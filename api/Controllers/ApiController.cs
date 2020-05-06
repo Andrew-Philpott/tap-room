@@ -60,7 +60,6 @@ namespace TapRoomApi.Controllers
         Username = user.UserName,
         FirstName = user.FirstName,
         LastName = user.LastName,
-        Role = user.Role,
         Token = JWToken
       });
     }
@@ -142,7 +141,6 @@ namespace TapRoomApi.Controllers
     {
       var currentUserId = int.Parse(User.Identity.Name);
       Beer entity = _mapper.Map<Beer>(model);
-      entity.UserId = currentUserId;
       _db.Beer.CreateBeer(entity);
       _db.Save();
     }
@@ -152,7 +150,6 @@ namespace TapRoomApi.Controllers
     {
       Beer entity = _mapper.Map<Beer>(model);
       var currentUserId = int.Parse(User.Identity.Name);
-      entity.UserId = currentUserId;
       _db.Beer.UpdateBeer(id, entity);
       _db.Save();
       return Ok();
@@ -163,7 +160,6 @@ namespace TapRoomApi.Controllers
     {
       Beer entity = _mapper.Map<Beer>(model);
       var currentUserId = int.Parse(User.Identity.Name);
-      entity.UserId = currentUserId;
       _db.Beer.UpdateBeer(id, entity);
       _db.Save();
       return Ok();
@@ -195,7 +191,6 @@ namespace TapRoomApi.Controllers
     {
       var currentUserId = int.Parse(User.Identity.Name);
       Review entity = _mapper.Map<Review>(model);
-      entity.UserId = currentUserId;
       _db.Review.CreateReview(entity);
       _db.Save();
     }
@@ -204,7 +199,6 @@ namespace TapRoomApi.Controllers
     {
       Review entity = _mapper.Map<Review>(model);
       var currentUserId = int.Parse(User.Identity.Name);
-      entity.UserId = currentUserId;
       _db.Review.UpdateReview(id, entity);
       _db.Save();
       return Ok();

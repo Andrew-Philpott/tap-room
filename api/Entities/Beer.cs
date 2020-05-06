@@ -16,7 +16,5 @@ namespace TapRoomApi.Entities
     public double AlcoholContent { get; set; }
     public int Pints { get; set; }
     public virtual ICollection<Review> Reviews { get; set; }
-    [ForeignKey(nameof(User))]
-    public int UserId { get; set; }
   }
 }

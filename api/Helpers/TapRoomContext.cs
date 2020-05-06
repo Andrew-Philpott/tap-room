@@ -35,11 +35,11 @@ namespace TapRoomApi.Helpers
       );
 
       builder.Entity<Beer>().HasData(
-        new Beer() { Id = 1, Name = "Universale", Brand = "Fremont", Color = "Golden Caramel", Aroma = "Citrus, apple, Biscuit", Flavor = "Pine, orange, bready", Price = 5, Pints = 124, AlcoholContent = 5.6, UserId = 1 },
-        new Beer() { Id = 2, Name = "Interurban", Brand = "Fremont", Color = "Yellow amber", Aroma = "Orange, dank, juicy", Flavor = "Grapefruit, pine, honey", Price = 5, Pints = 20, AlcoholContent = 6.2, UserId = 1 },
-        new Beer() { Id = 3, Name = "Round Trip", Brand = "Rileys", Color = "Golden Caramel", Aroma = "Apple", Flavor = "Pine, apple", Price = 9, Pints = 124, AlcoholContent = 7.4, UserId = 1 },
-        new Beer() { Id = 4, Name = "Universale", Brand = "Fremont", Color = "Golden Caramel", Aroma = "Citrus, apple, Biscuit", Flavor = "Pine, orange, bready", Price = 5, Pints = 124, AlcoholContent = 5.6, UserId = 1 },
-        new Beer() { Id = 5, Name = "The Good Stuff", Brand = "Andy's", Color = "Golden Brown", Aroma = "Citrus, apple, Biscuit", Flavor = "Pine, orange, bready", Price = 12, Pints = 124, AlcoholContent = 10.0, UserId = 1 }
+        new Beer() { Id = 1, Name = "Universale", Brand = "Fremont", Color = "Golden Caramel", Aroma = "Citrus, apple, Biscuit", Flavor = "Pine, orange, bready", Price = 5, Pints = 124, AlcoholContent = 5.6 },
+        new Beer() { Id = 2, Name = "Interurban", Brand = "Fremont", Color = "Yellow amber", Aroma = "Orange, dank, juicy", Flavor = "Grapefruit, pine, honey", Price = 5, Pints = 20, AlcoholContent = 6.2 },
+        new Beer() { Id = 3, Name = "Round Trip", Brand = "Rileys", Color = "Golden Caramel", Aroma = "Apple", Flavor = "Pine, apple", Price = 9, Pints = 124, AlcoholContent = 7.4 },
+        new Beer() { Id = 4, Name = "Universale", Brand = "Fremont", Color = "Golden Caramel", Aroma = "Citrus, apple, Biscuit", Flavor = "Pine, orange, bready", Price = 5, Pints = 124, AlcoholContent = 5.6 },
+        new Beer() { Id = 5, Name = "The Good Stuff", Brand = "Andy's", Color = "Golden Brown", Aroma = "Citrus, apple, Biscuit", Flavor = "Pine, orange, bready", Price = 12, Pints = 124, AlcoholContent = 10.0, }
       );
 
       #region Review
