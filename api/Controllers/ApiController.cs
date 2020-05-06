@@ -60,6 +60,7 @@ namespace TapRoomApi.Controllers
         Username = user.UserName,
         FirstName = user.FirstName,
         LastName = user.LastName,
+        Role = user.Role,
         Token = JWToken
       });
     }
