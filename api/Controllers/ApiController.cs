@@ -134,6 +134,7 @@ namespace TapRoomApi.Controllers
     [HttpGet("beers")]
     public async Task<IActionResult> Getbeers()
     {
+      // var currentUserId = int.Parse(User.Identity.Name);
       return Ok(_mapper.Map<IEnumerable<ViewBeer>>(await _db.Beer.GetBeersAsync()));
     }
     [AllowAnonymous]
