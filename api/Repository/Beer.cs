@@ -24,24 +24,33 @@ namespace TapRoomApi.Repository
       return await FindAll().ToListAsync();
     }
 
+    public async Task IncrementBeerPints(int id)
+    {
+      Beer model = await FindByCondition(x => x.Id == id).SingleOrDefaultAsync();
+      model.Pints += 1;
+      UpdateBeer(model);
+    }
+
+    public async Task DecrementBeerPints(int id)
+    {
+      Beer model = await FindByCondition(x => x.Id == id).SingleOrDefaultAsync();
+      model.Pints += 1;
+      UpdateBeer(model);
+    }
+
     public void CreateBeer(Beer model)
     {
       Create(model);
     }
 
-    public void UpdateBeer(int id, Beer update)
+    public void UpdateBeer(Beer model)
     {
-      var model = GetBeerAsync(id);
-      if (model == null)
-        throw new System.Exception($"No Beer");
-      Update(update);
+      Update(model);
     }
 
-    public async void DeleteBeer(int id)
+    public void DeleteBeer(Beer model)
     {
-      Beer model = await GetBeerAsync(id);
-      if (model != null)
-        Delete(model);
+      Delete(model);
     }
   }
 }

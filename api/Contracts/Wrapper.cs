@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace TapRoomApi.Contracts
 {
   public interface IRepositoryWrapper
@@ -5,6 +7,6 @@ namespace TapRoomApi.Contracts
     IBeerRepository Beer { get; }
     IReviewRepository Review { get; }
     IUserRepository User { get; }
-    void Save();
+    Task SaveAsync();
   }
 }

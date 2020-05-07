@@ -7,8 +7,10 @@ namespace TapRoomApi.Contracts
   {
     Task<Beer> GetBeerAsync(int id);
     Task<IEnumerable<Beer>> GetBeersAsync();
+    Task IncrementBeerPints(int id);
+    Task DecrementBeerPints(int id);
     void CreateBeer(Beer model);
-    void UpdateBeer(int id, Beer model);
-    void DeleteBeer(int id);
+    void UpdateBeer(Beer model);
+    void DeleteBeer(Beer model);
   }
 }

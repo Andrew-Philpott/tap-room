@@ -1,5 +1,6 @@
 using TapRoomApi.Helpers;
 using TapRoomApi.Contracts;
+using System.Threading.Tasks;
 
 namespace TapRoomApi.Repository
 {
@@ -53,9 +54,9 @@ namespace TapRoomApi.Repository
         return _user;
       }
     }
-    public void Save()
+    public async Task SaveAsync()
     {
-      _tapRoomContext.SaveChanges();
+      await _tapRoomContext.SaveChangesAsync();
     }
   }
 }
