@@ -206,14 +206,13 @@ namespace TapRoomApi.Controllers
     public async Task<IActionResult> IncrementBeerPints(int id)
     {
       Beer model = await _db.Beer.GetBeerAsync(id);
+      if (model == null)
+      {
+        _logger.LogError($"Beer with id: {id}, hasn't been found in db.");
+        return NotFound();
+      }
       model.Pints += 1;
       _db.Beer.UpdateBeer(model);
-      // if (model == null)
-      // {
-      //   _logger.LogError($"Beer with id: {id}, hasn't been found in db.");
-      //   return NotFound();
-      // }
-      // await _db.Beer.IncrementBeerPints(id);
       await _db.SaveAsync();
       return Ok(model);
     }
@@ -227,9 +226,10 @@ namespace TapRoomApi.Controllers
         _logger.LogError($"Beer with id: {id}, hasn't been found in db.");
         return NotFound();
       }
-      await _db.Beer.DecrementBeerPints(id);
+      model.Pints -= 1;
+      _db.Beer.UpdateBeer(model);
       await _db.SaveAsync();
-      return Ok();
+      return Ok(model);
     }
     [AllowAnonymous]
     [HttpDelete("beers/{id}")]
