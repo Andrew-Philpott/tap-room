@@ -169,6 +169,7 @@ namespace TapRoomApi.Controllers
     {
       try
       {
+        Console.WriteLine(id);
         if (model == null)
         {
           _logger.LogError("Beer object sent from client is null.");
@@ -189,7 +190,6 @@ namespace TapRoomApi.Controllers
         }
 
         _mapper.Map(model, entity);
-
         _db.Beer.UpdateBeer(entity);
         await _db.SaveAsync();
 
@@ -242,7 +242,7 @@ namespace TapRoomApi.Controllers
       }
       _db.Beer.DeleteBeer(model);
       await _db.SaveAsync();
-      return Ok();
+      return Ok(model.Id);
     }
     #endregion
 
