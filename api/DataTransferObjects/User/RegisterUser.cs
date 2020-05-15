@@ -4,19 +4,15 @@ namespace TapRoomApi.Models
 {
   public class RegisterUser
   {
-    [Required(ErrorMessage = "First name is required")]
-    [StringLength(20, ErrorMessage = "First name can't be longer than 20 characters")]
+    [Required]
     public string FirstName { get; set; }
-    [Required(ErrorMessage = "Last name is required")]
-    [StringLength(20, ErrorMessage = "Last name can't be longer than 20 characters")]
+    [Required]
     public string LastName { get; set; }
-    [Required(ErrorMessage = "Username is required")]
-    [StringLength(20, ErrorMessage = "Username can't be longer than 20 characters")]
+    [Required]
     public string Username { get; set; }
-    [Required(ErrorMessage = "Email is required")]
+    [Required]
     public string Email { get; set; }
-    [Required(ErrorMessage = "Password is required")]
+    [Required]
     public string Password { get; set; }
-
   }
 }

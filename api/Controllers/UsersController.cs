@@ -32,7 +32,7 @@ namespace TapRoomApi.Controllers
       _logger = logger;
       _appSettings = appSettings.Value;
     }
-    #region Users
+    #region users
     [AllowAnonymous]
     [HttpPost("authenticate")]
     public IActionResult Authenticate([FromBody] AuthenticateUser model)
@@ -67,13 +67,13 @@ namespace TapRoomApi.Controllers
 
     [AllowAnonymous]
     [HttpPost("register")]
-    public IActionResult Register([FromBody] RegisterUser model)
+    public async Task<IActionResult> Register([FromBody] RegisterUser model)
     {
       var user = _mapper.Map<User>(model);
       try
       {
         _db.User.CreateUser(user, model.Password);
-        _db.SaveAsync();
+        await _db.SaveAsync();
         return Ok();
       }
       catch (Exception ex)
@@ -85,28 +85,32 @@ namespace TapRoomApi.Controllers
     [HttpGet]
     public IActionResult GetAll()
     {
-      var users = _db.User.GetAllUsers();
-      var model = _mapper.Map<IEnumerable<ViewUser>>(users);
+      var entities = _db.User.GetAllUsers();
+      var model = _mapper.Map<IEnumerable<ViewUser>>(entities);
       return Ok(model);
     }
 
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-      var user = _db.User.GetUserById(id);
-      var model = _mapper.Map<ViewUser>(user);
+      var entity = _db.User.GetUserById(id);
+      if (entity == null)
+        return BadRequest(new { message = "User does not exist in database" });
+
+      var model = _mapper.Map<ViewUser>(entity);
       return Ok(model);
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, [FromBody] UpdateUser model)
+    public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUser model)
     {
-      var user = _mapper.Map<User>(model);
-      user.Id = id;
+      var entity = _mapper.Map<User>(model);
+      entity.Id = id;
 
       try
       {
-        _db.User.UpdateUser(user, model.Password);
+        _db.User.UpdateUser(entity, model.Password);
+        await _db.SaveAsync();
         return Ok();
       }
       catch (Exception ex)
@@ -116,10 +120,19 @@ namespace TapRoomApi.Controllers
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> DeleteUser(int id)
     {
-      _db.User.DeleteUser(id);
-      return Ok();
+      try
+      {
+        _db.User.DeleteUser(id);
+        await _db.SaveAsync();
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return BadRequest(new { message = ex.Message });
+      }
+
     }
     #endregion
 
@@ -128,130 +141,121 @@ namespace TapRoomApi.Controllers
     [HttpGet("beers/{id}")]
     public async Task<IActionResult> GetBeer(int id)
     {
-      return Ok(_mapper.Map<ViewBeer>(await _db.Beer.GetBeerAsync(id)));
+      var entity = await _db.Beer.GetBeerAsync(id);
+      if (entity == null)
+        return BadRequest(new { message = "Beer does not exist in database" });
+
+      var model = _mapper.Map<ViewBeer>(entity);
+      return Ok(model);
     }
+
     [AllowAnonymous]
     [HttpGet("beers")]
     public async Task<IActionResult> GetBeers()
     {
-      return Ok(_mapper.Map<IEnumerable<ViewBeer>>(await _db.Beer.GetBeersAsync()));
+      var entities = await _db.Beer.GetBeersAsync();
+      var model = _mapper.Map<IEnumerable<ViewBeer>>(entities);
+      return Ok(model);
     }
+
     [AllowAnonymous]
     [HttpPost("beers")]
     public async Task<IActionResult> CreateBeer([FromBody] CreateBeer model)
     {
+      var entity = _mapper.Map<Beer>(model);
       try
       {
-        if (model == null)
-        {
-          return BadRequest("Beer object is null");
-        }
-        if (!ModelState.IsValid)
-        {
-          return BadRequest("Invalid model object");
-        }
-
-        Beer entity = _mapper.Map<Beer>(model);
         _db.Beer.CreateBeer(entity);
         await _db.SaveAsync();
         return Ok();
       }
       catch (Exception ex)
       {
-        _logger.LogError($"Error in CreateBeer action: {ex.Message}");
-        return StatusCode(500, "Internal server error");
+        return BadRequest(new { message = ex });
       }
-
     }
-    [AllowAnonymous]
+
     [HttpPut("beers/{id}")]
     public async Task<IActionResult> UpdateBeer(int id, [FromBody] UpdateBeer model)
     {
+      var entity = _mapper.Map<Beer>(model);
+      entity.Id = id;
+
       try
       {
-        Console.WriteLine(id);
-        if (model == null)
-        {
-          _logger.LogError("Beer object sent from client is null.");
-          return BadRequest("Beer object is null");
-        }
-
-        if (!ModelState.IsValid)
-        {
-          _logger.LogError("Invalid beer object sent from client.");
-          return BadRequest("Invalid model object");
-        }
-
-        Beer entity = await _db.Beer.GetBeerAsync(id);
-        if (entity == null)
-        {
-          _logger.LogError($"Beer with id: {id}, hasn't been found in db.");
-          return NotFound();
-        }
-
-        _mapper.Map(model, entity);
-        _db.Beer.UpdateBeer(entity);
+        await _db.Beer.UpdateBeer(entity);
         await _db.SaveAsync();
-
         return Ok();
       }
       catch (Exception ex)
       {
-        _logger.LogError($"Something went wrong inside UpdateBeer action: {ex.Message}");
-        return StatusCode(500, "Internal server error");
+        return BadRequest(new { message = ex.Message });
       }
     }
-    [AllowAnonymous]
+
     [HttpPut("beers/increment/{id}")]
     public async Task<IActionResult> IncrementBeerPints(int id)
     {
-      Beer model = await _db.Beer.GetBeerAsync(id);
-      if (model == null)
+      try
       {
-        _logger.LogError($"Beer with id: {id}, hasn't been found in db.");
-        return NotFound();
+        await _db.Beer.IncrementBeerPints(id);
+        await _db.SaveAsync();
+        return Ok(await _db.Beer.GetBeerAsync(id));
       }
-      model.Pints += 1;
-      _db.Beer.UpdateBeer(model);
-      await _db.SaveAsync();
-      return Ok(model);
+      catch (Exception ex)
+      {
+        return BadRequest(new { message = ex });
+      }
     }
-    [AllowAnonymous]
+
     [HttpPut("beers/decrement/{id}")]
     public async Task<IActionResult> DecrementBeerPints(int id)
     {
-      Beer model = await _db.Beer.GetBeerAsync(id);
-      if (model == null)
+      try
       {
-        _logger.LogError($"Beer with id: {id}, hasn't been found in db.");
-        return NotFound();
+        await _db.Beer.DecrementBeerPints(id);
+        await _db.SaveAsync();
+        return Ok(await _db.Beer.GetBeerAsync(id));
       }
-      model.Pints -= 1;
-      _db.Beer.UpdateBeer(model);
-      await _db.SaveAsync();
-      return Ok(model);
+      catch (Exception ex)
+      {
+        return BadRequest(new { message = ex });
+      }
     }
-    [AllowAnonymous]
+
+
     [HttpDelete("beers/{id}")]
     public async Task<IActionResult> DeleteBeer(int id)
     {
-      Beer model = await _db.Beer.GetBeerAsync(id);
-      if (model == null)
+      try
       {
-        return NotFound();
+        await _db.Beer.DeleteBeer(id);
+        await _db.SaveAsync();
+        return Ok(id);
       }
-      _db.Beer.DeleteBeer(model);
-      await _db.SaveAsync();
-      return Ok(model.Id);
+      catch (Exception ex)
+      {
+        return BadRequest(new { message = ex });
+      }
+
     }
     #endregion
 
+
     #region reviews
+    [AllowAnonymous]
     [HttpGet("reviews/{id}")]
     public async Task<IActionResult> GetReview(int id)
     {
-      return Ok(_mapper.Map<ViewReview>(await _db.Review.GetReviewAsync(id)));
+      var entity = await _db.Review.GetReviewAsync(id);
+      if (entity == null)
+        return BadRequest(new { message = "Review does not exist in database" });
+
+      var model = _mapper.Map<ViewReview>(entity);
+      return Ok(model);
     }
+
+    [AllowAnonymous]
     [HttpGet("reviews")]
     public async Task<IActionResult> GetReviews()
     {
@@ -259,29 +263,54 @@ namespace TapRoomApi.Controllers
     }
 
     [HttpPost("reviews")]
-    public void CreateReview([FromBody] CreateReview model)
+    public async Task<IActionResult> CreateReview([FromBody] CreateReview model)
     {
       var currentUserId = int.Parse(User.Identity.Name);
-      Review entity = _mapper.Map<Review>(model);
-      _db.Review.CreateReview(entity);
-      _db.SaveAsync();
+      var entity = _mapper.Map<Review>(model);
+
+      try
+      {
+        _db.Review.CreateReview(entity);
+        await _db.SaveAsync();
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return BadRequest(new { message = ex });
+      }
     }
+
     [HttpPut("reviews/{id}")]
-    public IActionResult UpdateReview(int id, [FromBody] UpdateReview model)
+    public async Task<IActionResult> UpdateReview(int id, [FromBody] UpdateReview model)
     {
-      Review entity = _mapper.Map<Review>(model);
       var currentUserId = int.Parse(User.Identity.Name);
-      _db.Review.UpdateReview(id, entity);
-      _db.SaveAsync();
-      return Ok();
+      var entity = _mapper.Map<Review>(model);
+      entity.Id = id;
+      entity.UserId = currentUserId;
+
+      try
+      {
+        _db.Review.UpdateReview(entity);
+        await _db.SaveAsync();
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return BadRequest(new { message = ex.Message });
+      }
     }
 
     [HttpDelete("reviews/{id}")]
-    public IActionResult DeleteReview(int id)
+    public async Task<IActionResult> DeleteReview(int id)
     {
-      _db.Review.DeleteReview(id);
-      _db.SaveAsync();
-      return Ok();
+      Review model = await _db.Review.GetReviewAsync(id);
+      if (model == null)
+      {
+        return BadRequest(new { error = "Review does not exist in the database" });
+      }
+      _db.Review.DeleteReview(model);
+      await _db.SaveAsync();
+      return Ok(id);
     }
     #endregion
   }

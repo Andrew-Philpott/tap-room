@@ -87,14 +87,15 @@ namespace TapRoomApi.Repository
         user.PasswordSalt = passwordSalt;
       }
 
-      UpdateUser(user);
+      Update(user);
     }
 
     public void DeleteUser(int id)
     {
       var model = GetUserById(id);
-      if (model != null)
-        Delete(model);
+      if (model == null)
+        throw new Exception("User does not exist in the database");
+      Delete(model);
     }
 
     private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)

@@ -1,6 +1,7 @@
 using TapRoomApi.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 namespace TapRoomApi.Contracts
 {
   public interface IBeerRepository : IRepositoryBase<Beer>
@@ -10,7 +11,7 @@ namespace TapRoomApi.Contracts
     Task IncrementBeerPints(int id);
     Task DecrementBeerPints(int id);
     void CreateBeer(Beer model);
-    void UpdateBeer(Beer model);
-    void DeleteBeer(Beer model);
+    Task UpdateBeer(Beer model);
+    Task DeleteBeer(int id);
   }
 }

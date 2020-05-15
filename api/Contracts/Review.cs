@@ -1,6 +1,7 @@
 using TapRoomApi.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 namespace TapRoomApi.Contracts
 {
   public interface IReviewRepository : IRepositoryBase<Review>
@@ -8,7 +9,7 @@ namespace TapRoomApi.Contracts
     Task<Review> GetReviewAsync(int id);
     Task<IEnumerable<Review>> GetReviewsAsync();
     void CreateReview(Review model);
-    void UpdateReview(int id, Review model);
-    void DeleteReview(int id);
+    void UpdateReview(Review model);
+    void DeleteReview(Review model);
   }
 }

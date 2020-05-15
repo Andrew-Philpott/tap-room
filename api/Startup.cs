@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using TapRoomApi.Helpers;
 using TapRoomApi.Repository;
-using TapRoomApi.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
@@ -72,8 +71,6 @@ namespace TapRoomApi
     }
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-      app.UseStaticFiles();
-
       app.UseRouting();
 
       app.UseCors(x => x

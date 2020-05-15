@@ -4,32 +4,21 @@ namespace TapRoomApi.Models
 {
   public class UpdateBeer
   {
-    [StringLength(60, ErrorMessage = "Name can't be longer than 60 characters")]
+    [Required]
     public string Name { get; set; }
-
-    [Required(ErrorMessage = "Brand is required")]
-    [StringLength(50, ErrorMessage = "Brand can't be longer than 50 characters")]
+    [Required]
     public string Brand { get; set; }
-
-    [Required(ErrorMessage = "Color is required")]
-    [StringLength(20, ErrorMessage = "Color can't be longer than 20 characters")]
+    [Required]
     public string Color { get; set; }
-    [Required(ErrorMessage = "Aroma is required")]
-    [StringLength(50, ErrorMessage = "Aroma can't be longer than 50 characters")]
+    [Required]
     public string Aroma { get; set; }
-    [Required(ErrorMessage = "Flavor is required")]
-    [StringLength(50, ErrorMessage = "Flavor can't be longer than 50 characters")]
+    [Required]
     public string Flavor { get; set; }
-    [Required(ErrorMessage = "Price is required")]
+    [Range(0, 100)]
     public double Price { get; set; }
-    [Required(ErrorMessage = "ABV is required")]
     [Range(0, 100)]
     public double AlcoholContent { get; set; }
-    [Required(ErrorMessage = "Pints is required")]
     [Range(0, 10000)]
     public int Pints { get; set; }
-
-    [Required(ErrorMessage = "User id is required")]
-    public int UserId { get; set; }
   }
 }

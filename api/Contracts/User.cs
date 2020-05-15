@@ -1,6 +1,5 @@
 using TapRoomApi.Entities;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace TapRoomApi.Contracts
 {
