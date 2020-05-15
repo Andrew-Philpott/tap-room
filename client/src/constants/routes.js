@@ -1,0 +1,14 @@
+export const LANDING = "/";
+export const REGISTER = "/register";
+export const SIGN_IN = "/signin";
+export const SIGN_OUT = "/signin";
+export const BEER_LIST = "/ontap";
+export const FOOD = "/food";
+export const ABOUT = "/about";
+export const ACCOUNT = "/account";
+export const ADMIN = "/admin";
+export const ADMIN_DETAILS = "/admin/:id";
+export const NEW_BEER = "/new";
+export const EDIT_BEER = "/beers/edit/:id";
+export const BEER_DETAILS = "/beers/:id";
+export const NEW_REVIEW = "/newreview";
