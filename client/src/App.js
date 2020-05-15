@@ -1,23 +1,23 @@
 import React, { useEffect } from "react";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { history } from "../helpers";
-import { alertActions } from "../actions/alert-actions";
+import { history } from "./helpers";
+import { alertActions } from "./actions/alert-actions";
 import { Home } from "./components/Home/Home";
 import { Signin } from "./components/Signin/Signin";
 import { Register } from "./components/Register/Register";
-import { BeerDetail } from "./Beer/BeerDetail";
-import { BeerList } from "./Beer/BeerList";
-import { NewBeerForm } from "./Beer/NewBeerForm";
+import { BeerDetail } from "./components/Beer/BeerDetail";
+import { BeerList } from "./components/Beer/BeerList";
+import { NewBeerForm } from "./components/Beer/NewBeerForm";
 import { NavigationBar } from "./components/NavigationBar/NavigationBar";
-import { EditBeerForm } from "./Beer/EditBeerForm";
+import { EditBeerForm } from "./components/Beer/EditBeerForm";
 import { NewReviewForm } from "./components/Review/NewReviewForm";
-import { PrivateRoute } from "./PrivateRoute";
+import { PrivateRoute } from "./components/PrivateRoute";
 import { ToastProvider } from "react-toast-notifications";
 import { About } from "./components/About/About";
 import { Account } from "./components/Account/Account";
-import * as c from "../constants/routes";
-import * as r from "../constants/roles";
+import * as c from "../src/constants/routes";
+import * as r from "../src/constants/roles";
 
 function App() {
   const alert = useSelector((state) => state.alert);

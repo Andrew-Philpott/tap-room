@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Button,
-  makeStyles,
-} from "../components/About/Home/node_modules/@material-ui/core";
-import { beerActions } from "../../../actions/beer-actions";
+import { Button, makeStyles } from "@material-ui/core";
+import { beerActions } from "../../actions/beer-actions";
 
 const useStyles = makeStyles({
   mainContent: {

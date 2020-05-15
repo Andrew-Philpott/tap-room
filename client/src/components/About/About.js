@@ -1,9 +1,6 @@
 import React from "react";
-import CardMedia from "../components/Home/node_modules/@material-ui/core/CardMedia";
-import {
-  Grid,
-  Container,
-} from "../components/Home/node_modules/@material-ui/core";
+import CardMedia from "@material-ui/core/CardMedia";
+import { Grid, Container } from "@material-ui/core";
 
 export const About = () => {
   return (

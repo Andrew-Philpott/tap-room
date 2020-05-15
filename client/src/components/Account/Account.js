@@ -1,5 +1,5 @@
 import React from "react";
-import { Container } from "../components/Home/node_modules/@material-ui/core";
+import { Container } from "@material-ui/core";
 import { useSelector } from "react-redux";
 export const Account = () => {
   const user = useSelector((state) => state.authentication.user);

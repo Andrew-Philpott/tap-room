@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import {
-  Container,
-  Grid,
-  Button,
-} from "../Home/node_modules/@material-ui/core";
+import { Container, Grid, Button } from "@material-ui/core";
 import { beerActions } from "../../actions/beer-actions";
 import * as route from "../../constants/routes";
 

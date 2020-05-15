@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { userActions } from "../../../actions/user-actions";
-import {
-  Button,
-  makeStyles,
-  Grid,
-} from "../components/About/Home/node_modules/@material-ui/core";
+import { userActions } from "../../actions/user-actions";
+import { Button, makeStyles, Grid } from "@material-ui/core";
 
 const useStyles = makeStyles({
   mainContent: {

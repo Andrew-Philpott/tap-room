@@ -1,15 +1,15 @@
 import React from "react";
-import { makeStyles } from "../About/NavigationBar/node_modules/@material-ui/core/styles";
-import AppBar from "../About/NavigationBar/node_modules/@material-ui/core/AppBar";
-import Toolbar from "../About/NavigationBar/node_modules/@material-ui/core/Toolbar";
-import IconButton from "../About/NavigationBar/node_modules/@material-ui/core/IconButton";
-import MenuItem from "../About/NavigationBar/node_modules/@material-ui/core/MenuItem";
-import Menu from "../About/NavigationBar/node_modules/@material-ui/core/Menu";
-import { Button } from "../components/About/Home/node_modules/@material-ui/core";
-import MoreIcon from "../About/NavigationBar/node_modules/@material-ui/icons/MoreVert";
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+import { Button } from "@material-ui/core";
+import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
-import taphouselogo from "../../assets/img/taphouselogo.png";
-import * as c from "../../../constants/routes";
+import taphouselogo from "../../../assets/img/taphouselogo.png";
+import * as c from "../../constants/routes";
 import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({

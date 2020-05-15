@@ -1,7 +1,7 @@
 import React from "react";
-import CardMedia from "../About/Home/node_modules/@material-ui/core/CardMedia";
-import BeerPic from "../../assets/img/BeerPic.jpg";
-import { Grid, Container } from "../About/Home/node_modules/@material-ui/core";
+import CardMedia from "@material-ui/core/CardMedia";
+import BeerPic from "../../../assets/img/BeerPic.jpg";
+import { Grid, Container } from "@material-ui/core";
 export const Home = () => {
   return (
     <Container>
