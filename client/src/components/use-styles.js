@@ -64,4 +64,23 @@ export const useStyles = makeStyles((theme) => ({
     color: "white",
     marginRight: "50",
   },
+  orange: {
+    color: "orange",
+  },
+  yellow: {
+    color: "yellow",
+  },
+  green: {
+    color: "green",
+  },
+  tableCell: {
+    borderBottom: "none",
+    color: "white",
+  },
+  actionLinkStyle: {
+    cursor: "pointer",
+    color: "white",
+    textDecoration: "none",
+    minWidth: "100",
+  },
 }));

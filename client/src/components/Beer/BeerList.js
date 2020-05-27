@@ -8,33 +8,12 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { Grid, Container, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
 import EditIcon from "@material-ui/icons/Edit";
 import { beerActions } from "../../actions/beer-actions";
 import * as role from "../../constants/roles";
 import * as route from "../../constants/routes";
+import { useStyles } from "../use-styles";
 
-const useStyles = makeStyles({
-  orange: {
-    color: "orange",
-  },
-  yellow: {
-    color: "yellow",
-  },
-  green: {
-    color: "green",
-  },
-  tableCell: {
-    borderBottom: "none",
-    color: "white",
-  },
-  actionLinkStyle: {
-    cursor: "pointer",
-    color: "white",
-    textDecoration: "none",
-    minWidth: "100",
-  },
-});
 export const BeerListItemPints = (id) => {
   const beer = useSelector((state) => state.beers[id]);
   return <>{beer.pints}</>;
@@ -139,12 +118,12 @@ export const BeerList = () => {
                           ) : beer.pints > 0 ? (
                             <>
                               <br />
-                              <i style={{ color: "yellow" }}>Almost Empty</i>
+                              <i className={classes.yellow}>Almost Empty</i>
                             </>
                           ) : (
                             <>
                               <br />
-                              <i style={{ color: "red" }}>Out of stock</i>
+                              <i className={classes.red}>Out of stock</i>
                             </>
                           )}
                         </Link>

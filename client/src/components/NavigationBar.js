@@ -47,11 +47,9 @@ const NavigationBar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>
-        <Link className={classes.menuLink} to={c.ACCOUNT}>
-          My account
-        </Link>
-      </MenuItem>
+      <Link className={classes.menuLink} to={c.ACCOUNT}>
+        <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      </Link>
       <MenuItem onClick={handleMenuClose}>
         <Button className={classes.menuLink} href={c.LOG_OUT}>
           Logout
@@ -71,40 +69,28 @@ const NavigationBar = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <Link className={classes.menuLink} to={c.LANDING}>
-          Home
-        </Link>
-      </MenuItem>
-      <MenuItem>
-        <Link className={classes.menuLink} to={c.BEER_LIST}>
-          On Tap
-        </Link>
-      </MenuItem>
-      <MenuItem>
-        <Link className={classes.menuLink} to={c.ABOUT}>
-          About
-        </Link>
-      </MenuItem>
+      <Link className={classes.menuLink} to={c.LANDING}>
+        <MenuItem>Home</MenuItem>
+      </Link>
+      <Link className={classes.menuLink} to={c.BEER_LIST}>
+        <MenuItem>On Tap</MenuItem>
+      </Link>
+      <Link className={classes.menuLink} to={c.ABOUT}>
+        <MenuItem>About</MenuItem>
+      </Link>
       {user == null ? (
-        <MenuItem>
-          <Link className={classes.menuLink} to={c.LOG_IN}>
-            Log in
-          </Link>
-        </MenuItem>
+        <Link className={classes.menuLink} to={c.LOG_IN}>
+          <MenuItem>Log in</MenuItem>
+        </Link>
       ) : (
-        <MenuItem>
-          <Link className={classes.menuLink} to={c.LOG_OUT}>
-            Log out
-          </Link>
-        </MenuItem>
+        <Link className={classes.menuLink} to={c.LOG_OUT}>
+          <MenuItem>Log out</MenuItem>
+        </Link>
       )}
       {user != null ? (
-        <MenuItem onClick={handleProfileMenuOpen}>
-          <Link className={classes.menuLink} to={c.ACCOUNT}>
-            Account
-          </Link>
-        </MenuItem>
+        <Link className={classes.menuLink} to={c.ACCOUNT}>
+          <MenuItem onClick={handleProfileMenuOpen}>Account</MenuItem>
+        </Link>
       ) : null}
     </Menu>
   );
