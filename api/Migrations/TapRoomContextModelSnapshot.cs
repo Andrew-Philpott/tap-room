@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TapRoomApi.Helpers;
 
@@ -14,38 +15,40 @@ namespace TapRoomApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.3")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "3.1.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("TapRoomApi.Entities.Beer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<double>("AlcoholContent")
-                        .HasColumnType("double");
+                        .HasColumnType("float");
 
                     b.Property<string>("Aroma")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Brand")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Color")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Flavor")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Pints")
                         .HasColumnType("int");
 
                     b.Property<double>("Price")
-                        .HasColumnType("double");
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -118,13 +121,14 @@ namespace TapRoomApi.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("BeerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
@@ -169,28 +173,29 @@ namespace TapRoomApi.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("PasswordHash")
-                        .HasColumnType("longblob");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<byte[]>("PasswordSalt")
-                        .HasColumnType("longblob");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Role")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -203,8 +208,8 @@ namespace TapRoomApi.Migrations
                             Email = "admin@gmail.com",
                             FirstName = "admin",
                             LastName = "admin",
-                            PasswordHash = new byte[] { 143, 159, 101, 112, 8, 133, 169, 85, 194, 202, 56, 68, 142, 163, 117, 106, 183, 170, 204, 22, 224, 129, 39, 111, 131, 125, 126, 61, 155, 215, 63, 166, 46, 61, 39, 172, 40, 57, 153, 69, 173, 42, 200, 253, 185, 38, 147, 98, 69, 130, 135, 154, 73, 236, 69, 52, 98, 71, 253, 232, 239, 19, 87, 23 },
-                            PasswordSalt = new byte[] { 163, 205, 216, 120, 158, 213, 58, 48, 5, 142, 199, 121, 213, 184, 208, 195, 233, 117, 137, 112, 18, 217, 27, 250, 21, 233, 201, 170, 145, 57, 44, 60, 102, 166, 70, 140, 170, 108, 13, 211, 240, 197, 240, 94, 109, 15, 203, 75, 215, 213, 153, 121, 172, 234, 225, 235, 143, 229, 151, 139, 239, 70, 34, 234, 231, 227, 247, 46, 136, 194, 107, 221, 162, 219, 228, 11, 67, 250, 9, 174, 185, 186, 131, 106, 116, 189, 5, 161, 16, 219, 181, 98, 75, 129, 6, 144, 114, 35, 8, 21, 143, 242, 66, 186, 80, 230, 57, 58, 143, 221, 62, 243, 253, 144, 52, 89, 208, 53, 138, 115, 138, 105, 166, 251, 190, 202, 172, 35 },
+                            PasswordHash = new byte[] { 136, 63, 234, 173, 11, 53, 243, 131, 129, 183, 174, 40, 69, 136, 180, 172, 96, 9, 40, 245, 134, 238, 251, 123, 84, 114, 129, 84, 215, 119, 253, 89, 73, 238, 215, 51, 98, 98, 153, 202, 10, 29, 195, 130, 164, 50, 121, 240, 121, 200, 145, 122, 196, 96, 84, 241, 242, 244, 146, 203, 139, 30, 96, 252 },
+                            PasswordSalt = new byte[] { 241, 22, 93, 19, 181, 239, 224, 31, 107, 232, 201, 127, 183, 68, 252, 238, 191, 125, 243, 110, 0, 97, 29, 18, 63, 28, 49, 172, 188, 133, 206, 120, 133, 102, 145, 191, 117, 51, 203, 80, 49, 115, 215, 146, 98, 211, 159, 46, 206, 0, 129, 240, 66, 71, 123, 242, 196, 54, 191, 127, 114, 83, 149, 115, 45, 49, 95, 175, 138, 130, 59, 237, 138, 243, 41, 12, 78, 190, 11, 111, 96, 9, 15, 131, 17, 183, 104, 230, 178, 249, 135, 104, 247, 235, 54, 187, 2, 161, 176, 50, 85, 142, 126, 193, 90, 238, 192, 37, 107, 171, 1, 98, 193, 221, 167, 179, 151, 115, 26, 136, 135, 53, 195, 162, 233, 63, 9, 107 },
                             Role = "admin",
                             UserName = "admin"
                         },
@@ -214,8 +219,8 @@ namespace TapRoomApi.Migrations
                             Email = "employee@gmail.com",
                             FirstName = "employee",
                             LastName = "employee",
-                            PasswordHash = new byte[] { 143, 159, 101, 112, 8, 133, 169, 85, 194, 202, 56, 68, 142, 163, 117, 106, 183, 170, 204, 22, 224, 129, 39, 111, 131, 125, 126, 61, 155, 215, 63, 166, 46, 61, 39, 172, 40, 57, 153, 69, 173, 42, 200, 253, 185, 38, 147, 98, 69, 130, 135, 154, 73, 236, 69, 52, 98, 71, 253, 232, 239, 19, 87, 23 },
-                            PasswordSalt = new byte[] { 163, 205, 216, 120, 158, 213, 58, 48, 5, 142, 199, 121, 213, 184, 208, 195, 233, 117, 137, 112, 18, 217, 27, 250, 21, 233, 201, 170, 145, 57, 44, 60, 102, 166, 70, 140, 170, 108, 13, 211, 240, 197, 240, 94, 109, 15, 203, 75, 215, 213, 153, 121, 172, 234, 225, 235, 143, 229, 151, 139, 239, 70, 34, 234, 231, 227, 247, 46, 136, 194, 107, 221, 162, 219, 228, 11, 67, 250, 9, 174, 185, 186, 131, 106, 116, 189, 5, 161, 16, 219, 181, 98, 75, 129, 6, 144, 114, 35, 8, 21, 143, 242, 66, 186, 80, 230, 57, 58, 143, 221, 62, 243, 253, 144, 52, 89, 208, 53, 138, 115, 138, 105, 166, 251, 190, 202, 172, 35 },
+                            PasswordHash = new byte[] { 136, 63, 234, 173, 11, 53, 243, 131, 129, 183, 174, 40, 69, 136, 180, 172, 96, 9, 40, 245, 134, 238, 251, 123, 84, 114, 129, 84, 215, 119, 253, 89, 73, 238, 215, 51, 98, 98, 153, 202, 10, 29, 195, 130, 164, 50, 121, 240, 121, 200, 145, 122, 196, 96, 84, 241, 242, 244, 146, 203, 139, 30, 96, 252 },
+                            PasswordSalt = new byte[] { 241, 22, 93, 19, 181, 239, 224, 31, 107, 232, 201, 127, 183, 68, 252, 238, 191, 125, 243, 110, 0, 97, 29, 18, 63, 28, 49, 172, 188, 133, 206, 120, 133, 102, 145, 191, 117, 51, 203, 80, 49, 115, 215, 146, 98, 211, 159, 46, 206, 0, 129, 240, 66, 71, 123, 242, 196, 54, 191, 127, 114, 83, 149, 115, 45, 49, 95, 175, 138, 130, 59, 237, 138, 243, 41, 12, 78, 190, 11, 111, 96, 9, 15, 131, 17, 183, 104, 230, 178, 249, 135, 104, 247, 235, 54, 187, 2, 161, 176, 50, 85, 142, 126, 193, 90, 238, 192, 37, 107, 171, 1, 98, 193, 221, 167, 179, 151, 115, 26, 136, 135, 53, 195, 162, 233, 63, 9, 107 },
                             Role = "employee",
                             UserName = "employee"
                         },
@@ -225,8 +230,8 @@ namespace TapRoomApi.Migrations
                             Email = "member@gmail.com",
                             FirstName = "member",
                             LastName = "member",
-                            PasswordHash = new byte[] { 143, 159, 101, 112, 8, 133, 169, 85, 194, 202, 56, 68, 142, 163, 117, 106, 183, 170, 204, 22, 224, 129, 39, 111, 131, 125, 126, 61, 155, 215, 63, 166, 46, 61, 39, 172, 40, 57, 153, 69, 173, 42, 200, 253, 185, 38, 147, 98, 69, 130, 135, 154, 73, 236, 69, 52, 98, 71, 253, 232, 239, 19, 87, 23 },
-                            PasswordSalt = new byte[] { 163, 205, 216, 120, 158, 213, 58, 48, 5, 142, 199, 121, 213, 184, 208, 195, 233, 117, 137, 112, 18, 217, 27, 250, 21, 233, 201, 170, 145, 57, 44, 60, 102, 166, 70, 140, 170, 108, 13, 211, 240, 197, 240, 94, 109, 15, 203, 75, 215, 213, 153, 121, 172, 234, 225, 235, 143, 229, 151, 139, 239, 70, 34, 234, 231, 227, 247, 46, 136, 194, 107, 221, 162, 219, 228, 11, 67, 250, 9, 174, 185, 186, 131, 106, 116, 189, 5, 161, 16, 219, 181, 98, 75, 129, 6, 144, 114, 35, 8, 21, 143, 242, 66, 186, 80, 230, 57, 58, 143, 221, 62, 243, 253, 144, 52, 89, 208, 53, 138, 115, 138, 105, 166, 251, 190, 202, 172, 35 },
+                            PasswordHash = new byte[] { 136, 63, 234, 173, 11, 53, 243, 131, 129, 183, 174, 40, 69, 136, 180, 172, 96, 9, 40, 245, 134, 238, 251, 123, 84, 114, 129, 84, 215, 119, 253, 89, 73, 238, 215, 51, 98, 98, 153, 202, 10, 29, 195, 130, 164, 50, 121, 240, 121, 200, 145, 122, 196, 96, 84, 241, 242, 244, 146, 203, 139, 30, 96, 252 },
+                            PasswordSalt = new byte[] { 241, 22, 93, 19, 181, 239, 224, 31, 107, 232, 201, 127, 183, 68, 252, 238, 191, 125, 243, 110, 0, 97, 29, 18, 63, 28, 49, 172, 188, 133, 206, 120, 133, 102, 145, 191, 117, 51, 203, 80, 49, 115, 215, 146, 98, 211, 159, 46, 206, 0, 129, 240, 66, 71, 123, 242, 196, 54, 191, 127, 114, 83, 149, 115, 45, 49, 95, 175, 138, 130, 59, 237, 138, 243, 41, 12, 78, 190, 11, 111, 96, 9, 15, 131, 17, 183, 104, 230, 178, 249, 135, 104, 247, 235, 54, 187, 2, 161, 176, 50, 85, 142, 126, 193, 90, 238, 192, 37, 107, 171, 1, 98, 193, 221, 167, 179, 151, 115, 26, 136, 135, 53, 195, 162, 233, 63, 9, 107 },
                             Role = "member",
                             UserName = "member"
                         });

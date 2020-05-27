@@ -8,10 +8,10 @@ namespace TapRoomApi.Helpers
 {
   public static class ServiceExtensions
   {
-    public static void ConfigureMySqlContext(this IServiceCollection services, IConfiguration config)
+    public static void ConfigureSqlServerContext(this IServiceCollection services, IConfiguration config)
     {
       var connectionString = config["ConnectionStrings:DefaultConnection"];
-      services.AddDbContext<TapRoomContext>(o => o.UseMySql(connectionString));
+      services.AddDbContext<TapRoomContext>(o => o.UseSqlServer(connectionString));
     }
     public static void ConfigureRepositoryWrapper(this IServiceCollection services)
     {

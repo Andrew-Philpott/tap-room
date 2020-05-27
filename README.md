@@ -12,7 +12,9 @@
 
 ## About
 
-This is a website for the fake restuarant Tap House that allows users to browse the different types of beers offered at the establishment. The application features authentication and authorization to provide exclusive deals to registered customers, update functionality for employees, and full CRUD functionality for admins. Additionally, create, update, and read data transfer objects were made for the beer entity.
+This is a website for the fake restuarant Tap House that allows users to browse the different types of beers offered at the establishment. The application features authentication and authorization to provide exclusive deals to registered customers, update functionality for employees, and full CRUD functionality for admins. Additionally, create, update, and read data transfer objects were made for the beer entity. This project is a work in progress and will include the ability for users to leave reviews on beers.
+
+Log in with the username 'admin', 'employee', or 'member' and password 'test' to view authorization in action.
 
 ## User Stories
 
@@ -34,18 +36,19 @@ This is a website for the fake restuarant Tap House that allows users to browse 
 
 ## Setup/Installation Requirements
 
-_Clone this repository._
-_Navigate to api directory_
-_\$dotnet build_
-_\$dotnet ef migrations add initial_
-_\$dotnet ef database update_
-_\$dotnet watch run_
-_Api will run on localhost:4000_
-_Open a seperate terminal_
-_Navigate to app directory_
-_\$npm install to download dependencies_
-_\$npm run start to run the application_
-_Application will run on localhost:8080_
+- _Clone this repository._
+- _[Download Sql Server Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15)_
+- _Navigate to api directory_
+- _\$dotnet build_
+- _\$dotnet ef migrations add initial_
+- _\$dotnet ef database update_
+- _\$dotnet watch run_
+- _Api will run on localhost:4000_
+- _Open a seperate terminal_
+- _Navigate to app directory_
+- _\$npm install to download dependencies_
+- _\$npm run start to run the application_
+- _Application will run on localhost:8080_
 
 ## Known Bugs
 
@@ -57,17 +60,18 @@ No known bugs at this time.
 - CSS
 - JavaScript
 - Material UI
+- Bootstrap
 - React
 - C#
 - RESTful API
 - Entity Framework
-- MySql
+- Sql Server
 
 ## Support and Contact Details
 
 Feel free to provide feedback via email: andrewphilpott92@gmail.com
 
-### License
+## License
 
 This application is licensed under the MIT license.
 

@@ -1,7 +1,7 @@
 export const LANDING = "/";
 export const REGISTER = "/register";
-export const SIGN_IN = "/signin";
-export const SIGN_OUT = "/signin";
+export const LOG_IN = "/login";
+export const LOG_OUT = "/login";
 export const BEER_LIST = "/ontap";
 export const FOOD = "/food";
 export const ABOUT = "/about";

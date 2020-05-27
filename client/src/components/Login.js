@@ -1,21 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { userActions } from "../../actions/user-actions";
-import { Button, makeStyles } from "@material-ui/core";
+import { userActions } from "../actions/user-actions";
+import { Button, Container } from "@material-ui/core";
+import { useStyles } from "../components/use-styles";
 
-const useStyles = makeStyles({
-  mainContent: {
-    height: "100%",
-    backgroundColor: "black",
-    color: "white",
-  },
-  input: {
-    borderBottom: "white",
-    color: "white",
-  },
-});
-
-export const Signin = () => {
+export const Login = () => {
   const classes = useStyles();
   const [Inputs, setInputs] = useState({
     username: "",
@@ -45,13 +34,11 @@ export const Signin = () => {
   }
 
   return (
-    <div className="col-lg-8 offset-lg-2">
-      <br></br>
-      <h2>Signin</h2>
-      <br></br>
+    <Container maxWidth="sm">
+      <h2 className={classes.white}>Log in</h2>
       <form name="form" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Username</label>
+          <label className={classes.white}>Username</label>
           <input
             type="text"
             name="username"
@@ -66,7 +53,7 @@ export const Signin = () => {
           )}
         </div>
         <div className="form-group">
-          <label>Password</label>
+          <label className={classes.white}>Password</label>
           <input
             type="password"
             name="password"
@@ -82,36 +69,24 @@ export const Signin = () => {
         </div>
 
         <div className="form-group">
-          <span style={{ fontSize: "large", marginRight: "10" }}>
-            No Account?
-          </span>
+          <span className={classes.white}>No Account?</span>
           <Button
             style={{
-              backgroundColor: "white",
-              color: "black",
               marginLeft: "20px",
             }}
+            className={classes.buttons}
             href="/register"
-            className="btn btn-link"
           >
             Register
           </Button>
-          <Button
-            style={{
-              backgroundColor: "white",
-              color: "black",
-              float: "right",
-            }}
-            type="submit"
-            className="btn btn-primary"
-          >
+          <Button className={classes.floatRightButton} type="submit">
             {loggingIn && (
               <span className="spinner-border spinner-border-sm mr-1"></span>
             )}
-            Signin
+            Log in
           </Button>
         </div>
       </form>
-    </div>
+    </Container>
   );
 };

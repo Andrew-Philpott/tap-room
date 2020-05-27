@@ -25,7 +25,7 @@ namespace TapRoomApi
       services.AddCors();
       services.AddControllers();
 
-      services.ConfigureMySqlContext(_configuration);
+      services.ConfigureSqlServerContext(_configuration);
       services.ConfigureRepositoryWrapper();
       services.AddAutoMapper(typeof(Startup));
 

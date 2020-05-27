@@ -1,5 +1,4 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -8,40 +7,10 @@ import Menu from "@material-ui/core/Menu";
 import { Button } from "@material-ui/core";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
-import taphouselogo from "../../../assets/img/taphouselogo.png";
-import * as c from "../../constants/routes";
+import taphouselogo from "../../assets/img/taphouselogo.png";
+import * as c from "../constants/routes";
 import { useSelector } from "react-redux";
-
-const useStyles = makeStyles((theme) => ({
-  grow: {
-    flexGrow: 1,
-  },
-  inputRoot: {
-    color: "inherit",
-  },
-  sectionDesktop: {
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "flex",
-    },
-  },
-  sectionMobile: {
-    display: "flex",
-    [theme.breakpoints.up("sm")]: {
-      display: "none",
-    },
-  },
-  center: {
-    justifyContent: "center",
-  },
-  navLinks: {
-    color: "white",
-    textDecoration: "none",
-  },
-  navbar: {
-    backgroundColor: "#00acee",
-  },
-}));
+import { useStyles } from "../components/use-styles";
 
 const NavigationBar = () => {
   const classes = useStyles();
@@ -79,18 +48,12 @@ const NavigationBar = () => {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>
-        <Link
-          style={{ textDecoration: "none", color: "rgba(0, 0, 0, 0.87)" }}
-          to={c.ACCOUNT}
-        >
+        <Link className={classes.menuLink} to={c.ACCOUNT}>
           My account
         </Link>
       </MenuItem>
       <MenuItem onClick={handleMenuClose}>
-        <Button
-          style={{ textDecoration: "none", color: "rgba(0, 0, 0, 0.87)" }}
-          href={c.SIGN_OUT}
-        >
+        <Button className={classes.menuLink} href={c.LOG_OUT}>
           Logout
         </Button>
       </MenuItem>
@@ -109,62 +72,36 @@ const NavigationBar = () => {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <Link
-          style={{ textDecoration: "none", color: "rgba(0, 0, 0, 0.87)" }}
-          to={c.LANDING}
-        >
+        <Link className={classes.menuLink} to={c.LANDING}>
           Home
         </Link>
       </MenuItem>
       <MenuItem>
-        <Link
-          style={{ textDecoration: "none", color: "rgba(0, 0, 0, 0.87)" }}
-          to={c.BEER_LIST}
-        >
+        <Link className={classes.menuLink} to={c.BEER_LIST}>
           On Tap
         </Link>
       </MenuItem>
-      {/* <MenuItem>
-        <Link
-          style={{ textDecoration: "none", color: "rgba(0, 0, 0, 0.87)" }}
-          to={c.FOOD}
-        >
-          Food
-        </Link>
-      </MenuItem> */}
       <MenuItem>
-        <Link
-          style={{ textDecoration: "none", color: "rgba(0, 0, 0, 0.87)" }}
-          to={c.ABOUT}
-        >
+        <Link className={classes.menuLink} to={c.ABOUT}>
           About
         </Link>
       </MenuItem>
       {user == null ? (
         <MenuItem>
-          <Link
-            style={{ textDecoration: "none", color: "rgba(0, 0, 0, 0.87)" }}
-            to={c.SIGN_IN}
-          >
-            Sign in
+          <Link className={classes.menuLink} to={c.LOG_IN}>
+            Log in
           </Link>
         </MenuItem>
       ) : (
         <MenuItem>
-          <Link
-            style={{ textDecoration: "none", color: "rgba(0, 0, 0, 0.87)" }}
-            to={c.SIGN_OUT}
-          >
-            Sign out
+          <Link className={classes.menuLink} to={c.LOG_OUT}>
+            Log out
           </Link>
         </MenuItem>
       )}
       {user != null ? (
         <MenuItem onClick={handleProfileMenuOpen}>
-          <Link
-            style={{ textDecoration: "none", color: "rgba(0, 0, 0, 0.87)" }}
-            to={c.ACCOUNT}
-          >
+          <Link className={classes.menuLink} to={c.ACCOUNT}>
             Account
           </Link>
         </MenuItem>
@@ -184,40 +121,13 @@ const NavigationBar = () => {
           </Link>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <Button
-              style={{
-                color: "white",
-                marginRight: "50",
-              }}
-              href={c.LANDING}
-            >
+            <Button className={classes.navButton} href={c.LANDING}>
               Home
             </Button>
-            <Button
-              style={{
-                color: "white",
-                marginRight: "50",
-              }}
-              href={c.BEER_LIST}
-            >
+            <Button className={classes.navButton} href={c.BEER_LIST}>
               On Tap
             </Button>
-            {/* <Button
-              style={{
-                color: "white",
-                marginRight: "50",
-              }}
-              href={c.FOOD}
-            >
-              Food
-            </Button> */}
-            <Button
-              style={{
-                color: "white",
-                marginRight: "50",
-              }}
-              href={c.ABOUT}
-            >
+            <Button className={classes.navButton} href={c.ABOUT}>
               About
             </Button>
             {user != null ? (
@@ -229,8 +139,8 @@ const NavigationBar = () => {
                 Account
               </Button>
             ) : (
-              <Button style={{ color: "white" }} href={c.SIGN_IN}>
-                Sign in
+              <Button style={{ color: "white" }} href={c.LOG_IN}>
+                Log in
               </Button>
             )}
           </div>

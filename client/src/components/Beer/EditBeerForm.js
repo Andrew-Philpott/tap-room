@@ -2,17 +2,18 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Button } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Container } from "@material-ui/core";
 import { beerActions } from "../../actions/beer-actions";
 
 const useStyles = makeStyles({
-  mainContent: {
-    backgroundColor: "black",
+  white: {
     color: "white",
-    marginTop: "20%",
   },
-  label: {
-    color: "white",
+  buttons: {
+    backgroundColor: "white",
+    "&:hover": {
+      backgroundColor: "white !important",
+    },
   },
 });
 
@@ -28,7 +29,6 @@ export const EditBeerForm = () => {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log("submit");
 
     const beer = {
       name: event.target.name.value,
@@ -46,10 +46,10 @@ export const EditBeerForm = () => {
   if (beer) {
     return (
       <div className={classes.mainContext}>
-        <div className={"col-lg-8 offset-lg-2"}>
+        <Container maxWidth="sm">
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className={classes.label}>Name:</label>
+              <label className={classes.white}>Name:</label>
               <input
                 defaultValue={beer.name}
                 id="name"
@@ -58,9 +58,8 @@ export const EditBeerForm = () => {
                 className={"form-control"}
               />
             </div>
-
             <div className="form-group">
-              <label className={classes.label}>Brand:</label>
+              <label className={classes.white}>Brand:</label>
               <input
                 defaultValue={beer.brand}
                 id="brand"
@@ -69,9 +68,8 @@ export const EditBeerForm = () => {
                 className={"form-control"}
               />
             </div>
-
             <div className="form-group">
-              <label className={classes.label} htmlFor="color">
+              <label className={classes.white} htmlFor="color">
                 Color:
               </label>
               <input
@@ -82,9 +80,8 @@ export const EditBeerForm = () => {
                 className={"form-control"}
               />
             </div>
-
             <div className="form-group">
-              <label className={classes.label} htmlFor="aroma">
+              <label className={classes.white} htmlFor="aroma">
                 Aroma:
               </label>
               <input
@@ -95,9 +92,8 @@ export const EditBeerForm = () => {
                 className={"form-control"}
               />
             </div>
-
             <div className="form-group">
-              <label className={classes.label} htmlFor="flavor">
+              <label className={classes.white} htmlFor="flavor">
                 Flavor:
               </label>
               <input
@@ -108,9 +104,8 @@ export const EditBeerForm = () => {
                 className={"form-control"}
               />
             </div>
-
             <div className="form-group">
-              <label className={classes.label} htmlFor="price">
+              <label className={classes.white} htmlFor="price">
                 Price:
               </label>
               <input
@@ -121,10 +116,9 @@ export const EditBeerForm = () => {
                 className={"form-control"}
               />
             </div>
-
             <div className="form-group">
-              <label className={classes.label} htmlFor="alcoholContent">
-                AlcoholContent:
+              <label className={classes.white} htmlFor="alcoholContent">
+                Alcohol content:
               </label>
               <input
                 defaultValue={beer.alcoholContent}
@@ -134,9 +128,8 @@ export const EditBeerForm = () => {
                 className={"form-control"}
               />
             </div>
-
             <div className="form-group">
-              <label className={classes.label} htmlFor="pints">
+              <label className={classes.white} htmlFor="pints">
                 Pints:
               </label>
               <input
@@ -147,16 +140,11 @@ export const EditBeerForm = () => {
                 className={"form-control"}
               />
             </div>
-
-            <Button
-              style={{ backgroundColor: "white", color: "black" }}
-              className="btn btn-primary"
-              type="submit"
-            >
-              Add Beer
+            <Button className={classes.buttons} type="submit">
+              Edit Beer
             </Button>
           </form>
-        </div>
+        </Container>
       </div>
     );
   } else {

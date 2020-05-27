@@ -1,6 +1,6 @@
 import React from "react";
 import CardMedia from "@material-ui/core/CardMedia";
-import { Grid, Container } from "@material-ui/core";
+import { Container } from "@material-ui/core";
 
 export const About = () => {
   return (

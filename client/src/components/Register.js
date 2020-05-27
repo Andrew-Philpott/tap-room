@@ -1,20 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { userActions } from "../../actions/user-actions";
-import { Button, makeStyles, Grid } from "@material-ui/core";
-
-const useStyles = makeStyles({
-  mainContent: {
-    height: "100%",
-    backgroundColor: "black",
-    color: "white",
-  },
-  input: {
-    borderBottom: "white",
-    color: "white",
-  },
-});
+import { userActions } from "../actions/user-actions";
+import { Button, Container } from "@material-ui/core";
+import { useStyles } from "../components/use-styles";
 
 export const Register = () => {
   const classes = useStyles();
@@ -54,13 +42,11 @@ export const Register = () => {
   }
 
   return (
-    <div className={"col-lg-8 offset-lg-2"}>
-      <br></br>
-      <h1>Register</h1>
-      <br></br>
+    <Container maxWidth="sm">
+      <h1 className={classes.white}>Register</h1>
       <form name="form" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>First Name:&nbsp;</label>
+          <label className={classes.white}>First Name</label>
           <input
             type="text"
             name="firstName"
@@ -76,7 +62,7 @@ export const Register = () => {
           )}
         </div>
         <div className="form-group">
-          <label>Last Name:&nbsp;</label>
+          <label className={classes.white}>Last Name</label>
           <input
             type="text"
             name="lastName"
@@ -92,7 +78,7 @@ export const Register = () => {
           )}
         </div>
         <div className="form-group">
-          <label>Username:&nbsp;</label>
+          <label className={classes.white}>Username</label>
           <input
             type="text"
             name="username"
@@ -108,7 +94,7 @@ export const Register = () => {
           )}
         </div>
         <div className="form-group">
-          <label>Email:&nbsp;</label>
+          <label className={classes.white}>Email</label>
           <input
             type="text"
             name="email"
@@ -123,7 +109,7 @@ export const Register = () => {
           )}
         </div>
         <div className="form-group">
-          <label>Password:&nbsp;</label>
+          <label className={classes.white}>Password</label>
           <input
             type="password"
             name="password"
@@ -139,17 +125,10 @@ export const Register = () => {
           )}
         </div>
         <div className="form-group">
-          <Button
-            style={{ backgroundColor: "white", color: "black" }}
-            href="/login"
-          >
+          <Button className={classes.buttons} href="/login">
             Cancel
           </Button>
-          <Button
-            style={{ backgroundColor: "white", color: "black" }}
-            type="submit"
-            className="btn btn-primary"
-          >
+          <Button className={classes.floatRightButton} type="submit">
             {registering && (
               <span className="spinner-border spinner-border-sm mr-1"></span>
             )}
@@ -157,6 +136,6 @@ export const Register = () => {
           </Button>
         </div>
       </form>
-    </div>
+    </Container>
   );
 };

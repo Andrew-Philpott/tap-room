@@ -2,6 +2,7 @@ import { beerConstants } from "../constants";
 import { beerService } from "../services";
 import { alertActions } from ".";
 import { history } from "../helpers";
+import * as c from "../constants/routes";
 
 export const beerActions = {
   getBeer,
@@ -104,8 +105,8 @@ function createBeer(beer) {
     beerService.createBeer(beer).then(
       (beer) => {
         dispatch(success());
-        history.push("/beers");
-        dispatch(alertActions.success("beer created"));
+        history.push(c.BEER_LIST);
+        dispatch(alertActions.success("Beer created"));
       },
       (error) => {
         dispatch(failure(error.toString()));
@@ -131,8 +132,8 @@ function updateBeer(id, beer) {
     beerService.updateBeer(id, beer).then(
       (beer) => {
         dispatch(success(beer));
-        history.push("/ontap");
-        dispatch(alertActions.success("beer updated"));
+        history.push(c.BEER_LIST);
+        dispatch(alertActions.success("Beer updated"));
       },
       (error) => {
         dispatch(failure(error.toString()));
@@ -157,7 +158,10 @@ function deleteBeer(id) {
     dispatch(request(id));
 
     beerService.deleteBeer(id).then(
-      (id) => dispatch(success(id)),
+      (id) => {
+        dispatch(success(id));
+        dispatch(alertActions.success("Beer deleted"));
+      },
       (error) => dispatch(failure(id, error.toString()))
     );
   };

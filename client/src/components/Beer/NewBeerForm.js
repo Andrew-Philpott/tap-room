@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, makeStyles } from "@material-ui/core";
+import { Button, makeStyles, Container } from "@material-ui/core";
 import { beerActions } from "../../actions";
 
 const useStyles = makeStyles({
-  mainContent: {
-    height: "100%",
-    backgroundColor: "black",
+  white: {
     color: "white",
   },
-  label: {
-    color: "white",
+  buttons: {
+    backgroundColor: "white",
+    "&:hover": {
+      backgroundColor: "white !important",
+    },
   },
 });
 
@@ -58,10 +59,10 @@ export const NewBeerForm = () => {
 
   return (
     <div className={classes.mainContext}>
-      <div className={"col-lg-8 offset-lg-2"}>
+      <Container maxWidth="sm">
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label style={{ color: "white" }}>Name</label>
+            <label className={classes.white}>Name</label>
             <input
               value={beer.name}
               onChange={handleChange}
@@ -78,7 +79,7 @@ export const NewBeerForm = () => {
           </div>
 
           <div className="form-group">
-            <label style={{ color: "white" }}>Brand</label>
+            <label className={classes.white}>Brand</label>
             <input
               value={beer.brand}
               onChange={handleChange}
@@ -95,7 +96,7 @@ export const NewBeerForm = () => {
           </div>
 
           <div className="form-group">
-            <label style={{ color: "white" }} htmlFor="color">
+            <label className={classes.white} htmlFor="color">
               Color
             </label>
             <input
@@ -114,7 +115,7 @@ export const NewBeerForm = () => {
           </div>
 
           <div className="form-group">
-            <label style={{ color: "white" }} htmlFor="aroma">
+            <label className={classes.white} htmlFor="aroma">
               Aroma
             </label>
             <input
@@ -133,7 +134,7 @@ export const NewBeerForm = () => {
           </div>
 
           <div className="form-group">
-            <label style={{ color: "white" }} htmlFor="flavor">
+            <label className={classes.white} htmlFor="flavor">
               Flavor
             </label>
             <input
@@ -153,7 +154,7 @@ export const NewBeerForm = () => {
           </div>
 
           <div className="form-group">
-            <label style={{ color: "white" }} htmlFor="price">
+            <label className={classes.white} htmlFor="price">
               Price
             </label>
             <input
@@ -172,8 +173,8 @@ export const NewBeerForm = () => {
           </div>
 
           <div className="form-group">
-            <label style={{ color: "white" }} htmlFor="alcoholContent">
-              AlcoholContent
+            <label className={classes.white} htmlFor="alcoholContent">
+              Alcohol content
             </label>
             <input
               value={beer.alcoholContent}
@@ -194,7 +195,7 @@ export const NewBeerForm = () => {
           </div>
 
           <div className="form-group">
-            <label style={{ color: "white" }} htmlFor="pints">
+            <label className={classes.white} htmlFor="pints">
               Pints
             </label>
             <input
@@ -212,14 +213,14 @@ export const NewBeerForm = () => {
             )}
           </div>
 
-          <Button style={{ backgroundColor: "white" }} type="submit">
+          <Button className={classes.buttons} type="submit">
             {creating && (
               <span className="spinner-border spinner-border-sm mr-1"></span>
             )}
             Add Beer
           </Button>
         </form>
-      </div>
+      </Container>
     </div>
   );
 };
