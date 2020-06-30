@@ -1,20 +1,12 @@
 import { makeStyles } from "@material-ui/core";
 
 export const useStyles = makeStyles((theme) => ({
-  white: {
-    color: "white",
-  },
   buttons: {
     backgroundColor: "white",
     minWidth: "100px",
     "&:hover": {
       backgroundColor: "white !important",
     },
-  },
-  mainContent: {
-    height: "100%",
-    backgroundColor: "black",
-    color: "white",
   },
   input: {
     borderBottom: "white",
@@ -55,14 +47,16 @@ export const useStyles = makeStyles((theme) => ({
   },
   navLinks: {
     color: "white",
-    textDecoration: "none",
+    "&:hover, &:focus, &:visited, &:link, &:active ": {
+      textDecoration: "none",
+      color: "white",
+    },
   },
   navbar: {
     backgroundColor: "#00acee",
   },
-  navButton: {
-    color: "white",
-    marginRight: "50",
+  marginRightFifty: {
+    marginRight: "50px",
   },
   orange: {
     color: "orange",
@@ -80,7 +74,28 @@ export const useStyles = makeStyles((theme) => ({
   actionLinkStyle: {
     cursor: "pointer",
     color: "white",
-    textDecoration: "none",
     minWidth: "100",
+    "&:hover, &:focus, &:visited, &:link, &:active ": {
+      textDecoration: "none",
+    },
+  },
+  whiteTextField: {
+    borderColor: "white !important",
+  },
+  blackText: {
+    color: "black",
+  },
+  whiteText: {
+    color: "white",
+  },
+  marginTopTwo: { marginTop: theme.spacing(2) },
+  marginTopOne: { marginTop: theme.spacing(1) },
+  marginRightTen: { marginRight: "10px" },
+  tapHouseLogo: {
+    height: "100px",
+    width: "auto",
+  },
+  textAlignCenter: {
+    textAlign: "center",
   },
 }));

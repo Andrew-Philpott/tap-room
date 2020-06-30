@@ -1,4 +1,3 @@
-import config from "config";
 import { authHeader } from "../helpers";
 import { handleResponse } from "../helpers";
 
@@ -15,9 +14,10 @@ function getReview(id) {
     method: "GET",
   };
 
-  return fetch(`${config.apiUrl}/users/reviews/${id}`, requestOptions).then(
-    handleResponse
-  );
+  return fetch(
+    `http://localhost:4000/users/reviews/${id}`,
+    requestOptions
+  ).then(handleResponse);
 }
 
 function getReviews() {
@@ -25,7 +25,7 @@ function getReviews() {
     method: "GET",
   };
 
-  return fetch(`${config.apiUrl}/users/reviews`, requestOptions).then(
+  return fetch(`http://localhost:4000/users/reviews`, requestOptions).then(
     handleResponse
   );
 }
@@ -37,7 +37,7 @@ function createReview(Review) {
     body: JSON.stringify(Review),
   };
 
-  return fetch(`${config.apiUrl}/users/reviews`, requestOptions).then(
+  return fetch(`http://localhost:4000/users/reviews`, requestOptions).then(
     handleResponse
   );
 }
@@ -49,7 +49,9 @@ function updateReview(Review) {
     body: JSON.stringify(Review),
   };
 
-  return fetch(`${config.apiUrl}/reviews`, requestOptions).then(handleResponse);
+  return fetch(`http://localhost:4000/reviews`, requestOptions).then(
+    handleResponse
+  );
 }
 
 function deleteReview(id) {
@@ -58,7 +60,8 @@ function deleteReview(id) {
     headers: authHeader(),
   };
 
-  return fetch(`${config.apiUrl}/users/reviews/${id}`, requestOptions).then(
-    handleResponse
-  );
+  return fetch(
+    `http://localhost:4000/users/reviews/${id}`,
+    requestOptions
+  ).then(handleResponse);
 }

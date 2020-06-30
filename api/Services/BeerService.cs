@@ -1,18 +1,27 @@
-using TapRoomApi.Contracts;
 using TapRoomApi.Entities;
 using TapRoomApi.Helpers;
 using System.Collections.Generic;
+using System.Linq;
+using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
 
-namespace TapRoomApi.Repository
+namespace TapRoomApi.Services
 {
-  public class BeerRepository : RepositoryBase<Beer>,
-  IBeerRepository
+  public interface IBeerService : IServiceBase<Beer>
   {
-    public BeerRepository(TapRoomContext tapRoomContext) : base(tapRoomContext)
+    Task<Beer> GetBeerAsync(int id);
+    Task<IEnumerable<Beer>> GetBeersAsync();
+    Task IncrementBeerPints(int id);
+    Task DecrementBeerPints(int id);
+    void CreateBeer(Beer model);
+    Task UpdateBeer(Beer model);
+    Task DeleteBeer(int id);
+  }
+  public class BeerService : ServiceBase<Beer>,
+  IBeerService
+  {
+    public BeerService(TapRoomContext tapRoomContext) : base(tapRoomContext)
     {
     }
 

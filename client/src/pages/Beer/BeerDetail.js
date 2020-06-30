@@ -1,33 +1,31 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Container, Grid, Button } from "@material-ui/core";
-import { beerActions } from "../../actions/beer-actions";
+import { beerService } from "../../services/beer-service";
 import * as route from "../../constants/routes";
-import { useStyles } from "../use-styles";
+import { useStyles } from "../../components/use-styles";
 
 export const BeerDetail = () => {
   const classes = useStyles();
   const { id } = useParams();
-  const user = useSelector((state) => state.authentication.user);
-  const beer = useSelector((state) => state.beers.item);
-  const dispatch = useDispatch();
+  const [beer, setBeer] = useState(null);
 
   useEffect(() => {
-    dispatch(beerActions.getBeer(parseInt(id)));
+    if (id) {
+      beerService
+        .getBeer(parseInt(id))
+        .then((res) => setBeer(res))
+        .catch((error) => console.log(error));
+    }
   }, []);
 
   return (
-    <Container>
-      {beer && user && (
+    <Container className={`${classes.whiteText} ${classes.marginTopTwo}`}>
+      {beer && (
         <Grid container>
           <Grid item xs={12}>
             <Button
-              style={{
-                backgroundColor: "white",
-                float: "right",
-                marginTop: "10px",
-              }}
+              className={classes.floatRightButton}
               href={route.NEW_REVIEW}
             >
               Write a review
@@ -49,13 +47,13 @@ export const BeerDetail = () => {
       )}
       {beer && beer.reviews ? (
         <>
-          {beer.reviews.map((review) => {
+          {beer.reviews.map((review, index) => {
             return (
-              <div id={review.id}>
-                <h1 className={classes.white}>Reviews</h1>
-                <p className={classes.white}>User: {review.id}</p>
-                <p className={classes.white}>Rating: {review.rating}</p>
-                <p className={classes.white}>Description{review.description}</p>
+              <div key={index} id={index}>
+                <h1>Reviews</h1>
+                <p>User: {review.id}</p>
+                <p>Rating: {review.rating}</p>
+                <p>Description{review.description}</p>
               </div>
             );
           })}

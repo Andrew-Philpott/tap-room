@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Button, makeStyles, Container } from "@material-ui/core";
-import { beerActions } from "../../actions";
+import { beerService } from "../../services/beer-service";
 
 const useStyles = makeStyles({
   white: {
@@ -28,8 +27,6 @@ export const NewBeerForm = () => {
     pints: "",
   });
   const [submitted, setSubmitted] = useState(false);
-  const creating = useSelector((state) => state.beers.creating);
-  const dispatch = useDispatch();
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -53,7 +50,7 @@ export const NewBeerForm = () => {
       beer.alcoholContent &&
       beer.pints
     ) {
-      dispatch(beerActions.createBeer(beer));
+      beerService.createBeer(beer);
     }
   }
 
@@ -214,9 +211,6 @@ export const NewBeerForm = () => {
           </div>
 
           <Button className={classes.buttons} type="submit">
-            {creating && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
             Add Beer
           </Button>
         </form>

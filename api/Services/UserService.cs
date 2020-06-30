@@ -10,7 +10,7 @@ namespace TapRoomApi.Services
 {
   public interface IUserService
   {
-    User Authenticate(string username, string password);
+    User Authenticate(string email, string password);
     IEnumerable<User> GetAllUsers();
     User GetUserById(int id);
     User CreateUser(User user, string password);
@@ -33,12 +33,12 @@ namespace TapRoomApi.Services
     {
       return _db.Users.OrderBy(x => x.UserName);
     }
-    public User Authenticate(string username, string password)
+    public User Authenticate(string email, string password)
     {
-      if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+      if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
         return null;
 
-      var user = _db.Users.SingleOrDefault(x => x.UserName == username);
+      var user = _db.Users.SingleOrDefault(x => x.Email == email);
 
       if (user == null)
         return null;

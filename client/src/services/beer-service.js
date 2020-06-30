@@ -1,4 +1,3 @@
-import config from "config";
 import { authHeader } from "../helpers";
 import { handleResponse } from "../helpers";
 
@@ -17,7 +16,7 @@ function getBeer(id) {
     method: "GET",
   };
 
-  return fetch(`${config.apiUrl}/users/beers/${id}`, requestOptions).then(
+  return fetch(`http://localhost:4000/users/beers/${id}`, requestOptions).then(
     handleResponse
   );
 }
@@ -27,7 +26,7 @@ function getBeers() {
     method: "GET",
   };
 
-  return fetch(`${config.apiUrl}/users/beers`, requestOptions).then(
+  return fetch(`http://localhost:4000/users/beers`, requestOptions).then(
     handleResponse
   );
 }
@@ -40,7 +39,7 @@ function incrementPints(id) {
   };
 
   return fetch(
-    `${config.apiUrl}/users/beers/increment/${id}`,
+    `http://localhost:4000/users/beers/increment/${id}`,
     requestOptions
   ).then(handleResponse);
 }
@@ -53,7 +52,7 @@ function decrementPints(id) {
   };
 
   return fetch(
-    `${config.apiUrl}/users/beers/decrement/${id}`,
+    `http://localhost:4000/users/beers/decrement/${id}`,
     requestOptions
   ).then(handleResponse);
 }
@@ -65,20 +64,19 @@ function createBeer(beer) {
     body: JSON.stringify(beer),
   };
 
-  return fetch(`${config.apiUrl}/users/beers`, requestOptions).then(
+  return fetch(`http://localhost:4000/users/beers`, requestOptions).then(
     handleResponse
   );
 }
 
 function updateBeer(id, beer) {
-  console.log("In update beer service");
   const requestOptions = {
     method: "PUT",
     headers: { ...authHeader(), "Content-Type": "application/json" },
     body: JSON.stringify(beer),
   };
 
-  return fetch(`${config.apiUrl}/users/beers/${id}`, requestOptions).then(
+  return fetch(`http://localhost:4000/users/beers/${id}`, requestOptions).then(
     handleResponse
   );
 }
@@ -89,7 +87,7 @@ function deleteBeer(id) {
     headers: authHeader(),
   };
 
-  return fetch(`${config.apiUrl}/users/beers/${id}`, requestOptions).then(
+  return fetch(`http://localhost:4000/users/beers/${id}`, requestOptions).then(
     handleResponse
   );
 }

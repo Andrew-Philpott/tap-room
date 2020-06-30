@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using TapRoomApi.Entities;
 using TapRoomApi.Models;
 using Microsoft.Extensions.Logging;
-using TapRoomApi.Contracts;
+using TapRoomApi.Services;
 using TapRoomApi.Helpers;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
@@ -21,11 +21,11 @@ namespace TapRoomApi.Controllers
   [Route("[controller]")]
   public class UsersController : ControllerBase
   {
-    private IRepositoryWrapper _db;
+    private IServiceWrapper _db;
     private readonly ILogger<UsersController> _logger;
     private IMapper _mapper;
     private readonly AppSettings _appSettings;
-    public UsersController(ILogger<UsersController> logger, IRepositoryWrapper db, IMapper mapper, IOptions<AppSettings> appSettings)
+    public UsersController(ILogger<UsersController> logger, IServiceWrapper db, IMapper mapper, IOptions<AppSettings> appSettings)
     {
       _mapper = mapper;
       _db = db;
@@ -37,9 +37,9 @@ namespace TapRoomApi.Controllers
     [HttpPost("authenticate")]
     public IActionResult Authenticate([FromBody] AuthenticateUser model)
     {
-      var user = _db.User.Authenticate(model.UserName, model.Password);
+      var user = _db.User.Authenticate(model.Email, model.Password);
       if (user == null)
-        return BadRequest(new { message = "Username or password is incorrect" });
+        return BadRequest(new { message = "Email or password is incorrect" });
 
       var tokenHandler = new JwtSecurityTokenHandler();
       var key = Encoding.ASCII.GetBytes(_appSettings.Secret);

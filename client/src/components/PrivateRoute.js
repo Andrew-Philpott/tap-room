@@ -20,7 +20,7 @@ export const PrivateRoute = ({ component: Component, roles, ...rest }) => (
         return <Redirect to={c.LANDING} />;
       }
 
-      return <Component {...props} />;
+      return <Component user={user} {...props} />;
     }}
   />
 );

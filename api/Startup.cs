@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using TapRoomApi.Helpers;
-using TapRoomApi.Repository;
+using TapRoomApi.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
@@ -26,7 +26,7 @@ namespace TapRoomApi
       services.AddControllers();
 
       services.ConfigureSqlServerContext(_configuration);
-      services.ConfigureRepositoryWrapper();
+      services.ConfigureServiceWrapper();
       services.AddAutoMapper(typeof(Startup));
 
       var appSettingsSection = _configuration.GetSection("AppSettings");
@@ -46,7 +46,7 @@ namespace TapRoomApi
         {
           OnTokenValidated = context =>
                 {
-                  var userService = context.HttpContext.RequestServices.GetRequiredService<TapRoomApi.Contracts.IUserRepository>();
+                  var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                   var userId = int.Parse(context.Principal.Identity.Name);
                   var user = userService.GetUserById(userId);
                   if (user == null)
@@ -67,7 +67,7 @@ namespace TapRoomApi
         };
       });
 
-      services.AddScoped<TapRoomApi.Contracts.IUserRepository, UserRepository>();
+      services.AddScoped<IUserService, UserService>();
     }
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {

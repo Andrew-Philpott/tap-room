@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -9,28 +8,53 @@ import TableRow from "@material-ui/core/TableRow";
 import { Grid, Container, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
-import { beerActions } from "../../actions/beer-actions";
+import { beerService } from "../../services/beer-service";
 import * as role from "../../constants/roles";
 import * as route from "../../constants/routes";
-import { useStyles } from "../use-styles";
+import { useStyles } from "../../components/use-styles";
 
-export const BeerListItemPints = (id) => {
-  const beer = useSelector((state) => state.beers[id]);
-  return <>{beer.pints}</>;
-};
-
-export const BeerList = () => {
-  const beers = useSelector((state) => state.beers);
-  const user = useSelector((state) => state.authentication.user);
-  const dispatch = useDispatch();
+export const BeerList = (props) => {
+  const [beers, setBeers] = useState(null);
+  const [errors, setErrors] = useState(null);
+  const { user } = props;
 
   const onDelete = (id) => {
-    if (window.confirm("Are you sure to delete this record?"))
-      dispatch(beerActions.deleteBeer(id));
+    if (window.confirm("Are you sure you want to delete this beer?"))
+      beerService.deleteBeer(id);
   };
   useEffect(() => {
-    dispatch(beerActions.getBeers());
+    beerService.getBeers().then((res) => setBeers(res));
   }, []);
+
+  const incrementPints = (id) => {
+    setErrors(null);
+    beerService
+      .incrementPints(id)
+      .then((beer) => {
+        const newState = beers.map((x) => (x.id === id ? beer : x));
+        setBeers(newState);
+      })
+      .catch((error) => {
+        let temp = { ...errors };
+        temp.internal = error;
+        setErrors({ ...temp });
+      });
+  };
+
+  const decrementPints = (id) => {
+    setErrors(null);
+    beerService
+      .decrementPints(id)
+      .then((beer) => {
+        const newState = beers.map((x) => (x.id === id ? beer : x));
+        setBeers(newState);
+      })
+      .catch((error) => {
+        let temp = { ...errors };
+        temp.internal = error;
+        setErrors({ ...temp });
+      });
+  };
 
   const classes = useStyles();
   return (
@@ -104,8 +128,8 @@ export const BeerList = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {beers.items &&
-                  beers.items.map((beer) => (
+                {beers &&
+                  beers.map((beer) => (
                     <TableRow key={beer.id}>
                       <TableCell className={classes.tableCell}>
                         <Link
@@ -173,10 +197,7 @@ export const BeerList = () => {
                               align="center"
                             >
                               <span
-                                style={{ fontSize: "1.8em" }}
-                                onClick={() =>
-                                  dispatch(beerActions.decrementPints(beer.id))
-                                }
+                                onClick={() => decrementPints(beer.id)}
                                 className={classes.actionLinkStyle}
                               >
                                 -
@@ -187,12 +208,7 @@ export const BeerList = () => {
                               className={classes.tableCell}
                               align="center"
                             >
-                              <span
-                                style={{ fontSize: "1.8em" }}
-                                className={classes.actionLinkStyle}
-                              >
-                                -
-                              </span>
+                              <span className={classes.actionLinkStyle}>-</span>
                             </TableCell>
                           )}
 
@@ -202,9 +218,7 @@ export const BeerList = () => {
                           >
                             <span
                               className={classes.actionLinkStyle}
-                              onClick={() =>
-                                dispatch(beerActions.incrementPints(beer.id))
-                              }
+                              onClick={() => incrementPints(beer.id)}
                             >
                               +
                             </span>

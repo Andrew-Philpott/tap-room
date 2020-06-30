@@ -1,33 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, makeStyles } from "@material-ui/core";
-import { beerActions } from "../../actions/beer-actions";
-
-const useStyles = makeStyles({
-  mainContent: {
-    height: "100%",
-    backgroundColor: "black",
-    color: "white",
-  },
-  label: {
-    color: "white",
-  },
-});
+import { Button } from "@material-ui/core";
+import { beerService } from "../../services/beer-service";
+import { reviewService } from "../../services/review-service";
+import { useStyles } from "../../components/use-styles";
 
 export const NewReviewForm = () => {
   const classes = useStyles();
+  const [beers, setBeers] = useState(null);
   const [review, setReview] = useState({
     rating: "",
     description: "",
     beerId: 0,
   });
   const [submitted, setSubmitted] = useState(false);
-  const creating = useSelector((state) => state.reviews.creating);
-  const beers = useSelector((state) => state.beers);
-  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(beerActions.getBeers());
+    beerService.getBeers().then((res) => {
+      setBeers(res);
+    });
   }, []);
 
   function handleChange(e) {
@@ -40,7 +30,7 @@ export const NewReviewForm = () => {
 
     setSubmitted(true);
     if (review.rating && review.description && review.beerId) {
-      dispatch(reviewActions.createReview(review));
+      reviewService.createReview(review);
     }
   }
 
@@ -61,8 +51,8 @@ export const NewReviewForm = () => {
               }
             >
               <option key={0} value={0}></option>
-              {beers.items &&
-                beers.items
+              {beers &&
+                beers
                   .sort((a, b) => (a.name > b.name ? 1 : -1))
                   .map((item) => {
                     return (

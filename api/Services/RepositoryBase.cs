@@ -1,18 +1,25 @@
-using TapRoomApi.Contracts;
 using TapRoomApi.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using TapRoomApi.Entities;
 
-namespace TapRoomApi.Repository
+namespace TapRoomApi.Services
 {
-  public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
+
+  public interface IServiceBase<T>
+  {
+    IQueryable<T> FindAll();
+    IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression);
+    void Create(T entity);
+    void Update(T entity);
+    void Delete(T entity);
+  }
+  public abstract class ServiceBase<T> : IServiceBase<T> where T : class
   {
     protected TapRoomContext TapRoomContext { get; set; }
 
-    public RepositoryBase(TapRoomContext tapRoomContext)
+    public ServiceBase(TapRoomContext tapRoomContext)
     {
       this.TapRoomContext = tapRoomContext;
     }

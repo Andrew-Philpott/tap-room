@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import { makeStyles, Container } from "@material-ui/core";
-import { beerActions } from "../../actions/beer-actions";
+import { beerService } from "../../services/beer-service";
 
 const useStyles = makeStyles({
   white: {
@@ -20,11 +19,10 @@ const useStyles = makeStyles({
 export const EditBeerForm = () => {
   const classes = useStyles();
   const { id } = useParams();
-  const beer = useSelector((state) => state.beers.item);
-  const dispatch = useDispatch();
+  const [beer, setBeer] = useState(null);
 
   useEffect(() => {
-    dispatch(beerActions.getBeer(parseInt(id)));
+    beerService.getBeer(parseInt(id)).then((res) => setBeer(res));
   }, []);
 
   function handleSubmit(event) {
@@ -41,7 +39,7 @@ export const EditBeerForm = () => {
       pints: parseInt(event.target.pints.value),
     };
     console.log(beer);
-    dispatch(beerActions.updateBeer(id, beer));
+    beerService.updateBeer(id, beer);
   }
   if (beer) {
     return (

@@ -4,19 +4,19 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import { Button } from "@material-ui/core";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
-import taphouselogo from "../../assets/img/taphouselogo.png";
-import * as c from "../constants/routes";
-import { useSelector } from "react-redux";
+import taphouselogo from "../assets/img/taphouselogo.png";
+import * as c from "../constants/routes.js";
+
 import { useStyles } from "../components/use-styles";
 
-const NavigationBar = () => {
+const NavigationBar = (props) => {
+  const { user } = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const user = useSelector((state) => state.authentication.user);
+
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -47,13 +47,12 @@ const NavigationBar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <Link className={classes.menuLink} to={c.ACCOUNT}>
-        <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      </Link>
-      <MenuItem onClick={handleMenuClose}>
-        <Button className={classes.menuLink} href={c.LOG_OUT}>
-          Logout
-        </Button>
+      <MenuItem onClick={handleMenuClose} component={Link} to={c.ACCOUNT}>
+        My account
+      </MenuItem>
+
+      <MenuItem onClick={handleMenuClose} component={Link} to={c.LOG_OUT}>
+        Logout
       </MenuItem>
     </Menu>
   );
@@ -69,28 +68,35 @@ const NavigationBar = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <Link className={classes.menuLink} to={c.LANDING}>
-        <MenuItem>Home</MenuItem>
-      </Link>
-      <Link className={classes.menuLink} to={c.BEER_LIST}>
-        <MenuItem>On Tap</MenuItem>
-      </Link>
-      <Link className={classes.menuLink} to={c.ABOUT}>
-        <MenuItem>About</MenuItem>
-      </Link>
-      {user == null ? (
-        <Link className={classes.menuLink} to={c.LOG_IN}>
-          <MenuItem>Log in</MenuItem>
-        </Link>
+      <MenuItem component={Link} to={c.LANDING}>
+        Home
+      </MenuItem>
+
+      <MenuItem component={Link} to={c.BEER_LIST}>
+        On Tap
+      </MenuItem>
+
+      <MenuItem component={Link} to={c.ABOUT}>
+        About
+      </MenuItem>
+
+      {user === null ? (
+        <MenuItem component={Link} to={c.LOG_IN}>
+          Log in
+        </MenuItem>
       ) : (
-        <Link className={classes.menuLink} to={c.LOG_OUT}>
-          <MenuItem>Log out</MenuItem>
-        </Link>
+        <MenuItem component={Link} to={c.LOG_OUT}>
+          Log out
+        </MenuItem>
       )}
-      {user != null ? (
-        <Link className={classes.menuLink} to={c.ACCOUNT}>
-          <MenuItem onClick={handleProfileMenuOpen}>Account</MenuItem>
-        </Link>
+      {user !== null ? (
+        <MenuItem
+          component={Link}
+          to={c.ACCOUNT}
+          onClick={handleProfileMenuOpen}
+        >
+          Account
+        </MenuItem>
       ) : null}
     </Menu>
   );
@@ -101,33 +107,47 @@ const NavigationBar = () => {
         <Toolbar>
           <Link to={c.LANDING}>
             <img
-              style={{ height: "100px", width: "auto" }}
+              className={classes.tapHouseLogo}
               src={taphouselogo}
-            ></img>
+              alt="Tap House Logo"
+            />
           </Link>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <Button className={classes.navButton} href={c.LANDING}>
+            <Link
+              className={`${classes.navLinks} ${classes.marginRightFifty}`}
+              to={c.LANDING}
+            >
               Home
-            </Button>
-            <Button className={classes.navButton} href={c.BEER_LIST}>
+            </Link>
+            <Link
+              className={`${classes.navLinks} ${classes.marginRightFifty}`}
+              to={c.BEER_LIST}
+            >
               On Tap
-            </Button>
-            <Button className={classes.navButton} href={c.ABOUT}>
+            </Link>
+            <Link
+              className={`${classes.navLinks} ${classes.marginRightFifty}`}
+              to={c.ABOUT}
+            >
               About
-            </Button>
-            {user != null ? (
-              <Button
-                className={classes.navLinks}
+            </Link>
+            {user !== null ? (
+              <Link
+                className={`${classes.navLinks} ${classes.marginRightFifty}`}
                 aria-controls={menuId}
                 onClick={handleProfileMenuOpen}
+                to={c.ACCOUNT}
               >
                 Account
-              </Button>
+              </Link>
             ) : (
-              <Button style={{ color: "white" }} href={c.LOG_IN}>
+              <Link
+                className={`${classes.navLinks} ${classes.marginRightFifty}`}
+                to={c.LOG_IN}
+              >
                 Log in
-              </Button>
+              </Link>
             )}
           </div>
           <div className={classes.sectionMobile}>

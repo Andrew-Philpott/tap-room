@@ -1,17 +1,26 @@
-using TapRoomApi.Contracts;
 using TapRoomApi.Entities;
 using TapRoomApi.Helpers;
 using System.Collections.Generic;
+using System.Linq;
+using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
-namespace TapRoomApi.Repository
+namespace TapRoomApi.Services
 {
-  public class ReviewRepository : RepositoryBase<Review>,
-  IReviewRepository
+  public interface IReviewService : IServiceBase<Review>
   {
-    public ReviewRepository(TapRoomContext tapRoomContext) : base(tapRoomContext)
+    Task<Review> GetReviewAsync(int id);
+    Task<IEnumerable<Review>> GetReviewsAsync();
+    void CreateReview(Review model);
+    void UpdateReview(Review model);
+    void DeleteReview(Review model);
+  }
+
+  public class ReviewService : ServiceBase<Review>,
+  IReviewService
+  {
+    public ReviewService(TapRoomContext tapRoomContext) : base(tapRoomContext)
     {
     }
 
@@ -41,3 +50,4 @@ namespace TapRoomApi.Repository
     }
   }
 }
+
