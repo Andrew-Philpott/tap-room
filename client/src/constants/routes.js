@@ -11,4 +11,4 @@ export const ADMIN_DETAILS = "/admin/:id";
 export const NEW_BEER = "/beers/new";
 export const EDIT_BEER = "/beers/edit/:id";
 export const BEER_DETAILS = "/beers/:id";
-export const NEW_REVIEW = "/reviews/beers/:id/new";
+export const NEW_REVIEW = "/reviews/:id/new";

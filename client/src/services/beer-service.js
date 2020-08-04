@@ -11,12 +11,14 @@ export const beerService = {
   decrementPints,
 };
 
-async function getBeer(id) {
+function getBeer(id) {
   const requestOptions = {
     method: "GET",
   };
 
-  return fetch(`http://localhost:5000/api/beers/${id}`, requestOptions);
+  return fetch(`http://localhost:5000/api/beers/${id}`, requestOptions).then(
+    handleResponse
+  );
 }
 
 function getBeers() {
@@ -41,7 +43,7 @@ function incrementPints(id) {
   ).then(handleResponse);
 }
 
-async function decrementPints(id) {
+function decrementPints(id) {
   const requestOptions = {
     method: "PUT",
     headers: { ...authHeader(), "Content-Type": "application/json" },

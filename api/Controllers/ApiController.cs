@@ -24,14 +24,12 @@ namespace TapRoomApi.Controllers
   public class ApiController : ControllerBase
   {
     private TapRoomContext _db;
-    private readonly ILogger<ApiController> _logger;
     private IMapper _mapper;
     private readonly AppSettings _appSettings;
     public ApiController(ILogger<ApiController> logger, TapRoomContext db, IMapper mapper, IOptions<AppSettings> appSettings)
     {
       _mapper = mapper;
       _db = db;
-      _logger = logger;
       _appSettings = appSettings.Value;
     }
     #region users
@@ -218,7 +216,7 @@ namespace TapRoomApi.Controllers
     {
       try
       {
-        var entity = await (_db.Beer).AsQueryable().Include(x => x.Reviews).Where(x => x.BeerId == id).SingleOrDefaultAsync();
+        var entity = await (_db.Beer).AsQueryable().Include(x => x.Reviews).ThenInclude(x => x.User).Where(x => x.BeerId == id).SingleOrDefaultAsync();
 
         if (entity == null)
           return BadRequest(new { message = "Beer not found in database." });

@@ -77,151 +77,160 @@ export const BeerList = (props) => {
   return (
     <Container maxWidth="md">
       {apiErrors && <h1>{apiErrors}</h1>}
-      <Grid className={classes.marginTopTwo} container>
-        <Grid item xs={8}>
-          <p className={classes.whiteTextLarge}>Beer... Delicious beer.</p>
-        </Grid>
-        <Grid item xs={4}>
-          {user && user.role === role.ADMIN ? (
-            <Button
-              component={Link}
-              className={`${classes.buttons} ${classes.floatRight}`}
-              to={route.NEW_BEER}
-            >
-              Add beer
-            </Button>
-          ) : null}
-        </Grid>
-        <Grid item xs={12}>
-          <TableContainer>
-            <Table aria-label="simple table">
-              <TableHead>
-                <TableRow className={classes.tableRow}>
-                  <TableCell component="th" scope="row">
-                    On Tap
-                  </TableCell>
-                  <TableCell align="left">Brand</TableCell>
-                  <TableCell align="left">Flavor</TableCell>
-                  <TableCell align="left">ABV</TableCell>
-                  <TableCell align="left">Price</TableCell>
-                  <TableCell align="left">Pints</TableCell>
-                  {user ? (
-                    user.role === role.EMPLOYEE || user.role === role.ADMIN ? (
-                      <React.Fragment>
-                        <TableCell align="left">Buy</TableCell>
-                        <TableCell align="left">Restock</TableCell>
-                        <TableCell align="left">Edit</TableCell>
-                        <TableCell align="left">Remove</TableCell>
-                      </React.Fragment>
-                    ) : null
-                  ) : null}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {beers &&
-                  beers.map((beer) => (
-                    <TableRow key={beer.beerId} className={classes.tableRow}>
-                      <TableCell>
-                        <Link
-                          style={{
-                            color: "white",
-                          }}
-                          to={`/beers/${beer.beerId}`}
-                        >
-                          {beer.name}
-                        </Link>
-                        {beer.pints > 10 ? (
-                          ""
-                        ) : beer.pints > 0 ? (
-                          <p>
-                            <i
-                              className={`${classes.yellow} ${classes.marginTopTwo}`}
-                            >
-                              Almost Empty
-                            </i>
-                          </p>
-                        ) : (
-                          <p>
-                            {" "}
-                            <i
-                              className={`${classes.red} ${classes.marginTopTwo}`}
-                            >
-                              Out of stock
-                            </i>
-                          </p>
-                        )}
-                      </TableCell>
-                      <TableCell align="left">{beer.brand}</TableCell>
-                      <TableCell align="left">{beer.flavor}</TableCell>
-                      <TableCell align="left">{beer.alcoholContent}</TableCell>
-                      {beer.price > 12 ? (
-                        <TableCell style={{ color: "orange" }} align="left">
-                          {beer.price}
-                        </TableCell>
-                      ) : beer.price > 8 ? (
-                        <TableCell style={{ color: "yellow" }} align="left">
-                          {beer.price}
-                        </TableCell>
-                      ) : (
-                        <TableCell style={{ color: "green" }} align="left">
-                          {beer.price}
-                        </TableCell>
-                      )}
-                      <TableCell align="left">{beer.pints}</TableCell>
-                      {user &&
-                      (user.role === role.EMPLOYEE ||
-                        user.role === role.ADMIN) ? (
+      {beers ? (
+        <Grid className={classes.marginTopTwo} container>
+          <Grid item xs={8}>
+            <p className={classes.whiteTextLarge}>Beer... Delicious beer.</p>
+          </Grid>
+          <Grid item xs={4}>
+            {user && user.role === role.ADMIN ? (
+              <Button
+                component={Link}
+                className={`${classes.buttons} ${classes.floatRight}`}
+                to={route.NEW_BEER}
+              >
+                Add beer
+              </Button>
+            ) : null}
+          </Grid>
+          <Grid item xs={12}>
+            <TableContainer>
+              <Table aria-label="simple table">
+                <TableHead>
+                  <TableRow className={classes.tableRow}>
+                    <TableCell component="th" scope="row">
+                      On Tap
+                    </TableCell>
+                    <TableCell align="left">Brand</TableCell>
+                    <TableCell align="left">Flavor</TableCell>
+                    <TableCell align="left">ABV</TableCell>
+                    <TableCell align="left">Price</TableCell>
+                    <TableCell align="left">Pints</TableCell>
+                    {user ? (
+                      user.role === role.EMPLOYEE ||
+                      user.role === role.ADMIN ? (
                         <React.Fragment>
-                          {beer.pints > 0 ? (
+                          <TableCell align="left">Buy</TableCell>
+                          <TableCell align="left">Restock</TableCell>
+                          <TableCell align="left">Edit</TableCell>
+                          <TableCell align="left">Remove</TableCell>
+                        </React.Fragment>
+                      ) : null
+                    ) : null}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {beers &&
+                    beers.map((beer) => (
+                      <TableRow key={beer.beerId} className={classes.tableRow}>
+                        <TableCell>
+                          <Link
+                            style={{
+                              color: "white",
+                            }}
+                            to={`/beers/${parseInt(beer.beerId)}`}
+                          >
+                            {beer.name}
+                          </Link>
+                          {beer.pints > 10 ? (
+                            ""
+                          ) : beer.pints > 0 ? (
+                            <p>
+                              <i
+                                className={`${classes.yellow} ${classes.marginTopTwo}`}
+                              >
+                                Almost Empty
+                              </i>
+                            </p>
+                          ) : (
+                            <p>
+                              {" "}
+                              <i
+                                className={`${classes.red} ${classes.marginTopTwo}`}
+                              >
+                                Out of stock
+                              </i>
+                            </p>
+                          )}
+                        </TableCell>
+                        <TableCell align="left">{beer.brand}</TableCell>
+                        <TableCell align="left">{beer.flavor}</TableCell>
+                        <TableCell align="left">
+                          {beer.alcoholContent}
+                        </TableCell>
+                        {beer.price > 12 ? (
+                          <TableCell style={{ color: "orange" }} align="left">
+                            {beer.price}
+                          </TableCell>
+                        ) : beer.price > 8 ? (
+                          <TableCell style={{ color: "yellow" }} align="left">
+                            {beer.price}
+                          </TableCell>
+                        ) : (
+                          <TableCell style={{ color: "green" }} align="left">
+                            {beer.price}
+                          </TableCell>
+                        )}
+                        <TableCell align="left">{beer.pints}</TableCell>
+                        {user &&
+                        (user.role === role.EMPLOYEE ||
+                          user.role === role.ADMIN) ? (
+                          <React.Fragment>
+                            {beer.pints > 0 ? (
+                              <TableCell align="center">
+                                <span
+                                  onClick={() => decrementPints(beer.beerId)}
+                                  className={classes.actionLinkStyle}
+                                >
+                                  -
+                                </span>
+                              </TableCell>
+                            ) : (
+                              <TableCell align="center">
+                                <span className={classes.actionLinkStyle}>
+                                  -
+                                </span>
+                              </TableCell>
+                            )}
+
                             <TableCell align="center">
                               <span
-                                onClick={() => decrementPints(beer.beerId)}
                                 className={classes.actionLinkStyle}
+                                onClick={() => incrementPints(beer.beerId)}
                               >
-                                -
+                                +
                               </span>
                             </TableCell>
-                          ) : (
                             <TableCell align="center">
-                              <span className={classes.actionLinkStyle}>-</span>
+                              <Link to={`/beers/edit/${beer.beerId}`}>
+                                <EditIcon
+                                  style={{
+                                    cursor: "pointer",
+                                    color: "white",
+                                  }}
+                                />
+                              </Link>
                             </TableCell>
-                          )}
-
-                          <TableCell align="center">
-                            <span
-                              className={classes.actionLinkStyle}
-                              onClick={() => incrementPints(beer.beerId)}
-                            >
-                              +
-                            </span>
-                          </TableCell>
-                          <TableCell align="center">
-                            <Link to={`/beers/edit/${beer.beerId}`}>
-                              <EditIcon
-                                style={{
-                                  cursor: "pointer",
-                                  color: "white",
-                                }}
-                              />
-                            </Link>
-                          </TableCell>
-                          <TableCell align="center">
-                            <span
-                              className={classes.actionLinkStyle}
-                              onClick={() => onDelete(beer.beerId)}
-                            >
-                              X
-                            </span>
-                          </TableCell>
-                        </React.Fragment>
-                      ) : null}
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                            <TableCell align="center">
+                              <span
+                                className={classes.actionLinkStyle}
+                                onClick={() => onDelete(beer.beerId)}
+                              >
+                                X
+                              </span>
+                            </TableCell>
+                          </React.Fragment>
+                        ) : null}
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>{" "}
         </Grid>
-      </Grid>
+      ) : (
+        <h1>Loading...</h1>
+      )}
     </Container>
   );
 };

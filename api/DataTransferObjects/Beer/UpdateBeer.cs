@@ -15,13 +15,10 @@ namespace TapRoomApi.Models
     [Required]
     public string Flavor { get; set; }
     [Required]
-    [Range(0, 100)]
     public double Price { get; set; }
     [Required]
-    [Range(0, 100)]
     public double AlcoholContent { get; set; }
     [Required]
-    [Range(0, 10000)]
     public int Pints { get; set; }
   }
 }

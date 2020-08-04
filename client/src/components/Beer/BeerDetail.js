@@ -33,7 +33,7 @@ export const BeerDetail = () => {
           <Grid item xs={12}>
             <Button
               component={Link}
-              to={`/reviews/${id}/new`}
+              to={`/reviews/${parseInt(id)}/new`}
               className={`${classes.buttons} ${classes.floatRight}`}
             >
               Write a review
@@ -56,10 +56,11 @@ export const BeerDetail = () => {
       {beer && beer.reviews ? (
         <React.Fragment>
           {beer.reviews.map((review, index) => {
+            console.log(review);
             return (
               <div key={index} id={index}>
                 <h1>Reviews</h1>
-                <p>User: {review.reviewId}</p>
+                <p>User: {review.user.userName}</p>
                 <p>Rating: {review.rating}</p>
                 <p>Description{review.description}</p>
               </div>

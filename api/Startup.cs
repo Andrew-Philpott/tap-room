@@ -8,6 +8,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace TapRoomApi
 {
@@ -23,7 +25,7 @@ namespace TapRoomApi
     {
       services.ConfigureSqlServerContext(_configuration);
       services.AddCors();
-      services.AddControllers();
+      services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
       services.AddAutoMapper(typeof(Startup));
 
       var appSettingsSection = _configuration.GetSection("AppSettings");

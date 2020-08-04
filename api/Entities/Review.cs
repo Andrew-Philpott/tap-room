@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace TapRoomApi.Entities
 {
   public class Review
@@ -7,9 +5,9 @@ namespace TapRoomApi.Entities
     public int ReviewId { get; set; }
     public int Rating { get; set; }
     public string Description { get; set; }
-    [ForeignKey(nameof(Beer))]
+    public virtual Beer Beer { get; set; }
     public int BeerId { get; set; }
-    [ForeignKey(nameof(User))]
+    public virtual User User { get; set; }
     public int UserId { get; set; }
   }
 }
