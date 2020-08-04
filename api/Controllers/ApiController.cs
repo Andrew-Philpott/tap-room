@@ -492,7 +492,6 @@ namespace TapRoomApi.Controllers
         if (entity == null)
           return BadRequest(new { error = "Review not found in the database." });
 
-
         _mapper.Map(model, entity);
         entity.UserId = currentUserId;
         _db.Review.Update(entity);

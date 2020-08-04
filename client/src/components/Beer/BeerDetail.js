@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Container, Grid, Button } from "@material-ui/core";
 import { beerService } from "../../services/beer-service";
-import { useStyles } from "../../components/use-styles";
+import { useStyles } from "../use-styles";
 import { Link } from "react-router-dom";
 
 export const BeerDetail = () => {
@@ -16,11 +16,11 @@ export const BeerDetail = () => {
       beerService
         .getBeer(parseInt(id))
         .then((response) => setBeer(response))
-        .catch(() => {
+        .catch(() =>
           setApiErrors(
             "There was an error fetching the beer's details. Please try again later."
-          );
-        });
+          )
+        );
     }
   }, []);
 

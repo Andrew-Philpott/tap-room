@@ -85,9 +85,9 @@ export const Register = () => {
           password: e.target.password.value,
         })
         .then(() => history.push(routes.LOG_IN))
-        .catch(() => {
-          setApiErrors("Error trying to register. Please try again later.");
-        });
+        .catch(() =>
+          setApiErrors("Error trying to register. Please try again later.")
+        );
     }
   }
 

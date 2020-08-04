@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Button, Container, TextField } from "@material-ui/core";
 import { beerService } from "../../services/beer-service";
-import { useStyles } from "../../components/use-styles";
-import { useForm } from "../../components/useForm";
+import { useStyles } from "../use-styles";
+import { useForm } from "../useForm";
 import { history } from "../../helpers/history";
 import * as routes from "../../constants/routes";
 

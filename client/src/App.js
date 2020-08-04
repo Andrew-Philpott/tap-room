@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 import { history } from "./helpers";
 import getUserFromLs from "./helpers/get-user-from-ls";
-import { Home } from "./pages/Home";
-import { Login } from "./pages/Login";
-import { Register } from "./pages/Register";
-import { BeerDetail } from "./pages/Beer/BeerDetail";
-import { BeerList } from "./pages/Beer/BeerList";
-import { BeerForm } from "./pages/Beer/BeerForm";
+import { Home } from "./components/Home";
+import { Login } from "./components/Login";
+import { Register } from "./components/Register";
+import { BeerDetail } from "./components/Beer/BeerDetail";
+import { BeerList } from "./components/Beer/BeerList";
+import { BeerForm } from "./components/Beer/BeerForm";
 import { NavigationBar } from "./components/NavigationBar";
-import { ReviewForm } from "./pages/Review/ReviewForm";
+import { ReviewForm } from "./components/ReviewForm";
 import { PrivateRoute } from "./components/PrivateRoute";
-import { About } from "./pages/About";
-import { Account } from "./pages/Account";
+import { About } from "./components/About";
+import { Account } from "./components/Account";
 import * as routes from "../src/constants/routes";
 import * as roles from "../src/constants/roles";
+import "./App.css";
 
 function App() {
   const [user, setUser] = useState(null);

@@ -36,36 +36,37 @@ Log in with the username 'admin', 'employee', or 'member' and password 'test' to
 
 ## View URLs
 
-| URL Path         | Purpose                                  |
-| :--------------- | :--------------------------------------- |
-| /                | Landing page                             |
-| /login           | Form to login                            |
-| /register        | Form to register                         |
-| /account         | Member exclusive deals                   |
-| /beers           | List of beers                            |
-| /beers/:id       | Beer details                             |
-| /beers/edit/:id  | Form to update beer information          |
-| /beers/new       | Form to add a beer to the beer list      |
-| /reviews/new     | Form to add a review for any beer        |
-| /reviews/:id/new | Form to add a review for a specific beer |
+| URL Path         | Purpose                             |
+| :--------------- | :---------------------------------- |
+| /                | Landing page                        |
+| /login           | Form to login                       |
+| /register        | Form to register                    |
+| /account         | Member exclusive deals              |
+| /about           | About the company                   |
+| /beers           | List of beers                       |
+| /beers/:id       | Beer details                        |
+| /beers/edit/:id  | Form to update beer information     |
+| /beers/new       | Form to add a beer to the beer list |
+| /reviews/new     | Form to add a review for any beer   |
+| /reviews/:id/new | Form to add a review for a beer     |
 
 ## API Endpoints
 
-| HTTP Method | Endpoint            | Purpose                  |
-| :---------- | :------------------ | :----------------------- |
-| POST        | /users/register     | Create a user            |
-| POST        | /users/authenticate | Authenticate a user      |
-| GET         | /users/{id}         | Retrieve a user by id    |
-| PUT         | /users/{id}         | Edit a user              |
-| DELETE      | /users/{id}         | Delete a user            |
-| GET         | /beers              | Retrieve a list of beers |
-| POST        | /beers              | Create a beer            |
-| GET         | /beers/{id}         | Retrieve a specific beer |
-| PUT         | /beers/{id}         | Update a specific beer   |
-| GET         | /beers              | Retrieve a list of beers |
-| POST        | /beers              | Create a beer            |
-| GET         | /beers/{id}         | Retrieve a specific beer |
-| PUT         | /beers/{id}         | Update a specific beer   |
+| HTTP Method | Endpoint            | Purpose                    |
+| :---------- | :------------------ | :------------------------- |
+| POST        | /users/register     | Create a user              |
+| POST        | /users/authenticate | Authenticate a user        |
+| GET         | /users/{id}         | Retrieve a user            |
+| PUT         | /users/{id}         | Edit a user                |
+| DELETE      | /users/{id}         | Delete a user              |
+| GET         | /beers              | Retrieve a list of beers   |
+| POST        | /beers              | Create a beer              |
+| GET         | /beers/{id}         | Retrieve a beer            |
+| PUT         | /beers/{id}         | Update a beer              |
+| GET         | /reviews            | Retrieve a list of reviews |
+| POST        | /reviews            | Create a review            |
+| GET         | /reviews/{id}       | Retrieve a review          |
+| PUT         | /reviews/{id}       | Update a review            |
 
 ## Setup/Installation Requirements
 

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { beerService } from "../../services/beer-service";
-import { reviewService } from "../../services/review-service";
+import { beerService } from "../services/beer-service";
+import { reviewService } from "../services/review-service";
 import { useParams } from "react-router-dom";
 import { Button, Container, TextField, MenuItem } from "@material-ui/core";
-import { history } from "../../helpers/history";
-import { useForm } from "../../components/useForm";
-import { useStyles } from "../../components/use-styles";
+import { history } from "../helpers/history";
+import { useForm } from "./useForm";
+import { useStyles } from "./use-styles";
 
 export const ReviewForm = () => {
   const { id } = useParams();
