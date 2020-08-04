@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using TapRoomApi.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace TapRoomApi.Helpers
@@ -11,10 +10,6 @@ namespace TapRoomApi.Helpers
     {
       var connectionString = config["ConnectionStrings:DefaultConnection"];
       services.AddDbContext<TapRoomContext>(o => o.UseSqlServer(connectionString));
-    }
-    public static void ConfigureServiceWrapper(this IServiceCollection services)
-    {
-      services.AddScoped<IServiceWrapper, ServiceWrapper>();
     }
   }
 }

@@ -6,58 +6,10 @@ export const useStyles = makeStyles((theme) => ({
     minWidth: "100px",
     "&:hover": {
       backgroundColor: "white !important",
+      color: "black",
     },
   },
-  input: {
-    borderBottom: "white",
-    color: "white",
-  },
-  floatRightButton: {
-    backgroundColor: "white",
-    float: "right",
-    minWidth: "100px",
-    "&:hover": {
-      backgroundColor: "white !important",
-    },
-  },
-  menuLink: {
-    textDecoration: "none",
-    color: "rgba(0, 0, 0, 0.87)",
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  inputRoot: {
-    color: "inherit",
-  },
-  sectionDesktop: {
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "flex",
-    },
-  },
-  sectionMobile: {
-    display: "flex",
-    [theme.breakpoints.up("sm")]: {
-      display: "none",
-    },
-  },
-  center: {
-    justifyContent: "center",
-  },
-  navLinks: {
-    color: "white",
-    "&:hover, &:focus, &:visited, &:link, &:active ": {
-      textDecoration: "none",
-      color: "white",
-    },
-  },
-  navbar: {
-    backgroundColor: "#00acee",
-  },
-  marginRightFifty: {
-    marginRight: "50px",
-  },
+  floatRight: { float: "right" },
   orange: {
     color: "orange",
   },
@@ -67,9 +19,11 @@ export const useStyles = makeStyles((theme) => ({
   green: {
     color: "green",
   },
-  tableCell: {
-    borderBottom: "none",
-    color: "white",
+  tableRow: {
+    "& .MuiTableCell-root": {
+      borderBottom: "none",
+      color: "white",
+    },
   },
   actionLinkStyle: {
     cursor: "pointer",
@@ -82,20 +36,63 @@ export const useStyles = makeStyles((theme) => ({
   whiteTextField: {
     borderColor: "white !important",
   },
-  blackText: {
-    color: "black",
-  },
   whiteText: {
     color: "white",
   },
   marginTopTwo: { marginTop: theme.spacing(2) },
   marginTopOne: { marginTop: theme.spacing(1) },
   marginRightTen: { marginRight: "10px" },
+  textAlignCenter: {
+    textAlign: "center",
+  },
+  whiteTextLarge: {
+    color: "white",
+    fontSize: "2em",
+  },
+  pointer: {
+    cursor: "pointer",
+  },
+  appBar: {
+    backgroundColor: "#cc7000",
+  },
+  grow: {
+    flexGrow: 1,
+  },
+  sectionDesktop: {
+    display: "none",
+    [theme.breakpoints.up("sm")]: {
+      display: "flex",
+    },
+    "& a,span": {
+      color: "white",
+      marginRight: "50px",
+      "&:hover, &:focus, &:visited, &:link, &:active": {
+        color: "white",
+      },
+    },
+  },
+  sectionMobile: {
+    display: "flex",
+    [theme.breakpoints.up("sm")]: {
+      display: "none",
+    },
+  },
+  menuLink: {
+    textDecoration: "none",
+    color: "rgba(0, 0, 0, 0.87)",
+  },
+  navLinks: {
+    color: "white",
+    "&:hover, &:focus, &:visited, &:link, &:active": {
+      textDecoration: "none",
+      color: "white",
+    },
+  },
+  navbar: {
+    backgroundColor: "#00acee",
+  },
   tapHouseLogo: {
     height: "100px",
     width: "auto",
-  },
-  textAlignCenter: {
-    textAlign: "center",
   },
 }));

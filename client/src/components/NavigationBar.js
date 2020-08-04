@@ -7,12 +7,12 @@ import Menu from "@material-ui/core/Menu";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
 import taphouselogo from "../assets/img/taphouselogo.png";
-import * as c from "../constants/routes.js";
-
-import { useStyles } from "../components/use-styles";
+import * as routes from "../constants/routes.js";
+import { useStyles } from "./use-styles";
+import { userService } from "../services/user-service";
 
 const NavigationBar = (props) => {
-  const { user } = props;
+  const { user, setUser } = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -47,11 +47,17 @@ const NavigationBar = (props) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose} component={Link} to={c.ACCOUNT}>
+      <MenuItem onClick={handleMenuClose} component={Link} to={routes.ACCOUNT}>
         My account
       </MenuItem>
 
-      <MenuItem onClick={handleMenuClose} component={Link} to={c.LOG_OUT}>
+      <MenuItem
+        onClick={() => {
+          handleMenuClose();
+          userService.logout();
+          setUser(null);
+        }}
+      >
         Logout
       </MenuItem>
     </Menu>
@@ -68,44 +74,50 @@ const NavigationBar = (props) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem component={Link} to={c.LANDING}>
+      <MenuItem component={Link} to={routes.LANDING}>
         Home
       </MenuItem>
 
-      <MenuItem component={Link} to={c.BEER_LIST}>
+      <MenuItem component={Link} to={routes.BEER_LIST}>
         On Tap
       </MenuItem>
 
-      <MenuItem component={Link} to={c.ABOUT}>
+      <MenuItem component={Link} to={routes.ABOUT}>
         About
       </MenuItem>
 
       {user === null ? (
-        <MenuItem component={Link} to={c.LOG_IN}>
+        <MenuItem component={Link} to={routes.LOG_IN}>
           Log in
         </MenuItem>
       ) : (
-        <MenuItem component={Link} to={c.LOG_OUT}>
+        <MenuItem
+          onClick={() => {
+            handleMenuClose();
+            userService.logout();
+            setUser(null);
+          }}
+        >
           Log out
         </MenuItem>
       )}
-      {user !== null ? (
+      {user !== null && (
         <MenuItem
           component={Link}
-          to={c.ACCOUNT}
+          to={routes.ACCOUNT}
           onClick={handleProfileMenuOpen}
         >
           Account
         </MenuItem>
-      ) : null}
+      )}
     </Menu>
   );
 
   return (
     <div>
-      <AppBar style={{ backgroundColor: "#cc7000" }} position="static">
+      <AppBar className={classes.appBar} position="static">
         <Toolbar>
-          <Link to={c.LANDING}>
+          <Link to={routes.LANDING}>
             <img
               className={classes.tapHouseLogo}
               src={taphouselogo}
@@ -114,40 +126,20 @@ const NavigationBar = (props) => {
           </Link>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <Link
-              className={`${classes.navLinks} ${classes.marginRightFifty}`}
-              to={c.LANDING}
-            >
-              Home
-            </Link>
-            <Link
-              className={`${classes.navLinks} ${classes.marginRightFifty}`}
-              to={c.BEER_LIST}
-            >
-              On Tap
-            </Link>
-            <Link
-              className={`${classes.navLinks} ${classes.marginRightFifty}`}
-              to={c.ABOUT}
-            >
-              About
-            </Link>
+            <Link to={routes.LANDING}>Home</Link>
+            <Link to={routes.BEER_LIST}>On Tap</Link>
+            <Link to={routes.ABOUT}>About</Link>
             {user !== null ? (
-              <Link
-                className={`${classes.navLinks} ${classes.marginRightFifty}`}
+              <span
+                className={`${classes.navLinks} ${classes.pointer}`}
                 aria-controls={menuId}
                 onClick={handleProfileMenuOpen}
-                to={c.ACCOUNT}
+                to={routes.ACCOUNT}
               >
                 Account
-              </Link>
+              </span>
             ) : (
-              <Link
-                className={`${classes.navLinks} ${classes.marginRightFifty}`}
-                to={c.LOG_IN}
-              >
-                Log in
-              </Link>
+              <Link to={routes.LOG_IN}>Log in</Link>
             )}
           </div>
           <div className={classes.sectionMobile}>

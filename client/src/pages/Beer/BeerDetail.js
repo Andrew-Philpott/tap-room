@@ -2,31 +2,39 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Container, Grid, Button } from "@material-ui/core";
 import { beerService } from "../../services/beer-service";
-import * as route from "../../constants/routes";
 import { useStyles } from "../../components/use-styles";
+import { Link } from "react-router-dom";
 
 export const BeerDetail = () => {
   const classes = useStyles();
   const { id } = useParams();
   const [beer, setBeer] = useState(null);
+  const [apiErrors, setApiErrors] = useState(null);
 
   useEffect(() => {
-    if (id) {
+    if (id && !beer) {
       beerService
         .getBeer(parseInt(id))
-        .then((res) => setBeer(res))
-        .catch((error) => console.log(error));
+        .then((response) => setBeer(response))
+        .catch(() => {
+          setApiErrors(
+            "There was an error fetching the beer's details. Please try again later."
+          );
+        });
     }
   }, []);
 
   return (
     <Container className={`${classes.whiteText} ${classes.marginTopTwo}`}>
+      {apiErrors && <h1>{apiErrors}</h1>}
+
       {beer && (
         <Grid container>
           <Grid item xs={12}>
             <Button
-              className={classes.floatRightButton}
-              href={route.NEW_REVIEW}
+              component={Link}
+              to={`/reviews/beers/${id}/new`}
+              className={`${classes.buttons} ${classes.floatRight}`}
             >
               Write a review
             </Button>
@@ -46,18 +54,18 @@ export const BeerDetail = () => {
         </Grid>
       )}
       {beer && beer.reviews ? (
-        <>
+        <React.Fragment>
           {beer.reviews.map((review, index) => {
             return (
               <div key={index} id={index}>
                 <h1>Reviews</h1>
-                <p>User: {review.id}</p>
+                <p>User: {review.reviewId}</p>
                 <p>Rating: {review.rating}</p>
                 <p>Description{review.description}</p>
               </div>
             );
           })}
-        </>
+        </React.Fragment>
       ) : (
         <h1>
           No reviews for this beer yet. Create an account to provide feedback!

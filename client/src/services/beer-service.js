@@ -1,5 +1,5 @@
-import { authHeader } from "../helpers";
-import { handleResponse } from "../helpers";
+import authHeader from "../helpers/authentication-header";
+import handleResponse from "../helpers/handle-response";
 
 export const beerService = {
   getBeer,
@@ -11,83 +11,104 @@ export const beerService = {
   decrementPints,
 };
 
-function getBeer(id) {
+async function getBeer(id) {
   const requestOptions = {
     method: "GET",
   };
 
-  return fetch(`http://localhost:4000/users/beers/${id}`, requestOptions).then(
-    handleResponse
+  const response = await fetch(
+    `http://localhost:5000/users/beers/${id}`,
+    requestOptions
   );
+  return handleResponse(response);
 }
 
-function getBeers() {
+async function getBeers() {
   const requestOptions = {
     method: "GET",
   };
 
-  return fetch(`http://localhost:4000/users/beers`, requestOptions).then(
-    handleResponse
+  const response = await fetch(
+    `http://localhost:5000/users/beers`,
+    requestOptions
   );
+  return handleResponse(response);
 }
 
-function incrementPints(id) {
+async function incrementPints(id) {
   const requestOptions = {
     method: "PUT",
     headers: { ...authHeader(), "Content-Type": "application/json" },
     body: JSON.stringify(id),
   };
 
-  return fetch(
-    `http://localhost:4000/users/beers/increment/${id}`,
+  const response = await fetch(
+    `http://localhost:5000/users/beers/increment/${id}`,
     requestOptions
-  ).then(handleResponse);
+  );
+  return handleResponse(response);
 }
 
-function decrementPints(id) {
+async function decrementPints(id) {
   const requestOptions = {
     method: "PUT",
     headers: { ...authHeader(), "Content-Type": "application/json" },
     body: JSON.stringify(id),
   };
 
-  return fetch(
-    `http://localhost:4000/users/beers/decrement/${id}`,
+  const response = await fetch(
+    `http://localhost:5000/users/beers/decrement/${id}`,
     requestOptions
-  ).then(handleResponse);
+  );
+  return await handleResponse(response);
 }
 
 function createBeer(beer) {
+  const userString = localStorage.getItem("user");
+  let user = {};
+  if (userString) {
+    user = JSON.parse(userString);
+  }
+  console.log(userString);
+  console.log(user);
+
   const requestOptions = {
     method: "POST",
-    headers: { ...authHeader(), "Content-Type": "application/json" },
+    headers: {
+      Authorization: "Bearer " + user.token,
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(beer),
   };
 
-  return fetch(`http://localhost:4000/users/beers`, requestOptions).then(
+  return fetch(`http://localhost:5000/users/beers`, requestOptions).then(
     handleResponse
   );
 }
 
-function updateBeer(id, beer) {
+async function updateBeer(id, beer) {
   const requestOptions = {
     method: "PUT",
     headers: { ...authHeader(), "Content-Type": "application/json" },
     body: JSON.stringify(beer),
   };
 
-  return fetch(`http://localhost:4000/users/beers/${id}`, requestOptions).then(
-    handleResponse
+  const response = await fetch(
+    `http://localhost:5000/users/beers/${id}`,
+    requestOptions
   );
+  return await handleResponse(response);
 }
 
-function deleteBeer(id) {
+async function deleteBeer(id) {
   const requestOptions = {
     method: "DELETE",
     headers: authHeader(),
   };
 
-  return fetch(`http://localhost:4000/users/beers/${id}`, requestOptions).then(
-    handleResponse
+  const response = await fetch(
+    `http://localhost:5000/users/beers/${id}`,
+    requestOptions
   );
+  return await handleResponse(response);
 }

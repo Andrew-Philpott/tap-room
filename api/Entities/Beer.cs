@@ -1,12 +1,10 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 
 namespace TapRoomApi.Entities
 {
-  [Table("beer")]
   public class Beer
   {
-    public int Id { get; set; }
+    public int BeerId { get; set; }
     public string Brand { get; set; }
     public string Name { get; set; }
     public string Color { get; set; }

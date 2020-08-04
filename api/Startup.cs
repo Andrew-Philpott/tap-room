@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using TapRoomApi.Helpers;
-using TapRoomApi.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
@@ -22,11 +21,9 @@ namespace TapRoomApi
     }
     public void ConfigureServices(IServiceCollection services)
     {
+      services.ConfigureSqlServerContext(_configuration);
       services.AddCors();
       services.AddControllers();
-
-      services.ConfigureSqlServerContext(_configuration);
-      services.ConfigureServiceWrapper();
       services.AddAutoMapper(typeof(Startup));
 
       var appSettingsSection = _configuration.GetSection("AppSettings");
@@ -46,9 +43,9 @@ namespace TapRoomApi
         {
           OnTokenValidated = context =>
                 {
-                  var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                  var tapRoomContext = context.HttpContext.RequestServices.GetRequiredService<TapRoomContext>();
                   var userId = int.Parse(context.Principal.Identity.Name);
-                  var user = userService.GetUserById(userId);
+                  var user = tapRoomContext.User.Find(userId);
                   if (user == null)
                   {
                     context.Fail("Unauthorized");
@@ -66,17 +63,15 @@ namespace TapRoomApi
           ValidateAudience = false
         };
       });
-
-      services.AddScoped<IUserService, UserService>();
     }
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
       app.UseRouting();
 
-      app.UseCors(x => x
-          .AllowAnyOrigin()
-          .AllowAnyMethod()
-          .AllowAnyHeader());
+      app.UseCors(options =>
+     options.AllowAnyOrigin()
+     .AllowAnyHeader()
+     .AllowAnyMethod());
 
       app.UseAuthentication();
       app.UseAuthorization();

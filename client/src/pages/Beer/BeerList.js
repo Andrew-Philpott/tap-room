@@ -14,68 +14,79 @@ import * as route from "../../constants/routes";
 import { useStyles } from "../../components/use-styles";
 
 export const BeerList = (props) => {
-  const [beers, setBeers] = useState(null);
-  const [errors, setErrors] = useState(null);
   const { user } = props;
+  const classes = useStyles();
+  const [beers, setBeers] = useState(null);
+  const [apiErrors, setApiErrors] = useState(null);
+
+  useEffect(() => {
+    if (!beers) {
+      beerService
+        .getBeers()
+        .then((response) => setBeers(response))
+        .catch(
+          setApiErrors(
+            "Something went wrong trying to fetch the list beers. Please try again later."
+          )
+        );
+    }
+  }, []);
 
   const onDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this beer?"))
-      beerService.deleteBeer(id);
+      beerService
+        .deleteBeer(id)
+        .then(() => {
+          let newState = { ...beers };
+          newState = newState.filter((x) => x.beerId !== id);
+          setBeers(newState);
+        })
+        .catch(
+          setApiErrors("Something went wrong while trying to delete the beer.")
+        );
   };
-  useEffect(() => {
-    beerService.getBeers().then((res) => setBeers(res));
-  }, []);
 
   const incrementPints = (id) => {
-    setErrors(null);
     beerService
       .incrementPints(id)
       .then((beer) => {
-        const newState = beers.map((x) => (x.id === id ? beer : x));
+        const newState = beers.map((x) => (x.beerId === id ? beer : x));
         setBeers(newState);
       })
-      .catch((error) => {
-        let temp = { ...errors };
-        temp.internal = error;
-        setErrors({ ...temp });
-      });
+      .catch(
+        setApiErrors(
+          "Something went wrong while trying to increment the number of pints."
+        )
+      );
   };
 
   const decrementPints = (id) => {
-    setErrors(null);
     beerService
       .decrementPints(id)
       .then((beer) => {
-        const newState = beers.map((x) => (x.id === id ? beer : x));
+        const newState = beers.map((x) => (x.beerId === id ? beer : x));
         setBeers(newState);
       })
-      .catch((error) => {
-        let temp = { ...errors };
-        temp.internal = error;
-        setErrors({ ...temp });
-      });
+      .catch(
+        setApiErrors(
+          "Something went wrong while trying to decrement the number of pints."
+        )
+      );
   };
 
-  const classes = useStyles();
   return (
-    <Container>
-      <Grid container>
+    <Container maxWidth="md">
+      {apiErrors && <h1>{apiErrors}</h1>}
+      <Grid className={classes.marginTopTwo} container>
         <Grid item xs={8}>
-          <br></br>
-          <span style={{ color: "white", fontSize: "2em" }}>
-            Beer... Delicious beer.
-          </span>
-          <br></br>
+          <p className={classes.whiteTextLarge}>Beer... Delicious beer.</p>
         </Grid>
         <Grid item xs={4}>
           {user && user.role === role.ADMIN ? (
             <Button
-              style={{
-                backgroundColor: "white",
-                float: "right",
-                marginTop: "10px",
-              }}
-              href={route.NEW_BEER}
+              component={Link}
+              className={`${classes.buttons} ${classes.floatRight}`}
+              to={route.NEW_BEER}
             >
               Add beer
             </Button>
@@ -85,170 +96,124 @@ export const BeerList = (props) => {
           <TableContainer>
             <Table aria-label="simple table">
               <TableHead>
-                <TableRow>
-                  <TableCell
-                    className={classes.tableCell}
-                    component="th"
-                    scope="row"
-                  >
+                <TableRow className={classes.tableRow}>
+                  <TableCell component="th" scope="row">
                     On Tap
                   </TableCell>
-                  <TableCell className={classes.tableCell} align="left">
-                    Brand
-                  </TableCell>
-                  <TableCell className={classes.tableCell} align="left">
-                    Flavor
-                  </TableCell>
-                  <TableCell className={classes.tableCell} align="left">
-                    ABV
-                  </TableCell>
-                  <TableCell className={classes.tableCell} align="left">
-                    Price
-                  </TableCell>
-                  <TableCell className={classes.tableCell} align="left">
-                    Pints
-                  </TableCell>
-                  {user &&
-                  (user.role === role.EMPLOYEE || user.role === role.ADMIN) ? (
-                    <>
-                      <TableCell className={classes.tableCell} align="left">
-                        Buy
-                      </TableCell>
-                      <TableCell className={classes.tableCell} align="left">
-                        Restock
-                      </TableCell>
-                      <TableCell className={classes.tableCell} align="left">
-                        Edit
-                      </TableCell>
-                      <TableCell className={classes.tableCell} align="left">
-                        Remove
-                      </TableCell>
-                    </>
+                  <TableCell align="left">Brand</TableCell>
+                  <TableCell align="left">Flavor</TableCell>
+                  <TableCell align="left">ABV</TableCell>
+                  <TableCell align="left">Price</TableCell>
+                  <TableCell align="left">Pints</TableCell>
+                  {user ? (
+                    user.role === role.EMPLOYEE || user.role === role.ADMIN ? (
+                      <React.Fragment>
+                        <TableCell align="left">Buy</TableCell>
+                        <TableCell align="left">Restock</TableCell>
+                        <TableCell align="left">Edit</TableCell>
+                        <TableCell align="left">Remove</TableCell>
+                      </React.Fragment>
+                    ) : null
                   ) : null}
                 </TableRow>
               </TableHead>
               <TableBody>
                 {beers &&
                   beers.map((beer) => (
-                    <TableRow key={beer.id}>
-                      <TableCell className={classes.tableCell}>
+                    <TableRow key={beer.beerId} className={classes.tableRow}>
+                      <TableCell>
                         <Link
-                          to={`/beers/${beer.id}`}
-                          className={classes.actionLinkStyle}
+                          style={{
+                            color: "white",
+                          }}
+                          to={`/beers/${beer.beerId}`}
                         >
                           {beer.name}
-                          {beer.pints > 10 ? (
-                            ""
-                          ) : beer.pints > 0 ? (
-                            <>
-                              <br />
-                              <i className={classes.yellow}>Almost Empty</i>
-                            </>
-                          ) : (
-                            <>
-                              <br />
-                              <i className={classes.red}>Out of stock</i>
-                            </>
-                          )}
                         </Link>
+                        {beer.pints > 10 ? (
+                          ""
+                        ) : beer.pints > 0 ? (
+                          <p>
+                            <i
+                              className={`${classes.yellow} ${classes.marginTopTwo}`}
+                            >
+                              Almost Empty
+                            </i>
+                          </p>
+                        ) : (
+                          <p>
+                            {" "}
+                            <i
+                              className={`${classes.red} ${classes.marginTopTwo}`}
+                            >
+                              Out of stock
+                            </i>
+                          </p>
+                        )}
                       </TableCell>
-                      <TableCell className={classes.tableCell} align="left">
-                        {beer.brand}
-                      </TableCell>
-                      <TableCell className={classes.tableCell} align="left">
-                        {beer.flavor}
-                      </TableCell>
-                      <TableCell className={classes.tableCell} align="left">
-                        {beer.alcoholContent}
-                      </TableCell>
+                      <TableCell align="left">{beer.brand}</TableCell>
+                      <TableCell align="left">{beer.flavor}</TableCell>
+                      <TableCell align="left">{beer.alcoholContent}</TableCell>
                       {beer.price > 12 ? (
-                        <TableCell
-                          style={{ color: "orange", borderBottom: "none" }}
-                          align="left"
-                        >
+                        <TableCell style={{ color: "orange" }} align="left">
                           {beer.price}
                         </TableCell>
                       ) : beer.price > 8 ? (
-                        <TableCell
-                          style={{ color: "yellow", borderBottom: "none" }}
-                          align="left"
-                        >
+                        <TableCell style={{ color: "yellow" }} align="left">
                           {beer.price}
                         </TableCell>
                       ) : (
-                        <TableCell
-                          style={{ color: "green", borderBottom: "none" }}
-                          align="left"
-                        >
+                        <TableCell style={{ color: "green" }} align="left">
                           {beer.price}
                         </TableCell>
                       )}
-                      <TableCell className={classes.tableCell} align="left">
-                        {beer.pints}
-                      </TableCell>
-
+                      <TableCell align="left">{beer.pints}</TableCell>
                       {user &&
                       (user.role === role.EMPLOYEE ||
                         user.role === role.ADMIN) ? (
-                        <>
+                        <React.Fragment>
                           {beer.pints > 0 ? (
-                            <TableCell
-                              className={classes.tableCell}
-                              align="center"
-                            >
+                            <TableCell align="center">
                               <span
-                                onClick={() => decrementPints(beer.id)}
+                                onClick={() => decrementPints(beer.beerId)}
                                 className={classes.actionLinkStyle}
                               >
                                 -
                               </span>
                             </TableCell>
                           ) : (
-                            <TableCell
-                              className={classes.tableCell}
-                              align="center"
-                            >
+                            <TableCell align="center">
                               <span className={classes.actionLinkStyle}>-</span>
                             </TableCell>
                           )}
 
-                          <TableCell
-                            className={classes.tableCell}
-                            align="center"
-                          >
+                          <TableCell align="center">
                             <span
                               className={classes.actionLinkStyle}
-                              onClick={() => incrementPints(beer.id)}
+                              onClick={() => incrementPints(beer.beerId)}
                             >
                               +
                             </span>
                           </TableCell>
-                          <TableCell
-                            className={classes.tableCell}
-                            align="center"
-                          >
-                            <Link to={`/beers/edit/${beer.id}`}>
+                          <TableCell align="center">
+                            <Link to={`/beers/edit/${beer.beerId}`}>
                               <EditIcon
                                 style={{
                                   cursor: "pointer",
+                                  color: "white",
                                 }}
-                              ></EditIcon>
+                              />
                             </Link>
                           </TableCell>
-                          <TableCell
-                            style={{
-                              borderBottom: "none",
-                            }}
-                            align="center"
-                          >
+                          <TableCell align="center">
                             <span
                               className={classes.actionLinkStyle}
-                              onClick={() => onDelete(beer.id)}
+                              onClick={() => onDelete(beer.beerId)}
                             >
                               X
                             </span>
                           </TableCell>
-                        </>
+                        </React.Fragment>
                       ) : null}
                     </TableRow>
                   ))}

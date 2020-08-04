@@ -43,7 +43,7 @@ Log in with the username 'admin', 'employee', or 'member' and password 'test' to
 - _\$dotnet ef migrations add initial_
 - _\$dotnet ef database update_
 - _\$dotnet watch run_
-- _Api will run on localhost:4000_
+- _Api will run on localhost:5000_
 - _Open a seperate terminal_
 - _Navigate to app directory_
 - _\$npm install to download dependencies_

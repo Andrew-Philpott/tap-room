@@ -1,5 +1,5 @@
-import { authHeader } from "../helpers";
-import { handleResponse } from "../helpers";
+import authHeader from "../helpers/authentication-header";
+import handleResponse from "../helpers/handle-response";
 
 export const reviewService = {
   getReview,
@@ -14,44 +14,49 @@ function getReview(id) {
     method: "GET",
   };
 
-  return fetch(
-    `http://localhost:4000/users/reviews/${id}`,
+  const response = fetch(
+    `http://localhost:5000/users/reviews/${id}`,
     requestOptions
-  ).then(handleResponse);
+  );
+  return handleResponse(response);
 }
 
-function getReviews() {
+async function getReviews() {
   const requestOptions = {
     method: "GET",
   };
 
-  return fetch(`http://localhost:4000/users/reviews`, requestOptions).then(
-    handleResponse
+  const response = await fetch(
+    `http://localhost:5000/users/reviews`,
+    requestOptions
   );
+  return handleResponse(response);
 }
 
-function createReview(Review) {
+function createReview(review) {
   const requestOptions = {
     method: "POST",
     headers: { ...authHeader(), "Content-Type": "application/json" },
-    body: JSON.stringify(Review),
+    body: JSON.stringify(review),
   };
 
-  return fetch(`http://localhost:4000/users/reviews`, requestOptions).then(
+  return fetch(`http://localhost:5000/users/reviews`, requestOptions).then(
     handleResponse
   );
 }
 
-function updateReview(Review) {
+function updateReview(id, review) {
   const requestOptions = {
     method: "PUT",
     headers: { ...authHeader(), "Content-Type": "application/json" },
-    body: JSON.stringify(Review),
+    body: JSON.stringify(review),
   };
 
-  return fetch(`http://localhost:4000/reviews`, requestOptions).then(
-    handleResponse
+  const response = fetch(
+    `http://localhost:5000/users/reviews/${id}`,
+    requestOptions
   );
+  return handleResponse(response);
 }
 
 function deleteReview(id) {
@@ -60,8 +65,9 @@ function deleteReview(id) {
     headers: authHeader(),
   };
 
-  return fetch(
-    `http://localhost:4000/users/reviews/${id}`,
+  const response = fetch(
+    `http://localhost:5000/users/reviews/${id}`,
     requestOptions
-  ).then(handleResponse);
+  );
+  return handleResponse(response);
 }

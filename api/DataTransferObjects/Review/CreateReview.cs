@@ -4,13 +4,11 @@ namespace TapRoomApi.Models
 {
   public class CreateReview
   {
-    [Required(ErrorMessage = "Rating must be between 1 and 5.")]
-    [Range(1, 5)]
+    [Required]
     public int Rating { get; set; }
-    [Required(ErrorMessage = "Description is required.")]
-    [StringLength(60, ErrorMessage = "Description can't be longer than 500 characters.")]
+    [Required]
     public string Description { get; set; }
-    [Required(ErrorMessage = "Beer Id is required.")]
+    [Required]
     public int BeerId { get; set; }
   }
 }

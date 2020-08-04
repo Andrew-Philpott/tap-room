@@ -25,7 +25,6 @@ namespace TapRoomApi.Helpers
       #endregion
 
       #region User
-      CreateMap<User, ViewUser>();
 
       CreateMap<RegisterUser, User>();
 
