@@ -41,14 +41,13 @@ export const ReviewForm = () => {
         .then(() => {
           history.push(`/beers/${id}`);
         })
-        .catch(() => {
+        .catch(() =>
           setApiErrors(
             "Something went wrong trying to write a review. Please try again later."
-          );
-        });
+          )
+        );
     }
   }
-  console.log(values);
   return (
     <Container
       className={`${classes.whiteText} ${classes.marginTopTwo}`}

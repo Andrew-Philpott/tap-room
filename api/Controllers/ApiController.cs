@@ -21,13 +21,13 @@ namespace TapRoomApi.Controllers
 {
   [ApiController]
   [Route("[controller]")]
-  public class UsersController : ControllerBase
+  public class ApiController : ControllerBase
   {
     private TapRoomContext _db;
-    private readonly ILogger<UsersController> _logger;
+    private readonly ILogger<ApiController> _logger;
     private IMapper _mapper;
     private readonly AppSettings _appSettings;
-    public UsersController(ILogger<UsersController> logger, TapRoomContext db, IMapper mapper, IOptions<AppSettings> appSettings)
+    public ApiController(ILogger<ApiController> logger, TapRoomContext db, IMapper mapper, IOptions<AppSettings> appSettings)
     {
       _mapper = mapper;
       _db = db;
@@ -36,7 +36,7 @@ namespace TapRoomApi.Controllers
     }
     #region users
     [AllowAnonymous]
-    [HttpPost("authenticate")]
+    [HttpPost("users/authenticate")]
     public async Task<IActionResult> Authenticate([FromBody] AuthenticateUser model)
     {
       if (string.IsNullOrWhiteSpace(model.Email) || string.IsNullOrWhiteSpace(model.Password))
@@ -75,7 +75,7 @@ namespace TapRoomApi.Controllers
     }
 
     [AllowAnonymous]
-    [HttpPost("register")]
+    [HttpPost("users/register")]
     public async Task<IActionResult> Register([FromBody] RegisterUser model)
     {
       try
@@ -114,7 +114,7 @@ namespace TapRoomApi.Controllers
       }
     }
 
-    [HttpGet]
+    [HttpGet("users")]
     public async Task<IActionResult> GetAll()
     {
       try
@@ -128,7 +128,7 @@ namespace TapRoomApi.Controllers
       }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("users/{id}")]
     public async Task<IActionResult> GetById(int id)
     {
       try
@@ -145,7 +145,7 @@ namespace TapRoomApi.Controllers
       }
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("users/{id}")]
     public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUser model)
     {
       if (model == null)
@@ -191,7 +191,7 @@ namespace TapRoomApi.Controllers
       }
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("users/{id}")]
     public async Task<IActionResult> DeleteUser(int id)
     {
       try

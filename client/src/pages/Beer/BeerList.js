@@ -24,7 +24,7 @@ export const BeerList = (props) => {
       beerService
         .getBeers()
         .then((response) => setBeers(response))
-        .catch(
+        .catch(() =>
           setApiErrors(
             "Something went wrong trying to fetch the list beers. Please try again later."
           )
@@ -41,7 +41,7 @@ export const BeerList = (props) => {
           newState = newState.filter((x) => x.beerId !== id);
           setBeers(newState);
         })
-        .catch(
+        .catch(() =>
           setApiErrors("Something went wrong while trying to delete the beer.")
         );
   };
@@ -53,7 +53,7 @@ export const BeerList = (props) => {
         const newState = beers.map((x) => (x.beerId === id ? beer : x));
         setBeers(newState);
       })
-      .catch(
+      .catch(() =>
         setApiErrors(
           "Something went wrong while trying to increment the number of pints."
         )
@@ -67,7 +67,7 @@ export const BeerList = (props) => {
         const newState = beers.map((x) => (x.beerId === id ? beer : x));
         setBeers(newState);
       })
-      .catch(
+      .catch(() =>
         setApiErrors(
           "Something went wrong while trying to decrement the number of pints."
         )

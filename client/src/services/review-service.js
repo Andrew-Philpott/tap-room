@@ -15,7 +15,7 @@ function getReview(id) {
   };
 
   const response = fetch(
-    `http://localhost:5000/users/reviews/${id}`,
+    `http://localhost:5000/api/reviews/${id}`,
     requestOptions
   );
   return handleResponse(response);
@@ -27,7 +27,7 @@ async function getReviews() {
   };
 
   const response = await fetch(
-    `http://localhost:5000/users/reviews`,
+    `http://localhost:5000/api/reviews`,
     requestOptions
   );
   return handleResponse(response);
@@ -40,7 +40,7 @@ function createReview(review) {
     body: JSON.stringify(review),
   };
 
-  return fetch(`http://localhost:5000/users/reviews`, requestOptions).then(
+  return fetch(`http://localhost:5000/api/reviews`, requestOptions).then(
     handleResponse
   );
 }
@@ -53,7 +53,7 @@ function updateReview(id, review) {
   };
 
   const response = fetch(
-    `http://localhost:5000/users/reviews/${id}`,
+    `http://localhost:5000/api/reviews/${id}`,
     requestOptions
   );
   return handleResponse(response);
@@ -66,7 +66,7 @@ function deleteReview(id) {
   };
 
   const response = fetch(
-    `http://localhost:5000/users/reviews/${id}`,
+    `http://localhost:5000/api/reviews/${id}`,
     requestOptions
   );
   return handleResponse(response);

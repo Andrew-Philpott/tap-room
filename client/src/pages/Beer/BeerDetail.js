@@ -33,7 +33,7 @@ export const BeerDetail = () => {
           <Grid item xs={12}>
             <Button
               component={Link}
-              to={`/reviews/beers/${id}/new`}
+              to={`/reviews/${id}/new`}
               className={`${classes.buttons} ${classes.floatRight}`}
             >
               Write a review

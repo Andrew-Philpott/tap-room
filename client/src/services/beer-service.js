@@ -16,37 +16,29 @@ async function getBeer(id) {
     method: "GET",
   };
 
-  const response = await fetch(
-    `http://localhost:5000/users/beers/${id}`,
-    requestOptions
-  );
-  return handleResponse(response);
+  return fetch(`http://localhost:5000/api/beers/${id}`, requestOptions);
 }
 
-async function getBeers() {
+function getBeers() {
   const requestOptions = {
     method: "GET",
   };
 
-  const response = await fetch(
-    `http://localhost:5000/users/beers`,
-    requestOptions
+  return fetch(`http://localhost:5000/api/beers`, requestOptions).then(
+    handleResponse
   );
-  return handleResponse(response);
 }
 
-async function incrementPints(id) {
+function incrementPints(id) {
   const requestOptions = {
     method: "PUT",
     headers: { ...authHeader(), "Content-Type": "application/json" },
     body: JSON.stringify(id),
   };
-
-  const response = await fetch(
-    `http://localhost:5000/users/beers/increment/${id}`,
+  return fetch(
+    `http://localhost:5000/api/beers/increment/${id}`,
     requestOptions
-  );
-  return handleResponse(response);
+  ).then(handleResponse);
 }
 
 async function decrementPints(id) {
@@ -56,11 +48,10 @@ async function decrementPints(id) {
     body: JSON.stringify(id),
   };
 
-  const response = await fetch(
-    `http://localhost:5000/users/beers/decrement/${id}`,
+  return fetch(
+    `http://localhost:5000/api/beers/decrement/${id}`,
     requestOptions
-  );
-  return await handleResponse(response);
+  ).then(handleResponse);
 }
 
 function createBeer(beer) {
@@ -81,7 +72,7 @@ function createBeer(beer) {
     body: JSON.stringify(beer),
   };
 
-  return fetch(`http://localhost:5000/users/beers`, requestOptions).then(
+  return fetch(`http://localhost:5000/api/beers`, requestOptions).then(
     handleResponse
   );
 }
@@ -93,11 +84,9 @@ async function updateBeer(id, beer) {
     body: JSON.stringify(beer),
   };
 
-  const response = await fetch(
-    `http://localhost:5000/users/beers/${id}`,
-    requestOptions
+  return fetch(`http://localhost:5000/api/beers/${id}`, requestOptions).then(
+    handleResponse
   );
-  return await handleResponse(response);
 }
 
 async function deleteBeer(id) {
@@ -106,9 +95,7 @@ async function deleteBeer(id) {
     headers: authHeader(),
   };
 
-  const response = await fetch(
-    `http://localhost:5000/users/beers/${id}`,
-    requestOptions
+  return fetch(`http://localhost:5000/api/beers/${id}`, requestOptions).then(
+    handleResponse
   );
-  return await handleResponse(response);
 }

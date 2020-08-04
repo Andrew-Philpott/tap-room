@@ -29,7 +29,7 @@ export const BeerForm = () => {
       beerService
         .getBeer(id)
         .then((response) => setValues(response))
-        .catch(
+        .catch(() =>
           setApiErrors(
             "There was a problem fetching the beer. Please try again later."
           )
@@ -59,7 +59,7 @@ export const BeerForm = () => {
           .then(() => {
             history.push(routes.BEER_LIST);
           })
-          .catch(
+          .catch(() =>
             setApiErrors(
               "There was a problem updating the beer. Please try again later."
             )
@@ -70,7 +70,7 @@ export const BeerForm = () => {
           .then(() => {
             history.push(routes.BEER_LIST);
           })
-          .catch(
+          .catch(() =>
             setApiErrors(
               "There was a problem adding the beer to the list. Please try again later."
             )

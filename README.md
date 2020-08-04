@@ -6,7 +6,7 @@
 
 #### By **Andrew Philpott**
 
-[About](#About) | [User Stories](#User-Stories) | [Setup/Installation Requirements](#Setup/Installation-Requirements) | [Bugs](#Known-Bugs) | [Technologies](#Technologies-Used) | [Contact](#Support-and-Contact-Details)
+[About](#About) | [User Stories](#User-Stories) | | [View URLs](#View-URLs) | [API Endpoints](#API-Endpoints) | [Setup/Installation Requirements](#Setup/Installation-Requirements) | [Bugs](#Known-Bugs) | [Technologies](#Technologies-Used) | [Contact](#Support-and-Contact-Details)
 
 </div>
 
@@ -34,6 +34,39 @@ Log in with the username 'admin', 'employee', or 'member' and password 'test' to
 - As an admin, I want to be able to delete a beer.
 - As an admin, on clicking remove I want a popup notification asking me to confirm that I want to delete a beer from the list.
 
+## View URLs
+
+| URL Path         | Purpose                                  |
+| :--------------- | :--------------------------------------- |
+| /                | Landing page                             |
+| /login           | Form to login                            |
+| /register        | Form to register                         |
+| /account         | Member exclusive deals                   |
+| /beers           | List of beers                            |
+| /beers/:id       | Beer details                             |
+| /beers/edit/:id  | Form to update beer information          |
+| /beers/new       | Form to add a beer to the beer list      |
+| /reviews/new     | Form to add a review for any beer        |
+| /reviews/:id/new | Form to add a review for a specific beer |
+
+## API Endpoints
+
+| HTTP Method | Endpoint            | Purpose                  |
+| :---------- | :------------------ | :----------------------- |
+| POST        | /users/register     | Create a user            |
+| POST        | /users/authenticate | Authenticate a user      |
+| GET         | /users/{id}         | Retrieve a user by id    |
+| PUT         | /users/{id}         | Edit a user              |
+| DELETE      | /users/{id}         | Delete a user            |
+| GET         | /beers              | Retrieve a list of beers |
+| POST        | /beers              | Create a beer            |
+| GET         | /beers/{id}         | Retrieve a specific beer |
+| PUT         | /beers/{id}         | Update a specific beer   |
+| GET         | /beers              | Retrieve a list of beers |
+| POST        | /beers              | Create a beer            |
+| GET         | /beers/{id}         | Retrieve a specific beer |
+| PUT         | /beers/{id}         | Update a specific beer   |
+
 ## Setup/Installation Requirements
 
 - _Clone this repository._
@@ -48,7 +81,7 @@ Log in with the username 'admin', 'employee', or 'member' and password 'test' to
 - _Navigate to app directory_
 - _\$npm install to download dependencies_
 - _\$npm run start to run the application_
-- _Application will run on localhost:8080_
+- _Application will run on localhost:3000_
 
 ## Known Bugs
 

@@ -17,7 +17,7 @@ async function login(email, password) {
   };
 
   const response = await fetch(
-    `http://localhost:5000/users/authenticate`,
+    `http://localhost:5000/api/users/authenticate`,
     requestOptions
   );
   return await handleResponse(response);
@@ -35,7 +35,7 @@ async function register(user) {
   };
 
   const response = await fetch(
-    `http://localhost:5000/users/register`,
+    `http://localhost:5000/api/users/register`,
     requestOptions
   );
   return handleResponse(response);
@@ -48,7 +48,10 @@ async function updateUser(user) {
     body: JSON.stringify(user),
   };
 
-  const response = await fetch(`http://localhost:5000/users`, requestOptions);
+  const response = await fetch(
+    `http://localhost:5000/api/users`,
+    requestOptions
+  );
   return handleResponse(response);
 }
 
@@ -59,7 +62,7 @@ async function deleteUser(id) {
   };
 
   const response = await fetch(
-    `http://localhost:5000/users/${id}`,
+    `http://localhost:5000/api/users/${id}`,
     requestOptions
   );
   return handleResponse(response);
