@@ -37,7 +37,7 @@ export const useStyles = makeStyles((theme) => ({
     borderColor: "white !important",
   },
   whiteText: {
-    color: "white",
+    color: "white !important",
   },
   marginTopTwo: { marginTop: theme.spacing(2) },
   marginTopOne: { marginTop: theme.spacing(1) },
@@ -94,5 +94,10 @@ export const useStyles = makeStyles((theme) => ({
   tapHouseLogo: {
     height: "100px",
     width: "auto",
+  },
+  input: {
+    "&::placeholder": {
+      color: "white",
+    },
   },
 }));

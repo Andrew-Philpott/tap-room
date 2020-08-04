@@ -1,69 +1,65 @@
-import authHeader from "../helpers/authentication-header";
+import {
+  getOptions,
+  putOptions,
+  deleteOptions,
+  postOptions,
+} from "../helpers/request-options";
 import handleResponse from "../helpers/handle-response";
 
 export const userService = {
   login,
   logout,
+  getUser,
+  getUsers,
   register,
   updateUser,
   deleteUser,
 };
 
-async function login(email, password) {
+function getUser(id) {
+  return fetch(`http://localhost:5000/api/users/${id}`, getOptions).then(
+    handleResponse
+  );
+}
+
+function getUsers() {
+  return fetch(`http://localhost:5000/api/users`, getOptions).then(
+    handleResponse
+  );
+}
+
+function login(email, password) {
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   };
 
-  const response = await fetch(
+  return fetch(
     `http://localhost:5000/api/users/authenticate`,
     requestOptions
-  );
-  return await handleResponse(response);
+  ).then(handleResponse);
 }
 
 function logout() {
   localStorage.removeItem("user");
 }
 
-async function register(user) {
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(user),
-  };
-
-  const response = await fetch(
+function register(user) {
+  return fetch(
     `http://localhost:5000/api/users/register`,
-    requestOptions
-  );
-  return handleResponse(response);
+    postOptions(user)
+  ).then(handleResponse);
 }
 
-async function updateUser(user) {
-  const requestOptions = {
-    method: "PUT",
-    headers: { ...authHeader(), "Content-Type": "application/json" },
-    body: JSON.stringify(user),
-  };
-
-  const response = await fetch(
-    `http://localhost:5000/api/users`,
-    requestOptions
+function updateUser(user) {
+  return fetch(`http://localhost:5000/api/users`, putOptions(user)).then(
+    handleResponse
   );
-  return handleResponse(response);
 }
 
-async function deleteUser(id) {
-  const requestOptions = {
-    method: "DELETE",
-    headers: authHeader(),
-  };
-
-  const response = await fetch(
-    `http://localhost:5000/api/users/${id}`,
-    requestOptions
+function deleteUser(id) {
+  return fetch(`http://localhost:5000/api/users/${id}`, deleteOptions).then(
+    handleResponse
   );
-  return handleResponse(response);
 }

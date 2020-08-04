@@ -1,4 +1,9 @@
-import authHeader from "../helpers/authentication-header";
+import {
+  getOptions,
+  putOptions,
+  deleteOptions,
+  postOptions,
+} from "../helpers/request-options";
 import handleResponse from "../helpers/handle-response";
 
 export const reviewService = {
@@ -10,64 +15,32 @@ export const reviewService = {
 };
 
 function getReview(id) {
-  const requestOptions = {
-    method: "GET",
-  };
-
-  const response = fetch(
-    `http://localhost:5000/api/reviews/${id}`,
-    requestOptions
+  return fetch(`http://localhost:5000/api/reviews/${id}`, getOptions).then(
+    handleResponse
   );
-  return handleResponse(response);
 }
 
 async function getReviews() {
-  const requestOptions = {
-    method: "GET",
-  };
-
-  const response = await fetch(
-    `http://localhost:5000/api/reviews`,
-    requestOptions
+  await fetch(`http://localhost:5000/api/reviews`, getOptions).then(
+    handleResponse
   );
-  return handleResponse(response);
 }
 
 function createReview(review) {
-  const requestOptions = {
-    method: "POST",
-    headers: { ...authHeader(), "Content-Type": "application/json" },
-    body: JSON.stringify(review),
-  };
-
-  return fetch(`http://localhost:5000/api/reviews`, requestOptions).then(
+  return fetch(`http://localhost:5000/api/reviews`, postOptions(review)).then(
     handleResponse
   );
 }
 
 function updateReview(id, review) {
-  const requestOptions = {
-    method: "PUT",
-    headers: { ...authHeader(), "Content-Type": "application/json" },
-    body: JSON.stringify(review),
-  };
-
-  const response = fetch(
+  return fetch(
     `http://localhost:5000/api/reviews/${id}`,
-    requestOptions
-  );
-  return handleResponse(response);
+    putOptions(review)
+  ).then(handleResponse);
 }
 
 function deleteReview(id) {
-  const requestOptions = {
-    method: "DELETE",
-    headers: authHeader(),
-  };
-
-  const response = fetch(
-    `http://localhost:5000/api/reviews/${id}`,
-    requestOptions
+  return fetch(`http://localhost:5000/api/reviews/${id}`, deleteOptions).then(
+    handleResponse
   );
-  return handleResponse(response);
 }

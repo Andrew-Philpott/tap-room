@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import { beerService } from "../services/beer-service";
 import { reviewService } from "../services/review-service";
 import { useParams } from "react-router-dom";
-import { Button, Container, TextField, MenuItem } from "@material-ui/core";
+import {
+  Button,
+  Container,
+  TextField,
+  MenuItem,
+  InputLabel,
+} from "@material-ui/core";
 import { history } from "../helpers/history";
 import { useForm } from "./useForm";
 import { useStyles } from "./use-styles";
@@ -20,16 +26,14 @@ export const ReviewForm = () => {
 
   useEffect(() => {
     if (!id) {
-      (async () => {
-        try {
-          const response = await beerService.getBeers();
-          setBeers(response);
-        } catch {
+      beerService
+        .getBeers()
+        .then((response) => setBeers(response))
+        .catch(() =>
           setApiErrors(
             "Something went wrong fetching the list of available beers. Please try again later."
-          );
-        }
-      })();
+          )
+        );
     }
   }, []);
 
@@ -57,38 +61,50 @@ export const ReviewForm = () => {
 
       <form method="POST" onSubmit={handleSubmit}>
         {beers && (
-          <TextField
-            name="beerId"
-            fullWidth
-            select
-            InputProps={{
-              classes: { notchedOutline: classes.whiteTextField },
-              className: `${classes.whiteText} ${classes.marginTopTwo}`,
-            }}
-            placeholder="1 Star"
-            value={values.beerId}
-            onChange={handleInputChange}
-            variant="outlined"
-          >
-            {beers &&
-              beers.map((beer) => {
-                return (
-                  <MenuItem key={1} value={beer.beerId}>
-                    {beer.name}
-                  </MenuItem>
-                );
-              })}
-          </TextField>
+          <React.Fragment>
+            <InputLabel htmlFor="beerId">Select a beer</InputLabel>
+            <TextField
+              name="beerId"
+              fullWidth
+              select
+              InputProps={{
+                classes: {
+                  notchedOutline: classes.whiteTextField,
+                },
+                className: `${classes.whiteText} ${classes.marginTopTwo}`,
+              }}
+              value={values.beerId}
+              onChange={handleInputChange}
+              variant="outlined"
+            >
+              {beers &&
+                beers.map((beer) => {
+                  return (
+                    <MenuItem key={1} value={beer.beerId}>
+                      {beer.name}
+                    </MenuItem>
+                  );
+                })}
+            </TextField>
+          </React.Fragment>
         )}
+        <InputLabel
+          className={`${classes.whiteText} ${classes.marginTopTwo}`}
+          htmlFor="rating"
+        >
+          Rating
+        </InputLabel>
         <TextField
           name="rating"
           fullWidth
           select
           InputProps={{
-            classes: { notchedOutline: classes.whiteTextField },
-            className: `${classes.whiteText} ${classes.marginTopTwo}`,
+            classes: {
+              notchedOutline: classes.whiteTextField,
+            },
+            className: `${classes.whiteText}`,
           }}
-          placeholder="1 Star"
+          placeholder="Rating"
           value={values.rating}
           onChange={handleInputChange}
           variant="outlined"
@@ -109,13 +125,21 @@ export const ReviewForm = () => {
             5 Stars
           </MenuItem>
         </TextField>
+        <InputLabel
+          className={`${classes.whiteText} ${classes.marginTopTwo}`}
+          htmlFor="description"
+        >
+          Description
+        </InputLabel>
         <TextField
           type="text"
           name="description"
           fullWidth
+          multiline={true}
+          rows={5}
           InputProps={{
             classes: { notchedOutline: classes.whiteTextField },
-            className: `${classes.whiteText} ${classes.marginTopTwo}`,
+            className: `${classes.whiteText}`,
           }}
           placeholder="Smooth and great taste."
           value={values.description}
