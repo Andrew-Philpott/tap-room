@@ -56,7 +56,6 @@ export const BeerDetail = () => {
       {beer && beer.reviews ? (
         <React.Fragment>
           {beer.reviews.map((review, index) => {
-            console.log(review);
             return (
               <div key={index} id={index}>
                 <h1>Reviews</h1>
