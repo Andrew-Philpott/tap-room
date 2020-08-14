@@ -45,7 +45,7 @@ export const Login = (props) => {
           localStorage.setItem("user", JSON.stringify(response));
           history.push(routes.BEER_LIST);
         })
-        .catch(() =>
+        .catch(
           setApiErrors("Error trying to login. Please try again later.")
         );
     }

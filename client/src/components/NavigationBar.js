@@ -77,39 +77,25 @@ const NavigationBar = (props) => {
       <MenuItem component={Link} to={routes.LANDING}>
         Home
       </MenuItem>
-
       <MenuItem component={Link} to={routes.BEER_LIST}>
         On Tap
       </MenuItem>
-
       <MenuItem component={Link} to={routes.ABOUT}>
         About
       </MenuItem>
-
       {user === null ? (
         <MenuItem component={Link} to={routes.LOG_IN}>
           Log in
         </MenuItem>
       ) : (
-        <MenuItem
-          onClick={() => {
-            handleMenuClose();
-            userService.logout();
-            setUser(null);
-          }}
-        >
-          Log out
-        </MenuItem>
-      )}
-      {user !== null && (
-        <MenuItem
-          component={Link}
-          to={routes.ACCOUNT}
-          onClick={handleProfileMenuOpen}
-        >
-          Account
-        </MenuItem>
-      )}
+          <MenuItem
+            component={Link}
+            to={routes.ACCOUNT}
+            onClick={handleProfileMenuOpen}
+          >
+            Account
+          </MenuItem>
+        )}
     </Menu>
   );
 
@@ -139,8 +125,8 @@ const NavigationBar = (props) => {
                 Account
               </span>
             ) : (
-              <Link to={routes.LOG_IN}>Log in</Link>
-            )}
+                <Link to={routes.LOG_IN}>Log in</Link>
+              )}
           </div>
           <div className={classes.sectionMobile}>
             <IconButton onClick={handleMobileMenuOpen}>

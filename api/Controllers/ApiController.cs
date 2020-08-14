@@ -42,10 +42,10 @@ namespace TapRoomApi.Controllers
 
       var entity = await _db.User.SingleOrDefaultAsync(x => x.Email == model.Email);
       if (entity == null)
-        return BadRequest("User not found in the database.");
+        return BadRequest(new { message = "User not found in the database." });
 
       if (!VerifyPasswordHash(model.Password, entity.PasswordHash, entity.PasswordSalt))
-        return BadRequest("Email or password was incorrect.");
+        return BadRequest(new { message = "Email or password was incorrect." });
 
       var tokenHandler = new JwtSecurityTokenHandler();
       var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -78,21 +78,6 @@ namespace TapRoomApi.Controllers
     {
       try
       {
-        if (string.IsNullOrWhiteSpace(model.FirstName))
-          return BadRequest("FirstName is required.");
-
-        if (string.IsNullOrWhiteSpace(model.LastName))
-          return BadRequest("LastName is required.");
-
-        if (string.IsNullOrWhiteSpace(model.UserName))
-          return BadRequest("UserName is required.");
-
-        if (string.IsNullOrWhiteSpace(model.Password))
-          return BadRequest("Password is required.");
-
-        if (string.IsNullOrWhiteSpace(model.Email))
-          return BadRequest("Email is required.");
-
         if (await _db.User.AnyAsync(x => x.UserName == model.UserName))
           return BadRequest($"Username {model.UserName} is already taken.");
         byte[] passwordHash, passwordSalt;
@@ -147,29 +132,19 @@ namespace TapRoomApi.Controllers
     public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUser model)
     {
       if (model == null)
-        return BadRequest("User cannot be null.");
-
-      if (string.IsNullOrWhiteSpace(model.FirstName))
-        return BadRequest("First name cannot be blank.");
-
-      if (string.IsNullOrWhiteSpace(model.LastName))
-        return BadRequest("Last name cannot be blank.");
-
-      if (string.IsNullOrWhiteSpace(model.Password))
-        return BadRequest("Password cannot be blank.");
-
+        return BadRequest(new { message = "User cannot be null." });
       try
       {
         User entity = await _db.User.FindAsync(id);
 
         if (entity == null)
-          return BadRequest("User not found in database.");
+          return BadRequest(new { message = "User not found in database." });
 
         if (!string.IsNullOrWhiteSpace(model.UserName) && model.UserName != entity.UserName)
         {
           if (await _db.User.AnyAsync(x => x.UserName == model.UserName))
           {
-            return BadRequest("Username " + model.UserName + " is already taken.");
+            return BadRequest(new { message = "Username " + model.UserName + " is already taken." });
           }
         }
 
@@ -196,7 +171,7 @@ namespace TapRoomApi.Controllers
       {
         User entity = await _db.User.FindAsync(id);
         if (entity == null)
-          return BadRequest("User not found in database.");
+          return BadRequest(new { message = "User not found in database." });
 
         _db.User.Remove(entity);
         await _db.SaveChangesAsync();

@@ -20,12 +20,10 @@ import "./App.css";
 function App() {
   const [user, setUser] = useState(null);
   const [selectedBeer, setSelectedBeer] = useState(null);
-  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    if (!user && !loaded) {
+    if (!user) {
       setUser(getUserFromLs());
-      setLoaded(true);
     }
   }, []);
 
@@ -42,13 +40,11 @@ function App() {
             path={routes.LOG_IN}
             component={() => <Login setUser={setUser} />}
           />
-          {loaded && (
-            <Route
-              exact
-              path={routes.BEER_LIST}
-              component={() => <BeerList user={user} />}
-            />
-          )}
+          <Route
+            exact
+            path={routes.BEER_LIST}
+            component={() => <BeerList user={user} />}
+          />
           <PrivateRoute
             user={user}
             exact
