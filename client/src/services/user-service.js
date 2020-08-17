@@ -6,7 +6,7 @@ import {
 } from "../helpers/request-options";
 import handleResponse from "../helpers/handle-response";
 
-export const userService = {
+export default userService = {
   login,
   logout,
   getUser,
@@ -15,18 +15,6 @@ export const userService = {
   updateUser,
   deleteUser,
 };
-
-function getUser(id) {
-  return fetch(`http://localhost:5000/api/users/${id}`, getOptions).then(
-    handleResponse
-  );
-}
-
-function getUsers() {
-  return fetch(`http://localhost:5000/api/users`, getOptions).then(
-    handleResponse
-  );
-}
 
 function login(email, password) {
   const requestOptions = {
@@ -43,6 +31,19 @@ function login(email, password) {
 
 function logout() {
   localStorage.removeItem("user");
+}
+
+
+function getUser(id) {
+  return fetch(`http://localhost:5000/api/users/${id}`, getOptions).then(
+    handleResponse
+  );
+}
+
+function getUsers() {
+  return fetch(`http://localhost:5000/api/users`, getOptions).then(
+    handleResponse
+  );
 }
 
 function register(user) {
