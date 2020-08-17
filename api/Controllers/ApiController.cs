@@ -327,8 +327,12 @@ namespace TapRoomApi.Controllers
     [HttpDelete("beers/{id}")]
     public async Task<IActionResult> DeleteBeer(int id)
     {
+      var currentUserId = int.Parse(User.Identity.Name);
       try
       {
+        var user = await _db.User.FindAsync(currentUserId);
+        if (user.Role != "admin")
+          return BadRequest(new { message = "You must have administrative privileges to create a beer" });
         Beer entity = await _db.Beer.FindAsync(id);
         if (entity == null)
           return NotFound(new { message = "Beer not found in database." });
