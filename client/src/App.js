@@ -19,13 +19,12 @@ import "./App.css";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [selectedBeer, setSelectedBeer] = useState(null);
 
   useEffect(() => {
     if (!user) {
       setUser(getUserFromLs());
     }
-  }, []);
+  }, [user]);
 
   return (
     <div className="App">
@@ -55,7 +54,7 @@ function App() {
           <Route
             exact
             path={routes.BEER_DETAILS}
-            component={() => <BeerDetail setSelectedBeer={setSelectedBeer} />}
+            component={() => <BeerDetail />}
           />
           <PrivateRoute
             user={user}
@@ -71,8 +70,6 @@ function App() {
             roles={[roles.MEMBER, roles.EMPLOYEE, roles.ADMIN]}
             component={() => (
               <ReviewForm
-                selectedBeer={selectedBeer}
-                setSelectedBeer={setSelectedBeer}
               />
             )}
           />

@@ -5,24 +5,49 @@ import { beerService } from "../../services/beer-service";
 import { useStyles } from "../use-styles";
 import { useForm } from "../useForm";
 import { history } from "../../helpers/history";
-import * as routes from "../../constants/routes";
-
-const initialFieldValues = {
-  name: "",
-  brand: "",
-  color: "",
-  aroma: "",
-  flavor: "",
-  price: "",
-  alcoholContent: "",
-  pints: "",
-};
+import { BEER_LIST } from "../../constants/routes";
 
 export const BeerForm = () => {
   const { id } = useParams();
   const classes = useStyles();
   const [apiErrors, setApiErrors] = useState(null);
-  const { values, setValues, handleInputChange } = useForm(initialFieldValues);
+  const validate = (fieldValues = values) => {
+    let temp = { ...errors };
+    if ("name" in fieldValues)
+      temp.name = fieldValues.name ? "" : "Field cannot be blank";
+    if ("brand" in fieldValues)
+      temp.brand = fieldValues.brand ? "" : "Field cannot be blank";
+    if ("color" in fieldValues)
+      temp.color = fieldValues.color ? "" : "Field cannot be blank";
+    if ("aroma" in fieldValues)
+      temp.aroma = fieldValues.aroma ? "" : "Field cannot be blank";
+    if ("flavor" in fieldValues)
+      temp.flavor = fieldValues.flavor ? "" : "Field cannot be blank";
+    if ("price" in fieldValues)
+      temp.price = (/^\d+$/).test(fieldValues.price) ? "" : "Field must be a number";
+    if ("alcoholContent" in fieldValues)
+      temp.alcoholContent = (/^\d+$/).test(fieldValues.alcoholContent) ? "" : "Field must be a number";
+    if ("pints" in fieldValues)
+      temp.pints = (/^\d+$/).test(fieldValues.pints) ? "" : "Field must be a number";
+    setErrors({ ...temp });
+
+    if (fieldValues === values)
+      return Object.values(temp).every((x) => x === "");
+  };
+
+
+  const { values, setValues, errors, setErrors, handleInputChange } = useForm({
+    name: "",
+    brand: "",
+    color: "",
+    aroma: "",
+    flavor: "",
+    price: "",
+    alcoholContent: "",
+    pints: "",
+  }, validate);
+
+
 
   useEffect(() => {
     if (id) {
@@ -35,29 +60,16 @@ export const BeerForm = () => {
           )
         );
     }
-  }, []);
+  }, [id]);
 
   function handleSubmit(e) {
     e.preventDefault();
-    values.pints = parseInt(values.pints);
-    values.price = parseInt(values.price);
-    values.alcoholContent = parseInt(values.alcoholContent);
-
-    if (
-      values.name &&
-      values.brand &&
-      values.color &&
-      values.aroma &&
-      values.flavor &&
-      values.price &&
-      values.alcoholContent &&
-      values.pints
-    ) {
+    if (validate()) {
       if (id) {
         beerService
           .updateBeer(id, values)
           .then(() => {
-            history.push(routes.BEER_LIST);
+            history.push(BEER_LIST);
           })
           .catch(() =>
             setApiErrors(
@@ -68,7 +80,7 @@ export const BeerForm = () => {
         beerService
           .createBeer(values)
           .then(() => {
-            history.push(routes.BEER_LIST);
+            history.push(BEER_LIST);
           })
           .catch(() =>
             setApiErrors(
@@ -84,8 +96,8 @@ export const BeerForm = () => {
       className={`${classes.whiteText} ${classes.marginTopTwo}`}
       maxWidth="sm"
     >
-      {apiErrors && <p className={classes.whiteTextLarge}>{apiErrors}</p>}
-      <p className={classes.whiteTextLarge}>Add a new beer</p>
+      {apiErrors && <p className="white-text-large">{apiErrors}</p>}
+      <p className="white-text-large">Add a new beer</p>
       <form onSubmit={handleSubmit}>
         <TextField
           type="text"
@@ -99,6 +111,10 @@ export const BeerForm = () => {
           value={values.name}
           onChange={handleInputChange}
           variant="outlined"
+          {...(errors.name && {
+            error: true,
+            helperText: errors.name,
+          })}
         />
         <TextField
           type="text"
@@ -112,6 +128,10 @@ export const BeerForm = () => {
           value={values.brand}
           onChange={handleInputChange}
           variant="outlined"
+          {...(errors.brand && {
+            error: true,
+            helperText: errors.brand,
+          })}
         />
         <TextField
           type="text"
@@ -125,6 +145,10 @@ export const BeerForm = () => {
           value={values.color}
           onChange={handleInputChange}
           variant="outlined"
+          {...(errors.color && {
+            error: true,
+            helperText: errors.color,
+          })}
         />
         <TextField
           type="text"
@@ -138,6 +162,10 @@ export const BeerForm = () => {
           value={values.aroma}
           onChange={handleInputChange}
           variant="outlined"
+          {...(errors.aroma && {
+            error: true,
+            helperText: errors.aroma,
+          })}
         />
         <TextField
           type="text"
@@ -151,6 +179,10 @@ export const BeerForm = () => {
           value={values.flavor}
           onChange={handleInputChange}
           variant="outlined"
+          {...(errors.flavor && {
+            error: true,
+            helperText: errors.flavor,
+          })}
         />
         <TextField
           type="text"
@@ -164,6 +196,10 @@ export const BeerForm = () => {
           value={values.price}
           onChange={handleInputChange}
           variant="outlined"
+          {...(errors.price && {
+            error: true,
+            helperText: errors.price,
+          })}
         />
         <TextField
           type="text"
@@ -177,6 +213,10 @@ export const BeerForm = () => {
           value={values.alcoholContent}
           onChange={handleInputChange}
           variant="outlined"
+          {...(errors.alcoholContent && {
+            error: true,
+            helperText: errors.alcoholContent,
+          })}
         />
         <TextField
           type="text"
@@ -190,13 +230,19 @@ export const BeerForm = () => {
           value={values.pints}
           onChange={handleInputChange}
           variant="outlined"
+          {...(errors.pints && {
+            error: true,
+            helperText: errors.pints,
+          })}
         />
-        <Button
-          className={`${classes.buttons} ${classes.marginTopTwo} ${classes.floatRight}`}
-          type="submit"
-        >
-          Submit
+        <div className={classes.marginTopTwo}>
+          <Button
+            className="buttons float-right"
+            type="submit"
+          >
+            Submit
         </Button>
+        </div>
       </form>
     </Container>
   );

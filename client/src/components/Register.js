@@ -6,68 +6,35 @@ import { history } from "../helpers/history";
 import { useStyles } from "../components/use-styles";
 import { useForm } from "../components/useForm";
 
-const initialFieldValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
-};
-
 export const Register = () => {
   const classes = useStyles();
   const [apiErrors, setApiErrors] = useState(null);
-  const { values, errors, setErrors, handleInputChange } = useForm(
-    initialFieldValues
-  );
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
-    if ("firstName" in fieldValues) {
-      temp.firstName = fieldValues.firstName ? "" : "Field cannot be blank";
-    }
-    if ("lastName" in fieldValues) {
-      temp.lastName = fieldValues.lastName ? "" : "Field cannot be blank";
-    }
-    const mailFormat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-    if ("email" in fieldValues) {
-      temp.email = fieldValues.email.match(mailFormat)
+    if ("firstName" in fieldValues)
+      temp.firstName = fieldValues.firstName ? "" : "Field cannot be blank"
+    if ("lastName" in fieldValues)
+      temp.lastName = fieldValues.lastName ? "" : "Field cannot be blank"
+    if ("password" in fieldValues)
+      temp.password = fieldValues.password ? "" : "Field cannot be blank";
+    if ("email" in fieldValues)
+      temp.email = (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/).test(fieldValues.email)
         ? ""
         : "Email is not valid.";
-    }
-    if ("password" in fieldValues) {
-      temp.password = fieldValues.password ? "" : "Field cannot be blank";
-    }
-
-    if (!fieldValues.firstName) {
-      temp.firstName = "Field cannot be blank";
-    } else {
-      temp.firstName = "";
-    }
-    if (!fieldValues.lastName) {
-      temp.lastName = "Field cannot be blank";
-    } else {
-      temp.lastName = "";
-    }
-
-    if (!fieldValues.email.match(mailFormat)) {
-      temp.email = "Invalid email format";
-    } else {
-      temp.email = "";
-    }
-    if (!fieldValues.password) {
-      temp.password = "Field cannot be blank";
-    } else {
-      temp.password = "";
-    }
-
     setErrors({ ...temp });
-
-    if (!temp.firstName && !temp.lastName && !temp.email && !temp.password) {
-      return true;
-    } else {
-      return false;
-    }
+    if (fieldValues === values)
+      return Object.values(temp).every((x) => x === "");
   };
+
+  const { values, errors, setErrors, handleInputChange } = useForm(
+    {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+    }, validate
+  );
 
   useEffect(() => {
     userService.logout();
@@ -85,9 +52,9 @@ export const Register = () => {
           password: e.target.password.value,
         })
         .then(() => history.push(routes.LOG_IN))
-        .catch(() =>
-          setApiErrors("Error trying to register. Please try again later.")
-        );
+        .catch((error) => {
+          setApiErrors(error);
+        });
     }
   }
 
@@ -111,6 +78,10 @@ export const Register = () => {
           value={values.firstName}
           onChange={handleInputChange}
           variant="outlined"
+          {...(errors.firstName && {
+            error: true,
+            helperText: errors.firstName,
+          })}
         />
         <TextField
           type="text"
@@ -124,6 +95,10 @@ export const Register = () => {
           value={values.lastName}
           onChange={handleInputChange}
           variant="outlined"
+          {...(errors.lastName && {
+            error: true,
+            helperText: errors.lastName,
+          })}
         />
         <TextField
           type="text"
@@ -137,6 +112,10 @@ export const Register = () => {
           value={values.email}
           onChange={handleInputChange}
           variant="outlined"
+          {...(errors.email && {
+            error: true,
+            helperText: errors.email,
+          })}
         />
         <TextField
           type="password"
@@ -150,12 +129,16 @@ export const Register = () => {
           value={values.password}
           onChange={handleInputChange}
           variant="outlined"
+          {...(errors.password && {
+            error: true,
+            helperText: errors.password,
+          })}
         />
         <div className={classes.marginTopOne}>
-          <Button className={classes.buttons} href={routes.LANDING}>
+          <Button className="buttons" href={routes.LANDING}>
             Cancel
           </Button>
-          <Button className={`${classes.buttons} ${classes.floatRight}`}>
+          <Button type="submit" className="buttons float-right">
             Register
           </Button>
         </div>

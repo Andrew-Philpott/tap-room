@@ -14,7 +14,7 @@
 
 This is a website for the fake restuarant Tap House that allows users to browse the different types of beers offered at the establishment. The application features authentication and authorization to provide exclusive deals to registered customers, update functionality for employees, and full CRUD functionality for admins. Additionally, create, update, and read data transfer objects were made for the beer entity. This project is a work in progress and will include the ability for users to leave reviews on beers.
 
-Log in with the username 'admin', 'employee', or 'member' and password 'test' to view authorization in action.
+Log in with the email 'admin@gmail.com', 'employee@gmail.com', or 'member@gmail.com' and password 'test' to view authorization in action.
 
 ## User Stories
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const useForm = (initialFieldValues) => {
+export const useForm = (initialFieldValues, validate) => {
   const [values, setValues] = useState(initialFieldValues);
   const [errors, setErrors] = useState({});
 
@@ -11,6 +11,7 @@ export const useForm = (initialFieldValues) => {
       ...values,
       ...fieldValue,
     });
+    validate(fieldValue);
   };
   return {
     values,

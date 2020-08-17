@@ -18,11 +18,24 @@ export const ReviewForm = () => {
   const classes = useStyles();
   const [beers, setBeers] = useState(null);
   const [apiErrors, setApiErrors] = useState(null);
-  const { values, handleInputChange } = useForm({
+
+  const validate = (fieldValues = values) => {
+    let temp = { ...errors }
+    if ("rating" in fieldValues)
+      fieldValues.rating = (fieldValues.rating >= 1 && fieldValues.rating <= 5) ? "" : "Rating must be between 1 and 5."
+    if ("description" in fieldValues)
+      fieldValues.description = (fieldValues.description.length >= 50 && fieldValues.description.length <= 500) ? "" : "Description must be between 50 and 500 characters."
+
+    setErrors({ ...temp });
+    if (fieldValues === values)
+      return Object.values(temp).every((x) => x === "");
+  }
+
+  const { values, errors, setErrors, handleInputChange } = useForm({
     beerId: id ? parseInt(id) : 0,
     rating: "",
     description: "",
-  });
+  }, validate);
 
   useEffect(() => {
     if (!id) {
@@ -35,7 +48,7 @@ export const ReviewForm = () => {
           )
         );
     }
-  }, []);
+  }, [id]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -45,9 +58,9 @@ export const ReviewForm = () => {
         .then(() => {
           history.push(`/beers/${id}`);
         })
-        .catch(() =>
+        .catch((error) =>
           setApiErrors(
-            "Something went wrong trying to write a review. Please try again later."
+            error
           )
         );
     }
@@ -57,8 +70,6 @@ export const ReviewForm = () => {
       className={`${classes.whiteText} ${classes.marginTopTwo}`}
       maxWidth="sm"
     >
-      {apiErrors && <p className={classes.whiteTextLarge}>{apiErrors}</p>}
-
       <form method="POST" onSubmit={handleSubmit}>
         {beers && (
           <React.Fragment>
@@ -76,6 +87,7 @@ export const ReviewForm = () => {
               value={values.beerId}
               onChange={handleInputChange}
               variant="outlined"
+
             >
               {beers &&
                 beers.map((beer) => {
@@ -108,6 +120,10 @@ export const ReviewForm = () => {
           value={values.rating}
           onChange={handleInputChange}
           variant="outlined"
+          {...(errors.rating && {
+            error: true,
+            helperText: errors.rating,
+          })}
         >
           <MenuItem key={1} value={1}>
             1 Star
@@ -145,14 +161,19 @@ export const ReviewForm = () => {
           value={values.description}
           onChange={handleInputChange}
           variant="outlined"
+          {...(errors.description && {
+            error: true,
+            helperText: errors.description,
+          })}
         />
         <Button
-          className={`${classes.buttons} ${classes.marginTopTwo} ${classes.floatRight}`}
+          className={`buttons ${classes.marginTopTwo} float-right`}
           type="submit"
         >
           Submit
         </Button>
       </form>
+      {apiErrors && <p className="white-text-large">{apiErrors}</p>}
     </Container>
   );
 };

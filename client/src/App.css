@@ -26,3 +26,33 @@ body,
   opacity: 1;
   transition: opacity 300ms linear;
 }
+
+.orange {
+  color: orange;
+}
+
+.yellow {
+  color: yellow;
+}
+
+.green {
+  color: green;
+}
+
+.white-text-large {
+  color: white;
+  font-size: 1.5em;
+}
+
+.buttons {
+  background-color: white !important;
+  min-width: 100px;
+}
+.buttons:hover {
+  background-color: white !important;
+  color: black;
+}
+
+.float-right {
+  float: right;
+}

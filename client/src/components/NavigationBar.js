@@ -7,9 +7,9 @@ import Menu from "@material-ui/core/Menu";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
 import taphouselogo from "../assets/img/taphouselogo.png";
-import * as routes from "../constants/routes.js";
 import { useStyles } from "./use-styles";
 import { userService } from "../services/user-service";
+import { ACCOUNT, LANDING, LOG_IN, BEER_LIST, ABOUT } from "../constants/routes"
 
 const NavigationBar = (props) => {
   const { user, setUser } = props;
@@ -47,7 +47,7 @@ const NavigationBar = (props) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose} component={Link} to={routes.ACCOUNT}>
+      <MenuItem onClick={handleMenuClose} component={Link} to={ACCOUNT}>
         My account
       </MenuItem>
 
@@ -74,23 +74,23 @@ const NavigationBar = (props) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem component={Link} to={routes.LANDING}>
+      <MenuItem component={Link} to={LANDING}>
         Home
       </MenuItem>
-      <MenuItem component={Link} to={routes.BEER_LIST}>
+      <MenuItem component={Link} to={BEER_LIST}>
         On Tap
       </MenuItem>
-      <MenuItem component={Link} to={routes.ABOUT}>
+      <MenuItem component={Link} to={ABOUT}>
         About
       </MenuItem>
       {user === null ? (
-        <MenuItem component={Link} to={routes.LOG_IN}>
+        <MenuItem component={Link} to={LOG_IN}>
           Log in
         </MenuItem>
       ) : (
           <MenuItem
             component={Link}
-            to={routes.ACCOUNT}
+            to={ACCOUNT}
             onClick={handleProfileMenuOpen}
           >
             Account
@@ -103,7 +103,7 @@ const NavigationBar = (props) => {
     <div>
       <AppBar className={classes.appBar} position="static">
         <Toolbar>
-          <Link to={routes.LANDING}>
+          <Link to={LANDING}>
             <img
               className={classes.tapHouseLogo}
               src={taphouselogo}
@@ -112,20 +112,20 @@ const NavigationBar = (props) => {
           </Link>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <Link to={routes.LANDING}>Home</Link>
-            <Link to={routes.BEER_LIST}>On Tap</Link>
-            <Link to={routes.ABOUT}>About</Link>
+            <Link to={LANDING}>Home</Link>
+            <Link to={BEER_LIST}>On Tap</Link>
+            <Link to={ABOUT}>About</Link>
             {user !== null ? (
               <span
                 className={`${classes.navLinks} ${classes.pointer}`}
                 aria-controls={menuId}
                 onClick={handleProfileMenuOpen}
-                to={routes.ACCOUNT}
+                to={ACCOUNT}
               >
                 Account
               </span>
             ) : (
-                <Link to={routes.LOG_IN}>Log in</Link>
+                <Link to={LOG_IN}>Log in</Link>
               )}
           </div>
           <div className={classes.sectionMobile}>

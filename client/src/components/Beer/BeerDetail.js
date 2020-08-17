@@ -12,29 +12,33 @@ export const BeerDetail = () => {
   const [apiErrors, setApiErrors] = useState(null);
 
   useEffect(() => {
-    if (id && !beer) {
+    let mounted = true;
+    if (id) {
       beerService
         .getBeer(parseInt(id))
-        .then((response) => setBeer(response))
+        .then((response) => {
+          if (mounted)
+            setBeer(response)
+        })
         .catch(() =>
           setApiErrors(
             "There was an error fetching the beer's details. Please try again later."
           )
         );
     }
-  }, []);
+    return () => mounted = false;
+  }, [id]);
 
   return (
     <Container className={`${classes.whiteText} ${classes.marginTopTwo}`}>
       {apiErrors && <h1>{apiErrors}</h1>}
-
       {beer && (
         <Grid container>
           <Grid item xs={12}>
             <Button
               component={Link}
               to={`/reviews/${parseInt(id)}/new`}
-              className={`${classes.buttons} ${classes.floatRight}`}
+              className="buttons float-right"
             >
               Write a review
             </Button>
@@ -61,16 +65,16 @@ export const BeerDetail = () => {
                 <h1>Reviews</h1>
                 <p>User: {review.user.userName}</p>
                 <p>Rating: {review.rating}</p>
-                <p>Description{review.description}</p>
+                <p>Description: {review.description}</p>
               </div>
             );
           })}
         </React.Fragment>
       ) : (
-        <h1>
-          No reviews for this beer yet. Create an account to provide feedback!
-        </h1>
-      )}
+          <h1>
+            No reviews for this beer yet. Create an account to provide feedback!
+          </h1>
+        )}
     </Container>
   );
 };

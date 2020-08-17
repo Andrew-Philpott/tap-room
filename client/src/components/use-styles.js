@@ -10,16 +10,10 @@ export const useStyles = makeStyles((theme) => ({
     },
   },
   floatRight: { float: "right" },
-  orange: {
-    color: "orange",
-  },
-  yellow: {
-    color: "yellow",
-  },
-  green: {
-    color: "green",
-  },
-  tableRow: {
+  table: {
+    "& .MuiTableHead-root": {
+      color: "white",
+    },
     "& .MuiTableCell-root": {
       borderBottom: "none",
       color: "white",
@@ -44,10 +38,6 @@ export const useStyles = makeStyles((theme) => ({
   marginRightTen: { marginRight: "10px" },
   textAlignCenter: {
     textAlign: "center",
-  },
-  whiteTextLarge: {
-    color: "white",
-    fontSize: "2em",
   },
   pointer: {
     cursor: "pointer",

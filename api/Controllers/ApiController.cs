@@ -37,39 +37,45 @@ namespace TapRoomApi.Controllers
     [HttpPost("users/authenticate")]
     public async Task<IActionResult> Authenticate([FromBody] AuthenticateUser model)
     {
-      if (string.IsNullOrWhiteSpace(model.Email) || string.IsNullOrWhiteSpace(model.Password))
-        return BadRequest(new { message = "Not a valid email or password." });
-
-      var entity = await _db.User.SingleOrDefaultAsync(x => x.Email == model.Email);
-      if (entity == null)
-        return BadRequest(new { message = "User not found in the database." });
-
-      if (!VerifyPasswordHash(model.Password, entity.PasswordHash, entity.PasswordSalt))
-        return BadRequest(new { message = "Email or password was incorrect." });
-
-      var tokenHandler = new JwtSecurityTokenHandler();
-      var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-      var tokenDescriptor = new SecurityTokenDescriptor
+      try
       {
-        Subject = new ClaimsIdentity(new Claim[]
+        if (string.IsNullOrWhiteSpace(model.Email) || string.IsNullOrWhiteSpace(model.Password))
+          return BadRequest(new { message = "Not a valid email or password." });
+
+        var entity = await _db.User.SingleOrDefaultAsync(x => x.Email == model.Email);
+
+        if (entity == null || !VerifyPasswordHash(model.Password, entity.PasswordHash, entity.PasswordSalt))
+          return BadRequest(new { message = "Email or password was incorrect." });
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+        var tokenDescriptor = new SecurityTokenDescriptor
         {
+          Subject = new ClaimsIdentity(new Claim[]
+          {
             new Claim(ClaimTypes.Name, entity.UserId.ToString())
-        }),
-        Expires = DateTime.UtcNow.AddDays(7),
-        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-      };
-      var token = tokenHandler.CreateToken(tokenDescriptor);
-      var JWToken = tokenHandler.WriteToken(token);
+          }),
+          Expires = DateTime.UtcNow.AddDays(7),
+          SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        var JWToken = tokenHandler.WriteToken(token);
 
-      return Ok(new
+        return Ok(new
+        {
+          UserId = entity.UserId,
+          Username = entity.UserName,
+          FirstName = entity.FirstName,
+          LastName = entity.LastName,
+          Role = entity.Role,
+          Token = JWToken
+        });
+      }
+      catch (Exception ex)
       {
-        UserId = entity.UserId,
-        Username = entity.UserName,
-        FirstName = entity.FirstName,
-        LastName = entity.LastName,
-        Role = entity.Role,
-        Token = JWToken
-      });
+        System.Console.WriteLine(ex.GetBaseException());
+        return BadRequest(new { message = ex });
+      }
     }
 
     [AllowAnonymous]
@@ -79,7 +85,7 @@ namespace TapRoomApi.Controllers
       try
       {
         if (await _db.User.AnyAsync(x => x.UserName == model.UserName))
-          return BadRequest($"Username {model.UserName} is already taken.");
+          return BadRequest(new { message = $"Username {model.UserName} is already taken." });
         byte[] passwordHash, passwordSalt;
         CreatePasswordHash(model.Password, out passwordHash, out passwordSalt);
         var user = _mapper.Map<User>(model);
@@ -91,9 +97,10 @@ namespace TapRoomApi.Controllers
         await _db.SaveChangesAsync();
         return Ok();
       }
-      catch
+      catch (Exception ex)
       {
-        return StatusCode(500, "Internal server error.");
+        System.Console.WriteLine(ex.GetBaseException());
+        return BadRequest(new { message = ex });
       }
     }
 
@@ -224,53 +231,27 @@ namespace TapRoomApi.Controllers
     [HttpPost("beers")]
     public async Task<IActionResult> CreateBeer([FromBody] CreateBeer model)
     {
-      if (model == null)
-        return BadRequest("Beer cannot be null.");
-
-      if (string.IsNullOrEmpty(model.Name))
-        return BadRequest("Name cannot be blank.");
-
-      if (model.Name.Length > 50)
-        return BadRequest("Name cannot be greater than 50 characters.");
-
-      if (string.IsNullOrEmpty(model.Brand))
-        return BadRequest("Brand cannot be blank.");
-
-      if (model.Name.Length > 50)
-        return BadRequest("Name cannot be greater than 50 characters.");
-
-      if (string.IsNullOrEmpty(model.Color))
-        return BadRequest("Color cannot be blank.");
-
-      if (model.Name.Length > 50)
-        return BadRequest("Name cannot be greater than 50 characters.");
-
-      if (string.IsNullOrEmpty(model.Aroma))
-        return BadRequest("Aroma cannot be blank.");
-
-      if (model.Name.Length > 50)
-        return BadRequest("Name cannot be greater than 50 characters.");
-
-      if (string.IsNullOrEmpty(model.Flavor))
-        return BadRequest("Flavor cannot be blank.");
-
-      if (model.Name.Length > 50)
-        return BadRequest("Name cannot be greater than 50 characters.");
-
+      var currentUserId = int.Parse(User.Identity.Name);
       try
       {
+        var user = await _db.User.FindAsync(currentUserId);
+        if (user.Role != "admin")
+          return BadRequest(new { message = "You must have administrative privileges to create a beer" });
+
+        if (model == null)
+          return BadRequest(new { message = "Beer cannot be null." });
+
         var exists = await _db.Beer.FirstOrDefaultAsync(x => x.Name == model.Name && x.Brand == model.Brand);
         if (exists != null)
-          return BadRequest($"{model.Name} by {model.Brand} is already taken.");
+          return BadRequest(new { message = $"{model.Name} by {model.Brand} is already taken." });
 
         var entity = _mapper.Map<Beer>(model);
         await _db.Beer.AddAsync(entity);
         await _db.SaveChangesAsync();
         return Ok();
       }
-      catch (Exception ex)
+      catch
       {
-        System.Console.WriteLine(ex);
         return StatusCode(500, "Internal server error.");
       }
     }
@@ -278,29 +259,16 @@ namespace TapRoomApi.Controllers
     [HttpPut("beers/{id}")]
     public async Task<IActionResult> UpdateBeer(int id, [FromBody] UpdateBeer model)
     {
-      if (model == null)
-        return BadRequest("Beer cannot be null.");
-
-      if (string.IsNullOrEmpty(model.Name))
-        return BadRequest("Name cannot be blank.");
-
-      if (model.Name.Length > 50)
-        return BadRequest("Name cannot be blank.");
-
-      if (string.IsNullOrEmpty(model.Brand))
-        return BadRequest("Brand cannot be blank.");
-
-      if (string.IsNullOrEmpty(model.Color))
-        return BadRequest("Color cannot be blank.");
-
-      if (string.IsNullOrEmpty(model.Aroma))
-        return BadRequest("Aroma cannot be blank.");
-
-      if (string.IsNullOrEmpty(model.Flavor))
-        return BadRequest("Flavor cannot be blank.");
-
+      var currentUserId = int.Parse(User.Identity.Name);
       try
       {
+        var user = await _db.User.FindAsync(currentUserId);
+        if (user.Role != "admin")
+          return BadRequest(new { message = "You must have administrative privileges to create a beer" });
+
+        if (model == null)
+          return BadRequest(new { message = "Beer cannot be null." });
+
         var entity = await _db.Beer.FindAsync(id);
         if (entity == null)
           return NotFound(new { message = "Beer not found in database." });
@@ -414,17 +382,17 @@ namespace TapRoomApi.Controllers
     [HttpPost("reviews")]
     public async Task<IActionResult> CreateReview([FromBody] CreateReview model)
     {
+      string message = String.Empty;
       if (model == null)
-        return BadRequest(new { error = "Review cannot be null." });
-
+        message = "Review cannot be null.";
       if (!(model.Rating <= 5 && model.Rating >= 1))
-        return BadRequest(new { message = "Rating must be between 1 and 5." });
-
-      if (string.IsNullOrWhiteSpace(model.Description))
-        return BadRequest(new { message = "Description cannot be empty." });
-
+        message = "Rating must be between 1 and 5.";
+      if (!(model.Description.Length < 50))
+        message = "Description must be greater than 50 characters.";
       if (!(model.Description.Length <= 500))
-        return BadRequest(new { message = "Description cannot be longer than 500 characters." });
+        message = "Description cannot exceed 500 characters.";
+      if (!string.IsNullOrEmpty(message))
+        return BadRequest(new { message = message });
 
       var currentUserId = int.Parse(User.Identity.Name);
       try
@@ -436,9 +404,8 @@ namespace TapRoomApi.Controllers
         await _db.SaveChangesAsync();
         return Ok();
       }
-      catch (Exception ex)
+      catch
       {
-        System.Console.WriteLine(ex);
         return StatusCode(500, "Internal server error.");
       }
     }
@@ -446,24 +413,24 @@ namespace TapRoomApi.Controllers
     [HttpPut("reviews/{id}")]
     public async Task<IActionResult> UpdateReview(int id, [FromBody] UpdateReview model)
     {
+      string message = String.Empty;
       if (model == null)
-        return BadRequest(new { error = "Review cannot be null." });
-
+        message = "Review cannot be null.";
       if (!(model.Rating <= 5 && model.Rating >= 1))
-        return BadRequest(new { message = "Rating must be between 1 and 5." });
-
-      if (string.IsNullOrWhiteSpace(model.Description))
-        return BadRequest(new { message = "Description cannot be empty." });
-
+        message = "Rating must be between 1 and 5.";
+      if (!(model.Description.Length < 50))
+        message = "Description must be greater than 50 characters.";
       if (!(model.Description.Length <= 500))
-        return BadRequest(new { message = "Description cannot be longer than 500 characters." });
+        message = "Description cannot exceed 500 characters.";
+      if (!string.IsNullOrEmpty(message))
+        return BadRequest(new { message = message });
 
       var currentUserId = int.Parse(User.Identity.Name);
       try
       {
         Review entity = await _db.Review.FindAsync(id);
         if (entity == null)
-          return BadRequest(new { error = "Review not found in the database." });
+          return BadRequest(new { message = "Review not found in the database." });
 
         _mapper.Map(model, entity);
         entity.UserId = currentUserId;
@@ -484,7 +451,7 @@ namespace TapRoomApi.Controllers
       {
         Review entity = await _db.Review.FindAsync(id);
         if (entity == null)
-          return BadRequest(new { error = "Review not found in the database." });
+          return BadRequest(new { message = "Review not found in the database." });
 
         _db.Review.Remove(entity);
         await _db.SaveChangesAsync();

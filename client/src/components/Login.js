@@ -2,14 +2,9 @@ import React, { useState } from "react";
 import { userService } from "../services/user-service";
 import { Button, Container, TextField } from "@material-ui/core";
 import { history } from "../helpers/history";
-import * as routes from "../constants/routes";
+import { BEER_LIST, REGISTER } from "../constants/routes";
 import { useStyles } from "../components/use-styles";
 import { useForm } from "../components/useForm";
-
-const initialFieldValues = {
-  email: "",
-  password: "",
-};
 
 export const Login = (props) => {
   const { setUser } = props;
@@ -17,20 +12,25 @@ export const Login = (props) => {
   const [apiErrors, setApiErrors] = useState(null);
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
-    if ("email" in fieldValues) {
-      temp.email = fieldValues.email ? "" : "Field cannot be blank";
-    }
-    if ("password" in fieldValues) {
+    if ("email" in fieldValues)
+      temp.email = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
+        fieldValues.email
+      )
+        ? ""
+        : "Email is not valid.";
+    if ("password" in fieldValues)
       temp.password = fieldValues.password ? "" : "Field cannot be blank";
-    }
-    setErrors({ ...temp });
 
+    setErrors({ ...temp });
     if (fieldValues === values)
       return Object.values(temp).every((x) => x === "");
   };
 
   const { values, errors, setErrors, handleInputChange } = useForm(
-    initialFieldValues,
+    {
+      email: "",
+      password: "",
+    },
     validate
   );
 
@@ -43,11 +43,11 @@ export const Login = (props) => {
         .then((response) => {
           setUser(response);
           localStorage.setItem("user", JSON.stringify(response));
-          history.push(routes.BEER_LIST);
+          history.push(BEER_LIST);
         })
-        .catch(
-          setApiErrors("Error trying to login. Please try again later.")
-        );
+        .catch((err) => {
+          setApiErrors(err);
+        });
     }
   };
 
@@ -56,7 +56,7 @@ export const Login = (props) => {
       className={`${classes.whiteText} ${classes.marginTopTwo}`}
       maxWidth="sm"
     >
-      {apiErrors && <h1>{apiErrors}</h1>}
+
       <h2>Log in</h2>
       <form autoComplete="off" method="post" noValidate onSubmit={handleSubmit}>
         <TextField
@@ -93,25 +93,25 @@ export const Login = (props) => {
             helperText: errors.password,
           })}
         />
-
         <div className={classes.marginTopOne}>
           <span className={classes.marginRightTen}>No Account?</span>
           <Button
             variant="contained"
-            className={`${classes.buttons} ${classes.floatRight}`}
-            href={routes.REGISTER}
+            className="buttons float-right"
+            href={REGISTER}
           >
             Register
           </Button>
           <Button
             type="submit"
             variant="contained"
-            className={`${classes.buttons}`}
+            className="buttons"
           >
             Log in
           </Button>
         </div>
       </form>
+      {apiErrors && <h1>{apiErrors}</h1>}
     </Container>
   );
 };
