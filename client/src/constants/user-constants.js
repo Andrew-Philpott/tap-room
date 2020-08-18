@@ -1,4 +1,4 @@
-export default userConstants = {
+export const userConstants = {
   LOGIN_REQUEST: "LOGIN_REQUEST",
   LOGIN_SUCCESS: "LOGIN_SUCCESS",
   LOGIN_FAILURE: "LOGIN_FAILURE",
@@ -14,4 +14,4 @@ export default userConstants = {
   UPDATE_FAILURE: "UPDATE_FAILURE",
   DELETE_SUCCESS: "DELETE_SUCCESS",
   DELETE_FAILURE: "DELETE_FAILURE",
-}
+};

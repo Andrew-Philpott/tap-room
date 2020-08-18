@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -8,11 +9,20 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
 import taphouselogo from "../assets/img/taphouselogo.png";
 import { useStyles } from "./use-styles";
-import { userService } from "../services/user-service";
-import { ACCOUNT, LANDING, LOG_IN, BEER_LIST, ABOUT } from "../constants/routes"
+import {
+  ACCOUNT,
+  LANDING,
+  LOG_IN,
+  BEER_LIST,
+  ABOUT,
+  LOG_OUT,
+} from "../constants/routes";
+import { userActions } from "../actions/user-actions";
 
-const NavigationBar = (props) => {
-  const { user, setUser } = props;
+const NavigationBar = () => {
+  const user = useSelector((state) => state.authentication.user);
+  const dispatch = useDispatch();
+  console.log(user);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -52,10 +62,10 @@ const NavigationBar = (props) => {
       </MenuItem>
 
       <MenuItem
+        component={Link}
+        to={LOG_OUT}
         onClick={() => {
           handleMenuClose();
-          userService.logout();
-          setUser(null);
         }}
       >
         Logout
@@ -83,19 +93,15 @@ const NavigationBar = (props) => {
       <MenuItem component={Link} to={ABOUT}>
         About
       </MenuItem>
-      {user === null ? (
+      {user === undefined ? (
         <MenuItem component={Link} to={LOG_IN}>
           Log in
         </MenuItem>
       ) : (
-          <MenuItem
-            component={Link}
-            to={ACCOUNT}
-            onClick={handleProfileMenuOpen}
-          >
-            Account
-          </MenuItem>
-        )}
+        <MenuItem component={Link} to={ACCOUNT} onClick={handleProfileMenuOpen}>
+          Account
+        </MenuItem>
+      )}
     </Menu>
   );
 
@@ -115,7 +121,7 @@ const NavigationBar = (props) => {
             <Link to={LANDING}>Home</Link>
             <Link to={BEER_LIST}>On Tap</Link>
             <Link to={ABOUT}>About</Link>
-            {user !== null ? (
+            {user ? (
               <span
                 className={`${classes.navLinks} ${classes.pointer}`}
                 aria-controls={menuId}
@@ -125,8 +131,8 @@ const NavigationBar = (props) => {
                 Account
               </span>
             ) : (
-                <Link to={LOG_IN}>Log in</Link>
-              )}
+              <Link to={LOG_IN}>Log in</Link>
+            )}
           </div>
           <div className={classes.sectionMobile}>
             <IconButton onClick={handleMobileMenuOpen}>

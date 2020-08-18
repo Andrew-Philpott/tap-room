@@ -6,7 +6,7 @@ import beerListReducer from "./beer-list-reducer";
 
 export const rootReducer = combineReducers({
   beerList: beerListReducer,
-  auth: authReducer,
+  authentication: authReducer,
   registration: registrationReducer,
   users: usersReducer,
 });

@@ -6,7 +6,7 @@ import {
 } from "../helpers/request-options";
 import handleResponse from "../helpers/handle-response";
 
-export default userService = {
+export const userService = {
   login,
   logout,
   getUser,
@@ -23,16 +23,18 @@ function login(email, password) {
     body: JSON.stringify({ email, password }),
   };
 
-  return fetch(
-    `http://localhost:5000/api/users/authenticate`,
-    requestOptions
-  ).then(handleResponse);
+  return fetch(`http://localhost:5000/api/users/authenticate`, requestOptions)
+    .then(handleResponse)
+    .then((user) => {
+      localStorage.setItem("user", JSON.stringify(user));
+      console.log(user);
+      return user;
+    });
 }
 
 function logout() {
   localStorage.removeItem("user");
 }
-
 
 function getUser(id) {
   return fetch(`http://localhost:5000/api/users/${id}`, getOptions).then(

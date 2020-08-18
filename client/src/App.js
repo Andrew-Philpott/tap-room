@@ -16,65 +16,40 @@ import { Account } from "./components/Account";
 import * as routes from "../src/constants/routes";
 import * as roles from "../src/constants/roles";
 import "./App.css";
+import { useSelector } from "react-redux";
 
 function App() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    if (!user) {
-      setUser(getUserFromLs());
-    }
-  }, [user]);
-
+  const user = useSelector((state) => state.authentication.user);
   return (
     <div className="App">
       <Router history={history}>
-        <NavigationBar user={user} setUser={setUser} />
+        <NavigationBar user={user} />
         <Switch>
           <Route exact path={routes.LANDING} component={Home} />
           <Route exact path={routes.ABOUT} component={About} />
           <Route exact path={routes.REGISTER} component={Register} />
-          <Route
-            exact
-            path={routes.LOG_IN}
-            component={() => <Login setUser={setUser} />}
-          />
-          <Route
-            exact
-            path={routes.BEER_LIST}
-            component={() => <BeerList user={user} />}
-          />
+          <Route exact path={routes.LOG_IN} component={Login} />
+          <Route exact path={routes.BEER_LIST} component={BeerList} />
           <PrivateRoute
-            user={user}
             exact
             path={routes.NEW_BEER}
             roles={[roles.ADMIN]}
             component={BeerForm}
           />
-          <Route
-            exact
-            path={routes.BEER_DETAILS}
-            component={() => <BeerDetail />}
-          />
+          <Route exact path={routes.BEER_DETAILS} component={BeerDetail} />
           <PrivateRoute
-            user={user}
             exact
             path={routes.EDIT_BEER}
             roles={[roles.ADMIN]}
             component={BeerForm}
           />
           <PrivateRoute
-            user={user}
             exact
             path={routes.NEW_REVIEW}
             roles={[roles.MEMBER, roles.EMPLOYEE, roles.ADMIN]}
-            component={() => (
-              <ReviewForm
-              />
-            )}
+            component={ReviewForm}
           />
           <PrivateRoute
-            user={user}
             exact
             path={routes.ACCOUNT}
             roles={[roles.ADMIN]}

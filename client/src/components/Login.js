@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { userService } from "../services/user-service";
+import React, { useState, useEffect } from "react";
 import { Button, Container, TextField } from "@material-ui/core";
-import { history } from "../helpers/history";
-import { BEER_LIST, REGISTER } from "../constants/routes";
+import { REGISTER } from "../constants/routes";
 import { useStyles } from "../components/use-styles";
 import { useForm } from "../components/useForm";
+import { useDispatch } from "react-redux";
+import { userActions } from "../actions/user-actions";
 
-export const Login = (props) => {
-  const { setUser } = props;
+export const Login = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [apiErrors, setApiErrors] = useState(null);
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -34,20 +34,15 @@ export const Login = (props) => {
     validate
   );
 
+  useEffect(() => {
+    dispatch(userActions.logout());
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setApiErrors(null);
     if (validate()) {
-      userService
-        .login(values.email, values.password)
-        .then((response) => {
-          setUser(response);
-          localStorage.setItem("user", JSON.stringify(response));
-          history.push(BEER_LIST);
-        })
-        .catch((err) => {
-          setApiErrors(err);
-        });
+      dispatch(userActions.login(values.email, values.password));
     }
   };
 
@@ -56,7 +51,6 @@ export const Login = (props) => {
       className={`${classes.whiteText} ${classes.marginTopTwo}`}
       maxWidth="sm"
     >
-
       <h2>Log in</h2>
       <form autoComplete="off" method="post" noValidate onSubmit={handleSubmit}>
         <TextField
@@ -102,11 +96,7 @@ export const Login = (props) => {
           >
             Register
           </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            className="buttons"
-          >
+          <Button type="submit" variant="contained" className="buttons">
             Log in
           </Button>
         </div>

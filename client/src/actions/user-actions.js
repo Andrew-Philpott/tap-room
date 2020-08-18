@@ -1,6 +1,6 @@
-import userService from "../services/user-service";
-import userConstants from "../constants/user-constants";
-import history from "../helpers/history";
+import { userService } from "../services/user-service";
+import { userConstants } from "../constants/user-constants";
+import { history } from "../helpers/history";
 
 export const userActions = {
   login,
@@ -17,6 +17,7 @@ function login(username, password) {
     dispatch(request());
     userService.login(username, password).then(
       (res) => {
+        console.log(res);
         dispatch(success(res));
         history.push("/account");
       },
@@ -76,7 +77,8 @@ function register(user) {
     dispatch(request());
     userService.register(user).then(
       (user) => {
-        dispatch(success()), history.push("/login");
+        dispatch(success());
+        history.push("/login");
       },
       (error) => {
         dispatch(failure(error.toString()));

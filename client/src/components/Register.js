@@ -2,24 +2,25 @@ import React, { useEffect, useState } from "react";
 import { Button, Container, TextField } from "@material-ui/core";
 import * as routes from "../constants/routes";
 import { userService } from "../services/user-service";
-import { history } from "../helpers/history";
+import { userActions } from "../actions/user-actions";
 import { useStyles } from "../components/use-styles";
 import { useForm } from "../components/useForm";
 
 export const Register = () => {
   const classes = useStyles();
   const [apiErrors, setApiErrors] = useState(null);
-
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ("firstName" in fieldValues)
-      temp.firstName = fieldValues.firstName ? "" : "Field cannot be blank"
+      temp.firstName = fieldValues.firstName ? "" : "Field cannot be blank";
     if ("lastName" in fieldValues)
-      temp.lastName = fieldValues.lastName ? "" : "Field cannot be blank"
+      temp.lastName = fieldValues.lastName ? "" : "Field cannot be blank";
     if ("password" in fieldValues)
       temp.password = fieldValues.password ? "" : "Field cannot be blank";
     if ("email" in fieldValues)
-      temp.email = (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/).test(fieldValues.email)
+      temp.email = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
+        fieldValues.email
+      )
         ? ""
         : "Email is not valid.";
     setErrors({ ...temp });
@@ -33,7 +34,8 @@ export const Register = () => {
       lastName: "",
       email: "",
       password: "",
-    }, validate
+    },
+    validate
   );
 
   useEffect(() => {
@@ -44,17 +46,7 @@ export const Register = () => {
     e.preventDefault();
     setErrors(null);
     if (validate()) {
-      userService
-        .register({
-          firstName: values.firstName,
-          lastName: values.lastName,
-          email: values.email,
-          password: e.target.password.value,
-        })
-        .then(() => history.push(routes.LOG_IN))
-        .catch((error) => {
-          setApiErrors(error);
-        });
+      userActions.register(values);
     }
   }
 

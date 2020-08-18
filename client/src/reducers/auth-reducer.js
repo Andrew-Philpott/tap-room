@@ -1,9 +1,9 @@
-import userConstants from "../constants/user-constants";
+import { userConstants } from "../constants/user-constants";
 
 let user = JSON.parse(localStorage.getItem("user"));
 const initialState = user ? { loggedIn: true, user } : {};
 
-export default (state = initialState, action) => {
+export default function (state = initialState, action) {
   switch (action.type) {
     case userConstants.LOGIN_REQUEST:
       return {
@@ -23,4 +23,4 @@ export default (state = initialState, action) => {
     default:
       return state;
   }
-};
+}

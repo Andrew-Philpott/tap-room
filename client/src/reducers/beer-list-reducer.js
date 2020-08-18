@@ -1,6 +1,6 @@
 import * as a from "../actions/ActionTypes";
 
-export default (state = {}, action) => {
+export default function (state = {}, action) {
   let newState = {};
   let beer = null;
   switch (action.type) {
@@ -30,4 +30,4 @@ export default (state = {}, action) => {
     default:
       return state;
   }
-};
+}

@@ -1,9 +1,10 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
 import { useStyles } from "../components/use-styles";
+import { useSelector } from "react-redux";
 
-export const Account = (props) => {
-  const { user } = props;
+export const Account = () => {
+  const user = useSelector((state) => state.authentication.user);
   const classes = useStyles();
 
   return (
