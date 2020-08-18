@@ -2,8 +2,6 @@
 
 # Tap Room
 
-#### Pub website, 05.07.2020
-
 #### By **Andrew Philpott**
 
 [About](#About) | [User Stories](#User-Stories) | | [View URLs](#View-URLs) | [API Endpoints](#API-Endpoints) | [Setup/Installation Requirements](#Setup/Installation-Requirements) | [Bugs](#Known-Bugs) | [Technologies](#Technologies-Used) | [Contact](#Support-and-Contact-Details)
@@ -12,7 +10,7 @@
 
 ## About
 
-This is a website for the fake restuarant Tap House that allows users to browse the different types of beers offered at the establishment. The application features authentication and authorization to provide exclusive deals to registered customers, update functionality for employees, and full CRUD functionality for admins. Additionally, create, update, and read data transfer objects were made for the beer entity. This project is a work in progress and will include the ability for users to leave reviews on beers.
+This is a website for the fake restuarant Tap House that allows users to browse beers and their reviews. The application features authentication and authorization to provide exclusive deals to registered customers, update functionality for employees, and full CRUD functionality for admins.
 
 Log in with the email 'admin@gmail.com', 'employee@gmail.com', or 'member@gmail.com' and password 'test' to view authorization in action.
 
