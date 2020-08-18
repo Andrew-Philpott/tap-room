@@ -3,104 +3,109 @@ import beerConstants from "../constants/beer-constants";
 import history from "../helpers/history";
 import errorActions from "./error-actions";
 
-export default {
-  getBeer,
-  getBeers,
-  createBeer,
-  updateBeer,
-  deleteBeer,
-  incrementPints,
-  decrementPints,
-};
-
 function getBeer(id) {
   return (dispatch) => {
     beerService.getBeer(id).then(
-      (beer) => {
-        dispatch(success(beer));
-      },
+      (beer) => dispatch(getBeerSuccess(beer)),
       (error) => dispatch(errorActions.error(error.toString()))
     );
   };
-  function success(beer) {
-    return { type: beerConstants.GET_SUCCESS, payload: beer };
-  }
+}
+function getBeerSuccess(beer) {
+  return { type: beerConstants.GET_BEER_SUCCESS, payload: beer };
 }
 
 function getBeers() {
   return (dispatch) => {
     beerService.getBeers().then(
-      (beers) => dispatch(success(beers)),
+      (beers) => dispatch(getBeersSuccess(beers)),
       (error) => dispatch(errorActions.error(error.toString()))
     );
   };
-  function success(beers) {
-    return { type: beerConstants.GETALL_SUCCESS, payload: beers };
-  }
+}
+function getBeersSuccess(beers) {
+  return { type: beerConstants.GET_BEERS_SUCCESS, payload: beers };
 }
 
 function createBeer(beer) {
   return (dispatch) => {
     beerService.createBeer(beer).then(
       (beer) => {
-        dispatch(success(beer));
+        dispatch(createBeerSuccess(beer));
         history.push("/beers");
       },
       (error) => dispatch(errorActions.error(error.toString()))
     );
   };
-  function success(beers) {
-    return { type: beerConstants.CREATE_SUCCESS, payload: beers };
-  }
+}
+function createBeerSuccess(beers) {
+  return { type: beerConstants.CREATE_BEER_SUCCESS, payload: beers };
 }
 
 function updateBeer(id, beer) {
   return (dispatch) => {
     beerService.updateBeer(id, beer).then(
       (beer) => {
-        dispatch(success(beer));
+        dispatch(updateBeerSuccess(beer));
         history.push("/beers");
       },
       (error) => dispatch(errorActions.error(error.toString()))
     );
   };
-  function success(beer) {
-    return { type: beerConstants.UPDATE_SUCCESS, payload: beer };
-  }
+}
+function updateBeerSuccess(beer) {
+  return { type: beerConstants.UPDATE_BEER_SUCCESS, payload: beer };
 }
 
 function deleteBeer(id) {
   return (dispatch) => {
     beerService.deleteBeer(id).then(
-      (beer) => dispatch(success(beer)),
+      (beer) => dispatch(deleteBeerSuccess(beer)),
       (error) => dispatch(errorActions.error(error.toString()))
     );
   };
-  function success(beer) {
-    return { type: beerConstants.DELETE_SUCCESS, payload: beer };
-  }
+}
+function deleteBeerSuccess(beer) {
+  return { type: beerConstants.DELETE_BEER_SUCCESS, payload: beer };
 }
 
 function incrementPints(id) {
   return (dispatch) => {
     beerService.incrementPints(id).then(
-      (beer) => dispatch(success(beer)),
+      (beer) => dispatch(incrementPintsSuccess(beer)),
       (error) => dispatch(errorActions.error(error.toString()))
     );
   };
-  function success(beer) {
-    return { type: beerConstants.INCREASE_PINTS_SUCCESS, payload: beer };
-  }
+}
+function incrementPintsSuccess(beer) {
+  return { type: beerConstants.INCREASE_BEER_PINTS_SUCCESS, payload: beer };
 }
 
 function decrementPints(id) {
   return (dispatch) => {
     beerService.decrementPints(id).then(
-      (beer) => dispatch(success(beer)),
+      (beer) => dispatch(decrementPintsSuccess(beer)),
       (error) => dispatch(errorActions.error(error.toString()))
     );
   };
-  function success(beer) {
-    return { type: beerConstants.DECREASE_PINTS_SUCCESS, payload: beer };
-  }
 }
+function decrementPintsSuccess(beer) {
+  return { type: beerConstants.DECREASE_BEER_PINTS_SUCCESS, payload: beer };
+}
+
+export const beerActions = {
+  getBeer,
+  getBeerSuccess,
+  getBeers,
+  getBeersSuccess,
+  createBeer,
+  createBeerSuccess,
+  updateBeer,
+  updateBeerSuccess,
+  deleteBeer,
+  deleteBeerSuccess,
+  incrementPints,
+  incrementPintsSuccess,
+  decrementPints,
+  decrementPintsSuccess,
+};
