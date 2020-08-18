@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { Button, Container, TextField } from "@material-ui/core";
+import React from "react";
+import TextField from "@material-ui/core/TextField";
+import Container from "@material-ui/core/Container";
+import Button from "@material-ui/core/Button";
 import { REGISTER } from "../constants/routes";
-import { useStyles } from "../components/use-styles";
-import { useForm } from "../components/useForm";
+import useForm from "./hooks/useForm";
 import { useDispatch } from "react-redux";
-import { userActions } from "../actions/user-actions";
+import userActions from "../actions/user-actions";
 
-export const Login = () => {
-  const classes = useStyles();
+export default () => {
   const dispatch = useDispatch();
-  const [apiErrors, setApiErrors] = useState(null);
+  React.useEffect(() => {
+    dispatch(userActions.logout());
+  });
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ("email" in fieldValues)
@@ -20,12 +22,10 @@ export const Login = () => {
         : "Email is not valid.";
     if ("password" in fieldValues)
       temp.password = fieldValues.password ? "" : "Field cannot be blank";
-
     setErrors({ ...temp });
     if (fieldValues === values)
       return Object.values(temp).every((x) => x === "");
   };
-
   const { values, errors, setErrors, handleInputChange } = useForm(
     {
       email: "",
@@ -33,24 +33,15 @@ export const Login = () => {
     },
     validate
   );
-
-  useEffect(() => {
-    dispatch(userActions.logout());
-  }, []);
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    setApiErrors(null);
     if (validate()) {
       dispatch(userActions.login(values.email, values.password));
     }
   };
 
   return (
-    <Container
-      className={`${classes.whiteText} ${classes.marginTopTwo}`}
-      maxWidth="sm"
-    >
+    <Container className="white-text mrgn-t16" maxWidth="sm">
       <h2>Log in</h2>
       <form autoComplete="off" method="post" noValidate onSubmit={handleSubmit}>
         <TextField
@@ -58,8 +49,8 @@ export const Login = () => {
           name="email"
           fullWidth
           InputProps={{
-            classes: { notchedOutline: classes.whiteTextField },
-            className: `${classes.whiteText} ${classes.marginTopTwo}`,
+            classes: { notchedOutline: "white-border" },
+            className: "white-text mrgn-t16",
           }}
           placeholder="Email"
           value={values.email}
@@ -75,8 +66,8 @@ export const Login = () => {
           name="password"
           fullWidth
           InputProps={{
-            classes: { notchedOutline: classes.whiteTextField },
-            className: `${classes.whiteText} ${classes.marginTopTwo}`,
+            classes: { notchedOutline: "white-border" },
+            className: "white-text mrgn-t16",
           }}
           placeholder="Password"
           value={values.password}
@@ -87,8 +78,8 @@ export const Login = () => {
             helperText: errors.password,
           })}
         />
-        <div className={classes.marginTopOne}>
-          <span className={classes.marginRightTen}>No Account?</span>
+        <div className="mrgn-t8">
+          <span className="mrgn-r8">No Account?</span>
           <Button
             variant="contained"
             className="buttons float-right"
@@ -101,7 +92,6 @@ export const Login = () => {
           </Button>
         </div>
       </form>
-      {apiErrors && <h1>{apiErrors}</h1>}
     </Container>
   );
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -8,25 +8,36 @@ import Menu from "@material-ui/core/Menu";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
 import taphouselogo from "../assets/img/taphouselogo.png";
-import { useStyles } from "./use-styles";
-import {
-  ACCOUNT,
-  LANDING,
-  LOG_IN,
-  BEER_LIST,
-  ABOUT,
-  LOG_OUT,
-} from "../constants/routes";
-import { userActions } from "../actions/user-actions";
+import * as routes from "../constants/routes";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 
-const NavigationBar = () => {
+const useStyles = makeStyles((theme) => ({
+  sectionDesktop: {
+    display: "none",
+    [theme.breakpoints.up("sm")]: {
+      display: "flex",
+    },
+    "& a,span": {
+      color: "white",
+      marginRight: "50px",
+      "&:hover, &:focus, &:visited, &:link, &:active": {
+        color: "white",
+      },
+    },
+  },
+  sectionMobile: {
+    display: "flex",
+    [theme.breakpoints.up("sm")]: {
+      display: "none",
+    },
+  },
+}));
+
+export default () => {
   const user = useSelector((state) => state.authentication.user);
-  const dispatch = useDispatch();
-  console.log(user);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -46,6 +57,7 @@ const NavigationBar = () => {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -57,13 +69,12 @@ const NavigationBar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose} component={Link} to={ACCOUNT}>
+      <MenuItem onClick={handleMenuClose} component={Link} to={routes.ACCOUNT}>
         My account
       </MenuItem>
-
       <MenuItem
         component={Link}
-        to={LOG_OUT}
+        to={routes.LOG_OUT}
         onClick={() => {
           handleMenuClose();
         }}
@@ -84,21 +95,25 @@ const NavigationBar = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem component={Link} to={LANDING}>
+      <MenuItem component={Link} to={routes.LANDING}>
         Home
       </MenuItem>
-      <MenuItem component={Link} to={BEER_LIST}>
+      <MenuItem component={Link} to={routes.BEER_LIST}>
         On Tap
       </MenuItem>
-      <MenuItem component={Link} to={ABOUT}>
+      <MenuItem component={Link} to={routes.ABOUT}>
         About
       </MenuItem>
-      {user === undefined ? (
-        <MenuItem component={Link} to={LOG_IN}>
+      {!user ? (
+        <MenuItem component={Link} to={routes.LOG_IN}>
           Log in
         </MenuItem>
       ) : (
-        <MenuItem component={Link} to={ACCOUNT} onClick={handleProfileMenuOpen}>
+        <MenuItem
+          component={Link}
+          to={routes.ACCOUNT}
+          onClick={handleProfileMenuOpen}
+        >
           Account
         </MenuItem>
       )}
@@ -106,32 +121,32 @@ const NavigationBar = () => {
   );
 
   return (
-    <div>
-      <AppBar className={classes.appBar} position="static">
+    <React.Fragment>
+      <AppBar className="nav-bar" position="static">
         <Toolbar>
-          <Link to={LANDING}>
+          <Link to={routes.LANDING}>
             <img
-              className={classes.tapHouseLogo}
+              className="taphouse-logo"
               src={taphouselogo}
               alt="Tap House Logo"
             />
           </Link>
-          <div className={classes.grow} />
+          <div className="flex-grow-1" />
           <div className={classes.sectionDesktop}>
-            <Link to={LANDING}>Home</Link>
-            <Link to={BEER_LIST}>On Tap</Link>
-            <Link to={ABOUT}>About</Link>
+            <Link to={routes.LANDING}>Home</Link>
+            <Link to={routes.BEER_LIST}>On Tap</Link>
+            <Link to={routes.ABOUT}>About</Link>
             {user ? (
               <span
-                className={`${classes.navLinks} ${classes.pointer}`}
+                className="links"
                 aria-controls={menuId}
                 onClick={handleProfileMenuOpen}
-                to={ACCOUNT}
+                to={routes.ACCOUNT}
               >
                 Account
               </span>
             ) : (
-              <Link to={LOG_IN}>Log in</Link>
+              <Link to={routes.LOG_IN}>Log in</Link>
             )}
           </div>
           <div className={classes.sectionMobile}>
@@ -143,7 +158,6 @@ const NavigationBar = () => {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
-    </div>
+    </React.Fragment>
   );
 };
-export { NavigationBar };

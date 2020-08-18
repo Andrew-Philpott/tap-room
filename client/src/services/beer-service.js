@@ -1,12 +1,7 @@
-import {
-  getOptions,
-  putOptions,
-  deleteOptions,
-  postOptions,
-} from "../helpers/request-options";
+import requestOptions from "../helpers/request-options";
 import handleResponse from "../helpers/handle-response";
 
-export const beerService = {
+export default {
   getBeer,
   getBeers,
   createBeer,
@@ -17,45 +12,50 @@ export const beerService = {
 };
 
 function getBeer(id) {
-  return fetch(`http://localhost:5000/api/beers/${id}`, getOptions).then(
-    handleResponse
-  );
+  return fetch(
+    `http://localhost:5000/api/beers/${id}`,
+    requestOptions.getOptions
+  ).then(handleResponse);
 }
 
 function getBeers() {
-  return fetch(`http://localhost:5000/api/beers`, getOptions).then(
-    handleResponse
-  );
+  return fetch(
+    `http://localhost:5000/api/beers`,
+    requestOptions.getOptions
+  ).then(handleResponse);
 }
 
 function incrementPints(id) {
   return fetch(
     `http://localhost:5000/api/beers/increment/${id}`,
-    putOptions("")
+    requestOptions.putOptions({})
   ).then(handleResponse);
 }
 
 function decrementPints(id) {
   return fetch(
     `http://localhost:5000/api/beers/decrement/${id}`,
-    putOptions("")
+    requestOptions.putOptions({})
   ).then(handleResponse);
 }
 
 function createBeer(beer) {
-  return fetch(`http://localhost:5000/api/beers`, postOptions(beer)).then(
-    handleResponse
-  );
+  return fetch(
+    `http://localhost:5000/api/beers`,
+    requestOptions.postOptions(beer)
+  ).then(handleResponse);
 }
 
 async function updateBeer(id, beer) {
-  return fetch(`http://localhost:5000/api/beers/${id}`, putOptions(beer)).then(
-    handleResponse
-  );
+  return fetch(
+    `http://localhost:5000/api/beers/${id}`,
+    requestOptions.putOptions(beer)
+  ).then(handleResponse);
 }
 
 async function deleteBeer(id) {
-  return fetch(`http://localhost:5000/api/beers/${id}`, deleteOptions).then(
-    handleResponse
-  );
+  return fetch(
+    `http://localhost:5000/api/beers/${id}`,
+    requestOptions.deleteOptions
+  ).then(handleResponse);
 }

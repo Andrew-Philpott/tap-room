@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Button, Container, TextField } from "@material-ui/core";
+import React from "react";
+import TextField from "@material-ui/core/TextField";
+import Container from "@material-ui/core/Container";
+import Button from "@material-ui/core/Button";
 import * as routes from "../constants/routes";
-import { userService } from "../services/user-service";
-import { userActions } from "../actions/user-actions";
-import { useStyles } from "../components/use-styles";
-import { useForm } from "../components/useForm";
+import userService from "../services/user-service";
+import { useDispatch } from "react-redux";
+import userActions from "../actions/user-actions";
+import useForm from "./hooks/useForm";
 
-export const Register = () => {
-  const classes = useStyles();
-  const [apiErrors, setApiErrors] = useState(null);
+export default () => {
+  const dispatch = useDispatch();
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ("firstName" in fieldValues)
@@ -38,24 +39,19 @@ export const Register = () => {
     validate
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     userService.logout();
   }, []);
 
   function handleSubmit(e) {
     e.preventDefault();
-    setErrors(null);
     if (validate()) {
-      userActions.register(values);
+      dispatch(userActions.register(values));
     }
   }
 
   return (
-    <Container
-      className={`${classes.whiteText} ${classes.marginTopTwo}`}
-      maxWidth="sm"
-    >
-      {apiErrors && <h1>{apiErrors}</h1>}
+    <Container className="white-text mrgn-t16" maxWidth="sm">
       <h2>Register</h2>
       <form autoComplete="off" method="post" noValidate onSubmit={handleSubmit}>
         <TextField
@@ -63,8 +59,8 @@ export const Register = () => {
           name="firstName"
           fullWidth
           InputProps={{
-            classes: { notchedOutline: classes.whiteTextField },
-            className: `${classes.whiteText} ${classes.marginTopTwo}`,
+            classes: { notchedOutline: "white-border" },
+            className: "white-text mrgn-t16",
           }}
           placeholder="First Name"
           value={values.firstName}
@@ -80,8 +76,8 @@ export const Register = () => {
           name="lastName"
           fullWidth
           InputProps={{
-            classes: { notchedOutline: classes.whiteTextField },
-            className: `${classes.whiteText} ${classes.marginTopTwo}`,
+            classes: { notchedOutline: "white-border" },
+            className: "white-text mrgn-t16",
           }}
           placeholder="Last Name"
           value={values.lastName}
@@ -97,8 +93,8 @@ export const Register = () => {
           name="email"
           fullWidth
           InputProps={{
-            classes: { notchedOutline: classes.whiteTextField },
-            className: `${classes.whiteText} ${classes.marginTopTwo}`,
+            classes: { notchedOutline: "white-border" },
+            className: "white-text mrgn-t16",
           }}
           placeholder="Email"
           value={values.email}
@@ -114,8 +110,8 @@ export const Register = () => {
           name="password"
           fullWidth
           InputProps={{
-            classes: { notchedOutline: classes.whiteTextField },
-            className: `${classes.whiteText} ${classes.marginTopTwo}`,
+            classes: { notchedOutline: "white-border" },
+            className: "white-text mrgn-t16",
           }}
           placeholder="Password"
           value={values.password}
@@ -126,7 +122,7 @@ export const Register = () => {
             helperText: errors.password,
           })}
         />
-        <div className={classes.marginTopOne}>
+        <div className="mrgn-t8">
           <Button className="buttons" href={routes.LANDING}>
             Cancel
           </Button>
@@ -134,7 +130,6 @@ export const Register = () => {
             Register
           </Button>
         </div>
-        {errors && errors.internal && <h1>{errors.internal}</h1>}
       </form>
     </Container>
   );

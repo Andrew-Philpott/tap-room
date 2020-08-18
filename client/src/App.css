@@ -27,6 +27,10 @@ body,
   transition: opacity 300ms linear;
 }
 
+.red {
+  color: red;
+}
+
 .orange {
   color: orange;
 }
@@ -55,4 +59,61 @@ body,
 
 .float-right {
   float: right;
+}
+.white-text {
+  color: white !important;
+}
+
+.white-border {
+  border-color: white !important;
+}
+.mrgn-b0 {
+  margin-bottom: 0px;
+}
+.mrgn-t8 {
+  margin-top: 8px;
+}
+.mrgn-t16 {
+  margin-top: 16px;
+}
+.mrgn-r8 {
+  margin-right: 8px;
+}
+.action-link {
+  cursor: pointer;
+  color: white;
+  min-width: 100px;
+}
+.action-link:hover:focus:visited:link:active {
+  text-decoration: none;
+}
+.beer-list-table .MuiTableCell-root {
+  border-bottom: none;
+  color: white !important;
+  overflow-y: visible;
+}
+.text-align-center {
+  text-align: center;
+}
+.nav-bar {
+  background-color: #cc7000 !important;
+}
+.links {
+  cursor: pointer;
+  color: white;
+}
+.links:hover:focus:visited:link:active {
+  color: white;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.taphouse-logo {
+  height: 100px;
+  width: auto;
+}
+.flex-grow-1 {
+  flex-grow: 1;
+}
+svg path {
+  color: white;
 }

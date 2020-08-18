@@ -1,12 +1,7 @@
-import {
-  getOptions,
-  putOptions,
-  deleteOptions,
-  postOptions,
-} from "../helpers/request-options";
+import requestOptions from "../helpers/request-options";
 import handleResponse from "../helpers/handle-response";
 
-export const reviewService = {
+export default {
   getReview,
   getReviews,
   createReview,
@@ -15,32 +10,36 @@ export const reviewService = {
 };
 
 function getReview(id) {
-  return fetch(`http://localhost:5000/api/reviews/${id}`, getOptions).then(
-    handleResponse
-  );
+  return fetch(
+    `http://localhost:5000/api/reviews/${id}`,
+    requestOptions.getOptions
+  ).then(handleResponse);
 }
 
 async function getReviews() {
-  await fetch(`http://localhost:5000/api/reviews`, getOptions).then(
-    handleResponse
-  );
+  await fetch(
+    `http://localhost:5000/api/reviews`,
+    requestOptions.getOptions
+  ).then(handleResponse);
 }
 
 function createReview(review) {
-  return fetch(`http://localhost:5000/api/reviews`, postOptions(review)).then(
-    handleResponse
-  );
+  return fetch(
+    `http://localhost:5000/api/reviews`,
+    requestOptions.postOptions(review)
+  ).then(handleResponse);
 }
 
 function updateReview(id, review) {
   return fetch(
     `http://localhost:5000/api/reviews/${id}`,
-    putOptions(review)
+    requestOptions.putOptions(review)
   ).then(handleResponse);
 }
 
 function deleteReview(id) {
-  return fetch(`http://localhost:5000/api/reviews/${id}`, deleteOptions).then(
-    handleResponse
-  );
+  return fetch(
+    `http://localhost:5000/api/reviews/${id}`,
+    requestOptions.deleteOptions
+  ).then(handleResponse);
 }

@@ -1,29 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
-import { history } from "./helpers";
-import getUserFromLs from "./helpers/get-user-from-ls";
-import { Home } from "./components/Home";
-import { Login } from "./components/Login";
-import { Register } from "./components/Register";
-import { BeerDetail } from "./components/Beer/BeerDetail";
-import { BeerList } from "./components/Beer/BeerList";
-import { BeerForm } from "./components/Beer/BeerForm";
-import { NavigationBar } from "./components/NavigationBar";
-import { ReviewForm } from "./components/ReviewForm";
-import { PrivateRoute } from "./components/PrivateRoute";
-import { About } from "./components/About";
-import { Account } from "./components/Account";
+import history from "./helpers/history";
+import Home from "./components/Home";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import BeerDetail from "./components/Beer/BeerDetail";
+import BeerList from "./components/Beer/BeerList";
+import BeerForm from "./components/Beer/BeerForm";
+import NavigationBar from "./components/NavigationBar";
+import ReviewForm from "./components/Review/ReviewForm";
+import PrivateRoute from "./components/PrivateRoute";
+import About from "./components/About";
+import Account from "./components/Account";
 import * as routes from "../src/constants/routes";
 import * as roles from "../src/constants/roles";
+import { useSelector, useDispatch } from "react-redux";
+import errorActions from "./actions/error-actions";
 import "./App.css";
-import { useSelector } from "react-redux";
 
 function App() {
-  const user = useSelector((state) => state.authentication.user);
+  const error = useSelector((state) => state.error);
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    history.listen((location, action) => {
+      dispatch(errorActions.clear());
+    });
+  }, [dispatch]);
   return (
     <div className="App">
       <Router history={history}>
-        <NavigationBar user={user} />
+        <NavigationBar />
+        {error && (
+          <h1 className="white-text text-align-center">{error.message}</h1>
+        )}
         <Switch>
           <Route exact path={routes.LANDING} component={Home} />
           <Route exact path={routes.ABOUT} component={About} />

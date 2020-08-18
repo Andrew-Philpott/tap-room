@@ -1,48 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
-import { Container, Grid, Button } from "@material-ui/core";
-import { beerService } from "../../services/beer-service";
-import { useStyles } from "../use-styles";
+import Grid from "@material-ui/core/Grid";
+import Container from "@material-ui/core/Container";
+import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import beerActions from "../../actions/beer-actions";
 
-export const BeerDetail = () => {
-  const classes = useStyles();
+export default () => {
   const { id } = useParams();
-  const [beer, setBeer] = useState(null);
-  const [apiErrors, setApiErrors] = useState(null);
+  const dispatch = useDispatch();
+  const beer = useSelector((state) => state.beers.item);
+  const user = useSelector((state) => state.authentication.user);
 
-  useEffect(() => {
-    let mounted = true;
+  React.useEffect(() => {
     if (id) {
-      beerService
-        .getBeer(parseInt(id))
-        .then((response) => {
-          if (mounted)
-            setBeer(response)
-        })
-        .catch(() =>
-          setApiErrors(
-            "There was an error fetching the beer's details. Please try again later."
-          )
-        );
+      dispatch(beerActions.getBeer(parseInt(id)));
     }
-    return () => mounted = false;
-  }, [id]);
+  }, [id, dispatch]);
 
   return (
-    <Container className={`${classes.whiteText} ${classes.marginTopTwo}`}>
-      {apiErrors && <h1>{apiErrors}</h1>}
+    <Container className="white-text mrgn-t16">
       {beer && (
         <Grid container>
           <Grid item xs={12}>
-            <Button
-              component={Link}
-              to={`/reviews/${parseInt(id)}/new`}
-              className="buttons float-right"
-            >
-              Write a review
-            </Button>
             <h1>{beer.name}</h1>
+            {user && (
+              <Button
+                component={Link}
+                to={`/reviews/${parseInt(id)}/new`}
+                className="buttons float-right"
+              >
+                Write a review
+              </Button>
+            )}
           </Grid>
           <Grid item xs={6}>
             <p>Brand: {beer.brand}</p>
@@ -71,12 +62,10 @@ export const BeerDetail = () => {
           })}
         </React.Fragment>
       ) : (
-          <h1>
-            No reviews for this beer yet. Create an account to provide feedback!
-          </h1>
-        )}
+        <h1>
+          No reviews for this beer yet. Create an account to provide feedback!
+        </h1>
+      )}
     </Container>
   );
 };
-
-export default BeerDetail;

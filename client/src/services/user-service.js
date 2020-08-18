@@ -1,12 +1,7 @@
-import {
-  getOptions,
-  putOptions,
-  deleteOptions,
-  postOptions,
-} from "../helpers/request-options";
+import requestOptions from "../helpers/request-options";
 import handleResponse from "../helpers/handle-response";
 
-export const userService = {
+export default {
   login,
   logout,
   getUser,
@@ -27,7 +22,6 @@ function login(email, password) {
     .then(handleResponse)
     .then((user) => {
       localStorage.setItem("user", JSON.stringify(user));
-      console.log(user);
       return user;
     });
 }
@@ -37,32 +31,36 @@ function logout() {
 }
 
 function getUser(id) {
-  return fetch(`http://localhost:5000/api/users/${id}`, getOptions).then(
-    handleResponse
-  );
+  return fetch(
+    `http://localhost:5000/api/users/${id}`,
+    requestOptions.getOptions
+  ).then(handleResponse);
 }
 
 function getUsers() {
-  return fetch(`http://localhost:5000/api/users`, getOptions).then(
-    handleResponse
-  );
+  return fetch(
+    `http://localhost:5000/api/users`,
+    requestOptions.getOptions
+  ).then(handleResponse);
 }
 
 function register(user) {
   return fetch(
     `http://localhost:5000/api/users/register`,
-    postOptions(user)
+    requestOptions.postOptions(user)
   ).then(handleResponse);
 }
 
 function updateUser(user) {
-  return fetch(`http://localhost:5000/api/users`, putOptions(user)).then(
-    handleResponse
-  );
+  return fetch(
+    `http://localhost:5000/api/users`,
+    requestOptions.putOptions(user)
+  ).then(handleResponse);
 }
 
 function deleteUser(id) {
-  return fetch(`http://localhost:5000/api/users/${id}`, deleteOptions).then(
-    handleResponse
-  );
+  return fetch(
+    `http://localhost:5000/api/users/${id}`,
+    requestOptions.deleteOptions
+  ).then(handleResponse);
 }

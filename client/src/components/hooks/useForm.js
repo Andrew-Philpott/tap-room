@@ -1,8 +1,8 @@
-import { useState } from "react";
+import React from "react";
 
-export const useForm = (initialFieldValues, validate) => {
-  const [values, setValues] = useState(initialFieldValues);
-  const [errors, setErrors] = useState({});
+export default (initialFieldValues, validate) => {
+  const [values, setValues] = React.useState(initialFieldValues);
+  const [errors, setErrors] = React.useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

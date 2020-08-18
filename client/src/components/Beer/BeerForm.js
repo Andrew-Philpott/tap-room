@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
-import { Button, Container, TextField } from "@material-ui/core";
-import { beerService } from "../../services/beer-service";
-import { useStyles } from "../use-styles";
-import { useForm } from "../useForm";
-import { history } from "../../helpers/history";
-import { BEER_LIST } from "../../constants/routes";
+import TextField from "@material-ui/core/TextField";
+import Container from "@material-ui/core/Container";
+import Button from "@material-ui/core/Button";
+import useForm from "../hooks/useForm";
+import beerActions from "../../actions/beer-actions";
+import { useDispatch, useSelector } from "react-redux";
 
-export const BeerForm = () => {
+export default () => {
   const { id } = useParams();
-  const classes = useStyles();
-  const [apiErrors, setApiErrors] = useState(null);
+  const dispatch = useDispatch();
+  const beer = useSelector((state) => state.beers.item);
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ("name" in fieldValues)
@@ -24,88 +24,69 @@ export const BeerForm = () => {
     if ("flavor" in fieldValues)
       temp.flavor = fieldValues.flavor ? "" : "Field cannot be blank";
     if ("price" in fieldValues)
-      temp.price = (/^\d+$/).test(fieldValues.price) ? "" : "Field must be a number";
+      temp.price = !isNaN(fieldValues.price) ? "" : "Field must be a number";
     if ("alcoholContent" in fieldValues)
-      temp.alcoholContent = (/^\d+$/).test(fieldValues.alcoholContent) ? "" : "Field must be a number";
+      temp.alcoholContent = !isNaN(fieldValues.alcoholContent)
+        ? ""
+        : "Field must be a number";
     if ("pints" in fieldValues)
-      temp.pints = (/^\d+$/).test(fieldValues.pints) ? "" : "Field must be a number";
+      temp.pints = !isNaN(fieldValues.pints) ? "" : "Field must be a number";
     setErrors({ ...temp });
 
     if (fieldValues === values)
       return Object.values(temp).every((x) => x === "");
   };
 
+  const { values, setValues, errors, setErrors, handleInputChange } = useForm(
+    {
+      name: "",
+      brand: "",
+      color: "",
+      aroma: "",
+      flavor: "",
+      price: "",
+      alcoholContent: "",
+      pints: "",
+    },
+    validate
+  );
 
-  const { values, setValues, errors, setErrors, handleInputChange } = useForm({
-    name: "",
-    brand: "",
-    color: "",
-    aroma: "",
-    flavor: "",
-    price: "",
-    alcoholContent: "",
-    pints: "",
-  }, validate);
-
-
-
-  useEffect(() => {
+  React.useEffect(() => {
     if (id) {
-      beerService
-        .getBeer(id)
-        .then((response) => setValues(response))
-        .catch(() =>
-          setApiErrors(
-            "There was a problem fetching the beer. Please try again later."
-          )
-        );
+      dispatch(beerActions.getBeer(parseInt(id)));
     }
-  }, [id]);
+  }, [id, dispatch]);
+
+  React.useEffect(() => {
+    let loaded = true;
+    if (beer && loaded) {
+      setValues(beer);
+    }
+    return () => (loaded = false);
+  }, [beer, setValues]);
 
   function handleSubmit(e) {
     e.preventDefault();
     if (validate()) {
       if (id) {
-        beerService
-          .updateBeer(id, values)
-          .then(() => {
-            history.push(BEER_LIST);
-          })
-          .catch(() =>
-            setApiErrors(
-              "There was a problem updating the beer. Please try again later."
-            )
-          );
+        dispatch(beerActions.updateBeer(id, values));
       } else {
-        beerService
-          .createBeer(values)
-          .then(() => {
-            history.push(BEER_LIST);
-          })
-          .catch(() =>
-            setApiErrors(
-              "There was a problem adding the beer to the list. Please try again later."
-            )
-          );
+        dispatch(beerActions.createBeer(values));
       }
     }
   }
 
   return (
-    <Container
-      className={`${classes.whiteText} ${classes.marginTopTwo}`}
-      maxWidth="sm"
-    >
-      {apiErrors && <p className="white-text-large">{apiErrors}</p>}
-      <p className="white-text-large">Add a new beer</p>
-      <form onSubmit={handleSubmit}>
+    <Container className="white-text mrgn-t16" maxWidth="sm">
+      <span className="white-text-large">Add a new beer</span>
+      <form autoComplete="off" method="post" noValidate onSubmit={handleSubmit}>
         <TextField
           type="text"
           name="name"
           fullWidth
           InputProps={{
-            classes: { notchedOutline: classes.whiteTextField },
-            className: `${classes.whiteText} ${classes.marginTopTwo}`,
+            classes: { notchedOutline: "white-border" },
+            className: "white-text mrgn-t16",
           }}
           placeholder="Name"
           value={values.name}
@@ -121,8 +102,8 @@ export const BeerForm = () => {
           name="brand"
           fullWidth
           InputProps={{
-            classes: { notchedOutline: classes.whiteTextField },
-            className: `${classes.whiteText} ${classes.marginTopTwo}`,
+            classes: { notchedOutline: "white-border" },
+            className: "white-text mrgn-t16",
           }}
           placeholder="Brand"
           value={values.brand}
@@ -138,8 +119,8 @@ export const BeerForm = () => {
           name="color"
           fullWidth
           InputProps={{
-            classes: { notchedOutline: classes.whiteTextField },
-            className: `${classes.whiteText} ${classes.marginTopTwo}`,
+            classes: { notchedOutline: "white-border" },
+            className: "white-text mrgn-t16",
           }}
           placeholder="Color"
           value={values.color}
@@ -155,8 +136,8 @@ export const BeerForm = () => {
           name="aroma"
           fullWidth
           InputProps={{
-            classes: { notchedOutline: classes.whiteTextField },
-            className: `${classes.whiteText} ${classes.marginTopTwo}`,
+            classes: { notchedOutline: "white-border" },
+            className: "white-text mrgn-t16",
           }}
           placeholder="Aroma"
           value={values.aroma}
@@ -172,8 +153,8 @@ export const BeerForm = () => {
           name="flavor"
           fullWidth
           InputProps={{
-            classes: { notchedOutline: classes.whiteTextField },
-            className: `${classes.whiteText} ${classes.marginTopTwo}`,
+            classes: { notchedOutline: "white-border" },
+            className: "white-text mrgn-t16",
           }}
           placeholder="Flavor"
           value={values.flavor}
@@ -189,8 +170,8 @@ export const BeerForm = () => {
           name="price"
           fullWidth
           InputProps={{
-            classes: { notchedOutline: classes.whiteTextField },
-            className: `${classes.whiteText} ${classes.marginTopTwo}`,
+            classes: { notchedOutline: "white-border" },
+            className: "white-text mrgn-t16",
           }}
           placeholder="Price"
           value={values.price}
@@ -206,8 +187,8 @@ export const BeerForm = () => {
           name="alcoholContent"
           fullWidth
           InputProps={{
-            classes: { notchedOutline: classes.whiteTextField },
-            className: `${classes.whiteText} ${classes.marginTopTwo}`,
+            classes: { notchedOutline: "white-border" },
+            className: "white-text mrgn-t16",
           }}
           placeholder="Alcohol Content"
           value={values.alcoholContent}
@@ -223,8 +204,8 @@ export const BeerForm = () => {
           name="pints"
           fullWidth
           InputProps={{
-            classes: { notchedOutline: classes.whiteTextField },
-            className: `${classes.whiteText} ${classes.marginTopTwo}`,
+            classes: { notchedOutline: "white-border" },
+            className: "white-text mrgn-t16",
           }}
           placeholder="# of pints"
           value={values.pints}
@@ -235,13 +216,10 @@ export const BeerForm = () => {
             helperText: errors.pints,
           })}
         />
-        <div className={classes.marginTopTwo}>
-          <Button
-            className="buttons float-right"
-            type="submit"
-          >
+        <div className="mrgn-t16">
+          <Button className="buttons float-right" type="submit">
             Submit
-        </Button>
+          </Button>
         </div>
       </form>
     </Container>

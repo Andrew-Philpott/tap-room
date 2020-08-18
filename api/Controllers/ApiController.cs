@@ -198,7 +198,7 @@ namespace TapRoomApi.Controllers
     {
       try
       {
-        var entity = await (_db.Beer).AsQueryable().Include(x => x.Reviews).ThenInclude(x => x.User).Where(x => x.BeerId == id).SingleOrDefaultAsync();
+        var entity = await _db.Beer.Include(x => x.Reviews).ThenInclude(x => x.User).Where(x => x.BeerId == id).SingleOrDefaultAsync();
 
         if (entity == null)
           return BadRequest(new { message = "Beer not found in database." });
@@ -218,9 +218,9 @@ namespace TapRoomApi.Controllers
     {
       try
       {
-        var entities = await _db.Beer.ToArrayAsync();
-        var model = _mapper.Map<IEnumerable<ViewBeer>>(entities);
-        return Ok(model);
+        var entities = await _db.Beer.Include(x => x.Reviews).ToListAsync();
+        // var model = _mapper.Map<IList<ViewBeer>>(entities);
+        return Ok(entities);
       }
       catch
       {
@@ -248,7 +248,7 @@ namespace TapRoomApi.Controllers
         var entity = _mapper.Map<Beer>(model);
         await _db.Beer.AddAsync(entity);
         await _db.SaveChangesAsync();
-        return Ok();
+        return Ok(entity);
       }
       catch
       {
@@ -295,7 +295,7 @@ namespace TapRoomApi.Controllers
         entity.Pints += 1;
 
         _db.Beer.Update(entity);
-        await _db.SaveChangesAsync();
+        _db.SaveChanges();
         return Ok(entity);
       }
       catch
@@ -315,7 +315,7 @@ namespace TapRoomApi.Controllers
         entity.Pints -= 1;
 
         _db.Beer.Update(entity);
-        await _db.SaveChangesAsync();
+        _db.SaveChanges();
         return Ok(entity);
       }
       catch
@@ -391,10 +391,12 @@ namespace TapRoomApi.Controllers
         message = "Review cannot be null.";
       if (!(model.Rating <= 5 && model.Rating >= 1))
         message = "Rating must be between 1 and 5.";
-      if (!(model.Description.Length < 50))
+      if (model.Description.Length < 50)
         message = "Description must be greater than 50 characters.";
-      if (!(model.Description.Length <= 500))
+      if (model.Description.Length > 500)
         message = "Description cannot exceed 500 characters.";
+
+      System.Console.WriteLine(message);
       if (!string.IsNullOrEmpty(message))
         return BadRequest(new { message = message });
 
@@ -406,7 +408,7 @@ namespace TapRoomApi.Controllers
 
         await _db.Review.AddAsync(entity);
         await _db.SaveChangesAsync();
-        return Ok();
+        return Ok(entity);
       }
       catch
       {
@@ -439,8 +441,8 @@ namespace TapRoomApi.Controllers
         _mapper.Map(model, entity);
         entity.UserId = currentUserId;
         _db.Review.Update(entity);
-        await _db.SaveChangesAsync();
-        return Ok();
+        _db.SaveChanges();
+        return Ok(entity);
       }
       catch
       {

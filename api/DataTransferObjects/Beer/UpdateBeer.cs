@@ -4,6 +4,7 @@ namespace TapRoomApi.Models
 {
   public class UpdateBeer
   {
+    public int BeerId { get; set; }
     [Required]
     public string Name { get; set; }
     [Required]

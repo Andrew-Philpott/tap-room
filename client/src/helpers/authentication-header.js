@@ -1,7 +1,5 @@
-import getUserFromLs from "./get-user-from-ls";
-
-export default function authHeader() {
-  const user = getUserFromLs();
+export default () => {
+  const user = JSON.parse(localStorage.getItem("user"));
   if (user && user.token) {
     return {
       Authorization: `Bearer ${user.token}`,
@@ -9,4 +7,4 @@ export default function authHeader() {
   } else {
     return { Authorization: "" };
   }
-}
+};

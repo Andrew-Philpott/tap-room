@@ -1,8 +1,9 @@
-import { userService } from "../services/user-service";
-import { userConstants } from "../constants/user-constants";
-import { history } from "../helpers/history";
+import userService from "../services/user-service";
+import userConstants from "../constants/user-constants";
+import history from "../helpers/history";
+import errorActions from "./error-actions";
 
-export const userActions = {
+export default {
   login,
   logout,
   getUser,
@@ -16,14 +17,11 @@ function login(username, password) {
   return (dispatch) => {
     dispatch(request());
     userService.login(username, password).then(
-      (res) => {
-        console.log(res);
-        dispatch(success(res));
+      (user) => {
+        dispatch(success(user));
         history.push("/account");
       },
-      (error) => {
-        dispatch(failure(error.toString()));
-      }
+      (error) => dispatch(errorActions.error(error.toString()))
     );
   };
   function request() {
@@ -31,9 +29,6 @@ function login(username, password) {
   }
   function success(user) {
     return { type: userConstants.LOGIN_SUCCESS, payload: user };
-  }
-  function failure(error) {
-    return { type: userConstants.LOGIN_FAILURE, payload: error };
   }
 }
 
@@ -46,29 +41,23 @@ function getUser(id) {
   return (dispatch) => {
     userService.getUser(id).then(
       (user) => dispatch(success(user)),
-      (error) => dispatch(failure(error.toString()))
+      (error) => dispatch(errorActions.error(error.toString()))
     );
   };
   function success(user) {
     return { type: userConstants.GET_SUCCESS, payload: user };
   }
-  function failure(error) {
-    return { type: userConstants.GET_FAILURE, payload: error };
-  }
 }
 
-function getUsers(id) {
+function getUsers() {
   return (dispatch) => {
     userService.getUsers().then(
       (users) => dispatch(success(users)),
-      (error) => dispatch(failure(error.toString()))
+      (error) => dispatch(errorActions.error(error.toString()))
     );
   };
   function success(users) {
     return { type: userConstants.GETALL_SUCCESS, payload: users };
-  }
-  function failure(error) {
-    return { type: userConstants.GETALL_FAILURE, payload: error };
   }
 }
 
@@ -80,9 +69,7 @@ function register(user) {
         dispatch(success());
         history.push("/login");
       },
-      (error) => {
-        dispatch(failure(error.toString()));
-      }
+      (error) => dispatch(errorActions.error(error.toString()))
     );
   };
   function request() {
@@ -91,37 +78,28 @@ function register(user) {
   function success(users) {
     return { type: userConstants.REGISTER_SUCCESS, payload: users };
   }
-  function failure(error) {
-    return { type: userConstants.REGISTER_FAILURE, payload: error };
-  }
 }
 
 function updateUser(id, user) {
   return (dispatch) => {
     userService.updateUser(id, user).then(
       (user) => dispatch(success(user)),
-      (error) => dispatch(failure(error.toString()))
+      (error) => dispatch(errorActions.error(error.toString()))
     );
   };
   function success(user) {
     return { type: userConstants.UPDATE_SUCCESS, payload: user };
-  }
-  function failure(error) {
-    return { type: userConstants.UPDATE_FAILURE, payload: error };
   }
 }
 
 function deleteUser(id) {
   return (dispatch) => {
     userService.deleteUser(id).then(
-      (user) => dispatch(success()),
-      (error) => dispatch(failure(error.toString()))
+      (user) => dispatch(success(user)),
+      (error) => dispatch(errorActions.error(error.toString()))
     );
   };
   function success() {
     return { type: userConstants.DELETE_SUCCESS };
-  }
-  function failure(error) {
-    return { type: userConstants.DELETE_FAILURE, payload: error };
   }
 }

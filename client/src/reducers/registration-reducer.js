@@ -1,6 +1,6 @@
-import { userConstants } from "../constants/user-constants";
+import userConstants from "../constants/user-constants";
 
-export default function (state = {}, action) {
+export default (state = {}, action) => {
   switch (action.type) {
     case userConstants.REGISTER_REQUEST:
       return { registering: true };
@@ -11,4 +11,4 @@ export default function (state = {}, action) {
     default:
       return state;
   }
-}
+};
