@@ -1,4 +1,4 @@
-import { reviewActions } from "../../actions/review-actions";
+import reviewActions from "../../actions/review-actions";
 import reviewConstants from "../../constants/review-constants";
 
 describe("review actions", () => {
@@ -17,38 +17,38 @@ describe("review actions", () => {
     },
   ];
 
-  it("getBeerSuccess should create GET_BEER_SUCCESS", () => {
-    expect(beerActions.getBeerSuccess(beers[0])).toEqual({
-      type: beerConstants.GET_BEER_SUCCESS,
-      payload: beers[0],
+  it("getReviewSuccess should create GET_REVIEW_SUCCESS", () => {
+    expect(reviewActions.success.getReviewSuccess(reviews[0])).toEqual({
+      type: reviewConstants.GET_REVIEW_SUCCESS,
+      payload: reviews[0],
     });
   });
 
-  it("getBeersSuccess should create GET_BEERS_SUCCESS", () => {
-    expect(beerActions.getBeersSuccess(beers)).toEqual({
-      type: beerConstants.GET_BEERS_SUCCESS,
-      payload: beers,
+  it(" should create GET_REVIEWS_SUCCESS", () => {
+    expect(reviewActions.success.getReviewsSuccess(reviews)).toEqual({
+      type: reviewConstants.GET_REVIEWS_SUCCESS,
+      payload: reviews,
     });
   });
 
-  it("createBeerSuccess should create CREATE_BEER_SUCCESS", () => {
-    expect(beerActions.createBeerSuccess(beers[0])).toEqual({
-      type: beerConstants.CREATE_BEER_SUCCESS,
-      payload: beers[0],
+  it("createReviewSuccess should create CREATE_REVIEW_SUCCESS", () => {
+    expect(reviewActions.success.createReviewSuccess(reviews[0])).toEqual({
+      type: reviewConstants.CREATE_REVIEW_SUCCESS,
+      payload: reviews[0],
     });
   });
 
-  it("createBeerSuccess should create UPDATE_BEER_SUCCESS", () => {
-    expect(beerActions.updateBeerSuccess(beers[0])).toEqual({
-      type: beerConstants.UPDATE_BEER_SUCCESS,
-      payload: beers[0],
+  it("updateReviewSuccess should create UPDATE_REVIEW_SUCCESS", () => {
+    expect(reviewActions.success.updateReviewSuccess(reviews[0])).toEqual({
+      type: reviewConstants.UPDATE_REVIEW_SUCCESS,
+      payload: reviews[0],
     });
   });
 
-  it("deleteBeerSuccess should create DELETE_BEER_SUCCESS", () => {
-    expect(beerActions.deleteBeerSuccess(beers[0])).toEqual({
-      type: beerConstants.DELETE_BEER_SUCCESS,
-      payload: beers[0],
+  it("deleteReviewSuccess should create DELETE_REVIEW_SUCCESS", () => {
+    expect(reviewActions.success.deleteReviewSuccess(reviews[0])).toEqual({
+      type: reviewConstants.DELETE_REVIEW_SUCCESS,
+      payload: reviews[0],
     });
   });
 });

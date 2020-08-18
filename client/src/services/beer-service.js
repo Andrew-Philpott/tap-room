@@ -14,7 +14,7 @@ export default {
 function getBeer(id) {
   return fetch(
     `http://localhost:5000/api/beers/${id}`,
-    requestOptions.getOptions
+    requestOptions.getOptions()
   ).then(handleResponse);
 }
 

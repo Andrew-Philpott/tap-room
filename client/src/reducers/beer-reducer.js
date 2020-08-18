@@ -2,20 +2,20 @@ import beerConstants from "../constants/beer-constants";
 
 export default (state = {}, action) => {
   switch (action.type) {
-    case beerConstants.GET_SUCCESS:
+    case beerConstants.GET_BEER_SUCCESS:
       return {
         item: action.payload,
       };
-    case beerConstants.GETALL_SUCCESS:
+    case beerConstants.GET_BEERS_SUCCESS:
       return {
         items: action.payload,
       };
-    case beerConstants.CREATE_SUCCESS:
+    case beerConstants.CREATE_BEER_SUCCESS:
       return {
         ...state,
         items: [...state.items, action.payload],
       };
-    case beerConstants.UPDATE_SUCCESS:
+    case beerConstants.UPDATE_BEER_SUCCESS:
       return {
         ...state,
         items: [
@@ -23,19 +23,19 @@ export default (state = {}, action) => {
           action.payload,
         ],
       };
-    case beerConstants.DELETE_SUCCESS:
+    case beerConstants.DELETE_BEER_SUCCESS:
       return {
         ...state,
         items: state.items.filter((x) => x.beerId !== action.payload.beerId),
       };
-    case beerConstants.INCREASE_PINTS_SUCCESS:
+    case beerConstants.INCREASE_BEER_PINTS_SUCCESS:
       return {
         ...state,
         items: state.items.map((x) =>
           x.beerId === action.payload.beerId ? action.payload : x
         ),
       };
-    case beerConstants.DECREASE_PINTS_SUCCESS:
+    case beerConstants.DECREASE_BEER_PINTS_SUCCESS:
       return {
         ...state,
         items: state.items.map((x) =>

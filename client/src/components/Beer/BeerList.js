@@ -24,7 +24,7 @@ export default () => {
     if (!beers) {
       dispatch(beerActions.getBeers());
     }
-  }, [beers, dispatch]);
+  }, [beers]);
 
   const onDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this beer?"))
@@ -38,7 +38,7 @@ export default () => {
   const decrementPints = (id) => {
     dispatch(beerActions.decrementPints(id));
   };
-
+  console.log(beers);
   return (
     <Container maxWidth="md">
       <Grid className="mrgn-t16" container>

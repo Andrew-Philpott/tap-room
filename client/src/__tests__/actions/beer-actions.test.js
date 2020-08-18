@@ -1,4 +1,4 @@
-import { beerActions } from "../../actions/beer-actions";
+import beerActions from "../../actions/beer-actions";
 import beerConstants from "../../constants/beer-constants";
 
 describe("beer actions", () => {
@@ -28,49 +28,49 @@ describe("beer actions", () => {
   ];
 
   it("getBeerSuccess should create GET_BEER_SUCCESS", () => {
-    expect(beerActions.getBeerSuccess(beers[0])).toEqual({
+    expect(beerActions.success.getBeerSuccess(beers[0])).toEqual({
       type: beerConstants.GET_BEER_SUCCESS,
       payload: beers[0],
     });
   });
 
   it("getBeersSuccess should create GET_BEERS_SUCCESS", () => {
-    expect(beerActions.getBeersSuccess(beers)).toEqual({
+    expect(beerActions.success.getBeersSuccess(beers)).toEqual({
       type: beerConstants.GET_BEERS_SUCCESS,
       payload: beers,
     });
   });
 
   it("createBeerSuccess should create CREATE_BEER_SUCCESS", () => {
-    expect(beerActions.createBeerSuccess(beers[0])).toEqual({
+    expect(beerActions.success.createBeerSuccess(beers[0])).toEqual({
       type: beerConstants.CREATE_BEER_SUCCESS,
       payload: beers[0],
     });
   });
 
   it("createBeerSuccess should create UPDATE_BEER_SUCCESS", () => {
-    expect(beerActions.updateBeerSuccess(beers[0])).toEqual({
+    expect(beerActions.success.updateBeerSuccess(beers[0])).toEqual({
       type: beerConstants.UPDATE_BEER_SUCCESS,
       payload: beers[0],
     });
   });
 
   it("deleteBeerSuccess should create DELETE_BEER_SUCCESS", () => {
-    expect(beerActions.deleteBeerSuccess(beers[0])).toEqual({
+    expect(beerActions.success.deleteBeerSuccess(beers[0])).toEqual({
       type: beerConstants.DELETE_BEER_SUCCESS,
       payload: beers[0],
     });
   });
 
   it("incrementPintsSuccess should create INCREASE_BEER_PINTS_SUCCESS", () => {
-    expect(beerActions.incrementPintsSuccess(beers[0])).toEqual({
+    expect(beerActions.success.incrementPintsSuccess(beers[0])).toEqual({
       type: beerConstants.INCREASE_BEER_PINTS_SUCCESS,
       payload: beers[0],
     });
   });
 
   it("decrementPintsSuccess should create DECREASE_BEER_PINTS_SUCCESS", () => {
-    expect(beerActions.decrementPintsSuccess(beers[0])).toEqual({
+    expect(beerActions.success.decrementPintsSuccess(beers[0])).toEqual({
       type: beerConstants.DECREASE_BEER_PINTS_SUCCESS,
       payload: beers[0],
     });

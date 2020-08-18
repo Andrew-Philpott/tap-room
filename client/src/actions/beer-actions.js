@@ -93,19 +93,21 @@ function decrementPintsSuccess(beer) {
   return { type: beerConstants.DECREASE_BEER_PINTS_SUCCESS, payload: beer };
 }
 
-export const beerActions = {
+export default {
   getBeer,
-  getBeerSuccess,
   getBeers,
-  getBeersSuccess,
   createBeer,
-  createBeerSuccess,
   updateBeer,
-  updateBeerSuccess,
   deleteBeer,
-  deleteBeerSuccess,
   incrementPints,
-  incrementPintsSuccess,
   decrementPints,
-  decrementPintsSuccess,
+  success: {
+    getBeerSuccess,
+    getBeersSuccess,
+    createBeerSuccess,
+    updateBeerSuccess,
+    deleteBeerSuccess,
+    incrementPintsSuccess,
+    decrementPintsSuccess,
+  },
 };
