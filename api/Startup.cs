@@ -24,51 +24,14 @@ namespace TapRoomApi
       services.AddCors();
       services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
       services.AddAutoMapper(typeof(Startup));
-      var appSettingsSection = _configuration.GetSection("AppSettings");
-      services.Configure<AppSettings>(appSettingsSection);
-
-      var appSettings = appSettingsSection.Get<AppSettings>();
-      var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-
-      services.AddAuthentication(x =>
-      {
-        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-      })
-      .AddJwtBearer(x =>
-      {
-        x.Events = new JwtBearerEvents
-        {
-          OnTokenValidated = async context =>
-                {
-                  var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                  var userId = int.Parse(context.Principal.Identity.Name);
-                  var user = await userService.FindAsync(userId);
-                  if (user == null)
-                  {
-                    context.Fail("Unauthorized");
-                  }
-                }
-        };
-        x.RequireHttpsMetadata = false;
-        x.SaveToken = true;
-        x.TokenValidationParameters = new TokenValidationParameters
-        {
-          ValidateIssuerSigningKey = true,
-          IssuerSigningKey = new SymmetricSecurityKey(key),
-          ValidateIssuer = false,
-          ValidateAudience = false
-        };
-      });
-      services.AddScoped<IReviewService, ReviewService>();
-      services.AddScoped<IBeerService, BeerService>();
-      services.AddScoped<IUserService, UserService>();
+      services.ConfigureJWTAuthentication(_configuration);
+      services.ConfigureEntityServices();
     }
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
       app.UseRouting();
       app.UseCors(options =>
-      options.AllowAnyOrigin()
+      options.WithOrigins("http://localhost:3000")
       .AllowAnyHeader()
       .AllowAnyMethod());
 
