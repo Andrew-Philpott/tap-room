@@ -28,7 +28,7 @@ export default () => {
             {user && (
               <Button
                 component={Link}
-                to={`/reviews/${parseInt(id)}/new`}
+                to={`/reviews/${id}/new`}
                 className="buttons float-right"
               >
                 Write a review

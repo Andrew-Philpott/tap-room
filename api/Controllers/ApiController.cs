@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using TapRoomApi.Helpers;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace TapRoomApi.Controllers
 {
@@ -38,7 +37,6 @@ namespace TapRoomApi.Controllers
     {
       try
       {
-        var user = _mapper.Map<User>(model);
         var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
         var entity = await _userService.Authenticate(model.Email, model.Password, key);
         return Ok(entity);

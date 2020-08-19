@@ -11,7 +11,7 @@ export default () => {
   const dispatch = useDispatch();
   React.useEffect(() => {
     dispatch(userActions.logout());
-  });
+  }, []);
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ("email" in fieldValues)

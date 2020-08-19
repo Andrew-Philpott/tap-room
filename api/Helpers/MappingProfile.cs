@@ -9,8 +9,6 @@ namespace TapRoomApi.Helpers
     public MappingProfile()
     {
       #region Beer
-      CreateMap<Beer, ViewBeer>();
-
       CreateMap<CreateBeer, Beer>();
 
       CreateMap<UpdateBeer, Beer>();

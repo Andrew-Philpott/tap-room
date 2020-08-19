@@ -21,6 +21,7 @@ namespace TapRoomApi.Services
       this.LastName = user.LastName;
       this.Email = user.Email;
       this.UserName = user.UserName;
+      this.Role = user.Role;
       this.Token = token;
     }
     public int UserId { get; set; }
@@ -28,6 +29,7 @@ namespace TapRoomApi.Services
     public string LastName { get; set; }
     public string UserName { get; set; }
     public string Email { get; set; }
+    public string Role { get; set; }
     public string Token { get; set; }
   }
 

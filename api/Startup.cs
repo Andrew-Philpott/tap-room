@@ -1,13 +1,10 @@
 using Microsoft.AspNetCore.Builder;
-using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using TapRoomApi.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
-using TapRoomApi.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+
 namespace TapRoomApi
 {
   public class Startup
