@@ -2,23 +2,19 @@ import userConstants from "../constants/user-constants";
 
 export default (state = {}, action) => {
   switch (action.type) {
-    case userConstants.REGISTER_SUCCESS:
+    case userConstants.UPDATE_USER_SUCCESS:
       return {
         ...state,
       };
-    case userConstants.UPDATE_SUCCESS:
+    case userConstants.DELETE_USER_SUCCESS:
       return {
         ...state,
       };
-    case userConstants.DELETE_SUCCESS:
+    case userConstants.GET_USER_SUCCESS:
       return {
         ...state,
       };
-    case userConstants.GET_SUCCESS:
-      return {
-        ...state,
-      };
-    case userConstants.GETALL_SUCCESS:
+    case userConstants.GET_USERS_SUCCESS:
       return {
         ...state,
       };
