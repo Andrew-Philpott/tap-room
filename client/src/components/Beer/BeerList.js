@@ -38,7 +38,7 @@ export default () => {
   const decrementPints = (id) => {
     dispatch(beerActions.decrementPints(id));
   };
-  console.log(beers);
+
   return (
     <Container maxWidth="md">
       <Grid className="mrgn-t16" container>

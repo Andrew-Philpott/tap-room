@@ -38,8 +38,8 @@ function createBeer(beer) {
     );
   };
 }
-function createBeerSuccess(beers) {
-  return { type: beerConstants.CREATE_BEER_SUCCESS, payload: beers };
+function createBeerSuccess(beer) {
+  return { type: beerConstants.CREATE_BEER_SUCCESS, payload: beer };
 }
 
 function updateBeer(id, beer) {
