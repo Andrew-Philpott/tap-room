@@ -79,6 +79,7 @@ Log in with the email 'admin@gmail.com', 'employee@gmail.com', or 'member@gmail.
 - _Open a seperate terminal_
 - _Navigate to app directory_
 - _\$npm install to download dependencies_
+- _\$npm test to run tests_
 - _\$npm run start to run the application_
 - _Application will run on localhost:3000_
 
