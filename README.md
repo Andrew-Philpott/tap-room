@@ -93,7 +93,6 @@ No known bugs at this time.
 - CSS
 - JavaScript
 - Material UI
-- Bootstrap
 - React
 - C#
 - RESTful API
