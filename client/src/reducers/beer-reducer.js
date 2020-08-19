@@ -10,7 +10,7 @@ export default (state = initialState, action) => {
     case beerConstants.GET_BEER_SUCCESS:
       return {
         ...state,
-        item: state.items.find((x) => x.beerId === action.payload),
+        item: action.payload,
       };
     case beerConstants.GET_BEERS_SUCCESS:
       return {

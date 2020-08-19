@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import * as routes from "../constants/routes";
 import userService from "../services/user-service";
 import { useDispatch } from "react-redux";
-import userActions from "../actions/user-actions";
+import { userActions } from "../actions/user-actions";
 import useForm from "./hooks/useForm";
 
 export default () => {

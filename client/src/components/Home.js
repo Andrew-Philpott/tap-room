@@ -11,11 +11,10 @@ import { Link } from "react-router-dom";
 export default () => {
   const beers = useSelector((state) => state.beers.items);
   const dispatch = useDispatch();
+  console.log(beers);
   useEffect(() => {
-    if (!beers) {
-      dispatch(beerActions.getBeers());
-    }
-  }, [beers]);
+    dispatch(beerActions.getBeers());
+  }, []);
   const average = (array) => array.reduce((a, b) => a + b) / array.length;
   const highestRatedBeers =
     beers &&

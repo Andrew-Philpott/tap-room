@@ -1,16 +1,13 @@
 using Microsoft.AspNetCore.Builder;
+using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using TapRoomApi.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
-using System.Text;
+using TapRoomApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-
-
 namespace TapRoomApi
 {
   public class Startup
@@ -27,7 +24,6 @@ namespace TapRoomApi
       services.AddCors();
       services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
       services.AddAutoMapper(typeof(Startup));
-
       var appSettingsSection = _configuration.GetSection("AppSettings");
       services.Configure<AppSettings>(appSettingsSection);
 
@@ -43,16 +39,15 @@ namespace TapRoomApi
       {
         x.Events = new JwtBearerEvents
         {
-          OnTokenValidated = context =>
+          OnTokenValidated = async context =>
                 {
-                  var tapRoomContext = context.HttpContext.RequestServices.GetRequiredService<TapRoomContext>();
+                  var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                   var userId = int.Parse(context.Principal.Identity.Name);
-                  var user = tapRoomContext.User.Find(userId);
+                  var user = await userService.FindAsync(userId);
                   if (user == null)
                   {
                     context.Fail("Unauthorized");
                   }
-                  return Task.CompletedTask;
                 }
         };
         x.RequireHttpsMetadata = false;
@@ -65,15 +60,17 @@ namespace TapRoomApi
           ValidateAudience = false
         };
       });
+      services.AddScoped<IReviewService, ReviewService>();
+      services.AddScoped<IBeerService, BeerService>();
+      services.AddScoped<IUserService, UserService>();
     }
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
       app.UseRouting();
-
       app.UseCors(options =>
-     options.AllowAnyOrigin()
-     .AllowAnyHeader()
-     .AllowAnyMethod());
+      options.AllowAnyOrigin()
+      .AllowAnyHeader()
+      .AllowAnyMethod());
 
       app.UseAuthentication();
       app.UseAuthorization();

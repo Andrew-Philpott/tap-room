@@ -3,6 +3,25 @@ import beerConstants from "../constants/beer-constants";
 import history from "../helpers/history";
 import errorActions from "./error-actions";
 
+export default {
+  getBeer,
+  getBeers,
+  createBeer,
+  updateBeer,
+  deleteBeer,
+  incrementPints,
+  decrementPints,
+  success: {
+    getBeerSuccess,
+    getBeersSuccess,
+    createBeerSuccess,
+    updateBeerSuccess,
+    deleteBeerSuccess,
+    incrementPintsSuccess,
+    decrementPintsSuccess,
+  },
+};
+
 function getBeer(id) {
   return (dispatch) => {
     beerService.getBeer(id).then(
@@ -16,9 +35,12 @@ function getBeerSuccess(beer) {
 }
 
 function getBeers() {
+  console.log("hello");
   return (dispatch) => {
     beerService.getBeers().then(
-      (beers) => dispatch(getBeersSuccess(beers)),
+      (beers) => {
+        dispatch(getBeersSuccess(beers));
+      },
       (error) => dispatch(errorActions.error(error.toString()))
     );
   };
@@ -92,22 +114,3 @@ function decrementPints(id) {
 function decrementPintsSuccess(beer) {
   return { type: beerConstants.DECREASE_BEER_PINTS_SUCCESS, payload: beer };
 }
-
-export default {
-  getBeer,
-  getBeers,
-  createBeer,
-  updateBeer,
-  deleteBeer,
-  incrementPints,
-  decrementPints,
-  success: {
-    getBeerSuccess,
-    getBeersSuccess,
-    createBeerSuccess,
-    updateBeerSuccess,
-    deleteBeerSuccess,
-    incrementPintsSuccess,
-    decrementPintsSuccess,
-  },
-};

@@ -42,12 +42,12 @@ describe("beerReducer", () => {
   test("Should successfully retrieve a beer from the beer list", () => {
     action = {
       type: beerConstants.GET_BEER_SUCCESS,
-      payload: 1,
+      payload: beer,
     };
 
-    expect(beerReducer({ item: {}, items: [beer] }, action)).toEqual({
+    expect(beerReducer(initalState, action)).toEqual({
       item: beer,
-      items: [beer],
+      items: [],
     });
   });
 

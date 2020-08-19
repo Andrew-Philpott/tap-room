@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import { REGISTER } from "../constants/routes";
 import useForm from "./hooks/useForm";
 import { useDispatch } from "react-redux";
-import userActions from "../actions/user-actions";
+import { userActions } from "../actions/user-actions";
 
 export default () => {
   const dispatch = useDispatch();
