@@ -21,8 +21,10 @@ const BeerDetail = ({ ...props }) => {
     <Container className="white-text mrgn-t16">
       {beer && (
         <Grid container>
-          <Grid item xs={12}>
+          <Grid item xs={8}>
             <h1>{beer.name}</h1>
+          </Grid>
+          <Grid item xs={4}>
             {user && (
               <Button
                 component={Link}
@@ -48,14 +50,22 @@ const BeerDetail = ({ ...props }) => {
       )}
       {JSON.stringify(beer) !== "{}" && beer.reviews.length !== 0 ? (
         <React.Fragment>
+          <h1>Reviews</h1>
           {beer.reviews.map((review, index) => {
             return (
-              <div key={index} id={index}>
-                <h1>Reviews</h1>
-                <p>User: {review.user.userName}</p>
-                <p>Rating: {review.rating}</p>
-                <p>Description: {review.description}</p>
-              </div>
+              <Grid direction="column" container key={index}>
+                <Grid item xs={10}>
+                  <p>
+                    User:{" "}
+                    <Link to={`/reviews/user/${review.user.userId}`}>
+                      {review.user.userName}
+                    </Link>
+                  </p>
+                  <p>Rating: {review.rating}</p>
+                  <p>Description: {review.description}</p>
+                </Grid>
+                <Grid item xs={2} />
+              </Grid>
             );
           })}
         </React.Fragment>
