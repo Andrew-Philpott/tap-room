@@ -18,7 +18,7 @@ const BeerDetail = ({ ...props }) => {
   }, [id]);
 
   return (
-    <Container className="white-text mrgn-t16">
+    <Container maxWidth="md" className="white-text mrgn-t16">
       {beer && (
         <Grid container>
           <Grid item xs={8}>

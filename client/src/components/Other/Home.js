@@ -3,7 +3,6 @@ import CardMedia from "@material-ui/core/CardMedia";
 import BeerPic from "../../assets/img/BeerPic.jpg";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import { CSSTransition } from "react-transition-group";
 import { connect } from "react-redux";
 import beerActions from "../../actions/beer-actions";
 import { Link } from "react-router-dom";
@@ -30,9 +29,7 @@ const Home = ({ ...props }) => {
 
   return (
     <Container>
-      <CSSTransition in={true} appear={true} timeout={600} classNames="home">
-        <CardMedia style={{ height: "300px", width: "100%" }} image={BeerPic} />
-      </CSSTransition>
+      <CardMedia style={{ height: "300px", width: "100%" }} image={BeerPic} />
       <Grid className="white-text" container>
         <Grid item xs={1} />
         <Grid item xs={6}>
