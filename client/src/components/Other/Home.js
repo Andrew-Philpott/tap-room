@@ -17,18 +17,16 @@ const Home = ({ ...props }) => {
   }, []);
 
   const average = (array) => array.reduce((a, b) => a + b) / array.length;
-  const highestRatedBeers =
-    beers &&
-    beers
-      .filter((x) => x.reviews.length !== 0)
-      .map((x) => {
-        return {
-          beer: x,
-          averageRating: average(x.reviews.map((r) => r.rating)),
-        };
-      })
-      .sort((a, b) => (a.rating > b.rating ? 1 : -1))
-      .slice(0, 3);
+  const highestRatedBeers = beers
+    .filter((x) => x.reviews.length !== 0)
+    .map((x) => {
+      return {
+        beer: x,
+        averageRating: average(x.reviews.map((r) => r.rating)),
+      };
+    })
+    .sort((a, b) => (a.rating > b.rating ? 1 : -1))
+    .slice(0, 3);
 
   return (
     <Container>
@@ -38,17 +36,19 @@ const Home = ({ ...props }) => {
       <Grid className="white-text" container>
         <Grid item xs={1} />
         <Grid item xs={6}>
-          {beers ? (
-            <h1>
-              <i>{beers.length} beers on tap!</i>
-            </h1>
-          ) : (
-            <h1>Sorry, we're all out at the moment</h1>
-          )}
+          <h1>
+            {beers ? (
+              <>
+                <i>{beers.length} beers on tap!</i>
+              </>
+            ) : (
+              <>Sorry, we're all out at the moment</>
+            )}
+          </h1>
         </Grid>
         <Grid item xs={4}>
-          {highestRatedBeers && highestRatedBeers.length !== 0 && (
-            <div>
+          {highestRatedBeers.length !== 0 && (
+            <React.Fragment>
               <h1>
                 <i>Local favorites:</i>
               </h1>
@@ -64,7 +64,7 @@ const Home = ({ ...props }) => {
                   </p>
                 );
               })}
-            </div>
+            </React.Fragment>
           )}
         </Grid>
         <Grid item xs={1} />

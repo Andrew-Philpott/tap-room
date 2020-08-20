@@ -134,4 +134,4 @@ const mapActionToProps = {
   register: userActions.register,
 };
 
-export default connect(mapActionToProps)(Register);
+export default connect(null, mapActionToProps)(Register);

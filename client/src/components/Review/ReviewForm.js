@@ -13,8 +13,6 @@ import reviewActions from "../../actions/review-actions";
 const ReviewForm = ({ ...props }) => {
   const { beer, beers, getBeer, getBeers, createReview } = props;
   const { id } = useParams();
-  const [loaded, setLoaded] = React.useState(true);
-
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ("rating" in fieldValues)
@@ -51,11 +49,10 @@ const ReviewForm = ({ ...props }) => {
   }, []);
 
   React.useEffect(() => {
-    if (beer && loaded) {
+    if (beer) {
       let temp = { ...values };
       temp.beerId = beer.beerId;
       setValues(temp);
-      setLoaded(false);
     }
   }, []);
 
@@ -90,14 +87,13 @@ const ReviewForm = ({ ...props }) => {
               variant="outlined"
             >
               <MenuItem key="" value=""></MenuItem>
-              {beers &&
-                beers.map((beer, index) => {
-                  return (
-                    <MenuItem key={index} value={beer.beerId}>
-                      {beer.name}
-                    </MenuItem>
-                  );
-                })}
+              {beers.map((beer, index) => {
+                return (
+                  <MenuItem key={index} value={beer.beerId}>
+                    {beer.name}
+                  </MenuItem>
+                );
+              })}
             </TextField>
           </React.Fragment>
         )}
@@ -169,7 +165,7 @@ const ReviewForm = ({ ...props }) => {
   );
 };
 const mapStateToProps = (state) => ({
-  beers: state.beers.item,
+  beer: state.beers.item,
   beers: state.beers.items,
 });
 

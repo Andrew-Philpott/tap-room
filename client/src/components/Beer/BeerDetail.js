@@ -46,7 +46,7 @@ const BeerDetail = ({ ...props }) => {
           </Grid>
         </Grid>
       )}
-      {beer && beer.reviews && beer.reviews.length !== 0 ? (
+      {JSON.stringify(beer) !== "{}" && beer.reviews.length !== 0 ? (
         <React.Fragment>
           {beer.reviews.map((review, index) => {
             return (

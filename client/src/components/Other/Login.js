@@ -101,4 +101,4 @@ const mapActionToProps = {
   logout: userActions.logout,
 };
 
-export default connect(mapActionToProps)(Login);
+export default connect(null, mapActionToProps)(Login);
