@@ -19,7 +19,6 @@ function getBeer(id) {
 }
 
 function getBeers() {
-  console.log("hello");
   return fetch(
     `http://localhost:5000/api/beers`,
     requestOptions.getOptions

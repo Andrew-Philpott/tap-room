@@ -6,7 +6,7 @@ export default () => {
   const user = useSelector((state) => state.authentication.user);
   return (
     <Container>
-      <h1>Welcome {user.username}</h1>
+      <h1>Welcome {user.userName}</h1>
       <div className="white-text text-align-center">
         <h2>Todays deals</h2>
         <h4>Growler for $15</h4>

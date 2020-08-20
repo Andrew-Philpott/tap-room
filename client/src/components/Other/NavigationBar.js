@@ -7,8 +7,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
-import taphouselogo from "../assets/img/taphouselogo.png";
-import * as routes from "../constants/routes";
+import taphouselogo from "../../assets/img/taphouselogo.png";
+import * as routes from "../../constants/routes";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
 const useStyles = makeStyles((theme) => ({

@@ -10,33 +10,38 @@ import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import beerActions from "../../actions/beer-actions";
+import { userActions } from "../../actions/user-actions";
 import * as role from "../../constants/roles";
 import * as route from "../../constants/routes";
 
-export default () => {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.authentication.user);
-  const beers = useSelector((state) => state.beers.items);
-
+const BeerList = ({ ...props }) => {
+  const {
+    user,
+    beers,
+    getBeers,
+    deleteBeer,
+    incrementPints,
+    decrementPints,
+  } = props;
   React.useEffect(() => {
-    if (!beers) {
-      dispatch(beerActions.getBeers());
+    if (beers.length === 0) {
+      getBeers();
     }
-  }, [beers]);
+  }, []);
 
   const onDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this beer?"))
-      dispatch(beerActions.deleteBeer(id));
+      deleteBeer(id);
   };
 
-  const incrementPints = (id) => {
-    dispatch(beerActions.incrementPints(id));
+  const incrementBeerPints = (id) => {
+    incrementPints(id);
   };
 
-  const decrementPints = (id) => {
-    dispatch(beerActions.decrementPints(id));
+  const decrementBeerPints = (id) => {
+    decrementPints(id);
   };
 
   return (
@@ -137,7 +142,9 @@ export default () => {
                             {beer.pints > 0 ? (
                               <TableCell align="center">
                                 <span
-                                  onClick={() => decrementPints(beer.beerId)}
+                                  onClick={() =>
+                                    decrementBeerPints(beer.beerId)
+                                  }
                                   className="action-link"
                                 >
                                   -
@@ -151,7 +158,7 @@ export default () => {
                             <TableCell align="center">
                               <span
                                 className="action-link"
-                                onClick={() => incrementPints(beer.beerId)}
+                                onClick={() => incrementBeerPints(beer.beerId)}
                               >
                                 +
                               </span>
@@ -190,3 +197,18 @@ export default () => {
     </Container>
   );
 };
+
+const mapStateToProps = (state) => ({
+  beers: state.beers.items,
+  user: state.authentication.user,
+});
+
+const mapActionToProps = {
+  getBeers: beerActions.getBeers,
+  deleteBeer: beerActions.deleteBeer,
+  incrementPints: beerActions.incrementPints,
+  decrementPints: beerActions.decrementPints,
+  getUser: userActions.getUser,
+};
+
+export default connect(mapStateToProps, mapActionToProps)(BeerList);

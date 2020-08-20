@@ -1,20 +1,21 @@
-import React, { useEffect } from "react";
+import React from "react";
 import CardMedia from "@material-ui/core/CardMedia";
-import BeerPic from "../assets/img/BeerPic.jpg";
+import BeerPic from "../../assets/img/BeerPic.jpg";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { CSSTransition } from "react-transition-group";
-import { useSelector, useDispatch } from "react-redux";
-import beerActions from "../actions/beer-actions";
+import { connect } from "react-redux";
+import beerActions from "../../actions/beer-actions";
 import { Link } from "react-router-dom";
 
-export default () => {
-  const beers = useSelector((state) => state.beers.items);
-  const dispatch = useDispatch();
-  console.log(beers);
-  useEffect(() => {
-    dispatch(beerActions.getBeers());
+const Home = ({ ...props }) => {
+  const { beers, getBeers } = props;
+  React.useEffect(() => {
+    if (beers.length === 0) {
+      getBeers();
+    }
   }, []);
+
   const average = (array) => array.reduce((a, b) => a + b) / array.length;
   const highestRatedBeers =
     beers &&
@@ -71,3 +72,13 @@ export default () => {
     </Container>
   );
 };
+
+const mapStateToProps = (state) => ({
+  beers: state.beers.items,
+});
+
+const mapActionToProps = {
+  getBeers: beerActions.getBeers,
+};
+
+export default connect(mapStateToProps, mapActionToProps)(Home);

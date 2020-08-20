@@ -35,7 +35,6 @@ function getBeerSuccess(beer) {
 }
 
 function getBeers() {
-  console.log("hello");
   return (dispatch) => {
     beerService.getBeers().then(
       (beers) => {

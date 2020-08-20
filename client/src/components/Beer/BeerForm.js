@@ -5,12 +5,11 @@ import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import useForm from "../hooks/useForm";
 import beerActions from "../../actions/beer-actions";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 
-export default () => {
+const BeerForm = ({ ...props }) => {
+  const { beer, getBeer, updateBeer, createBeer } = props;
   const { id } = useParams();
-  const dispatch = useDispatch();
-  const beer = useSelector((state) => state.beers.item);
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ("name" in fieldValues)
@@ -53,25 +52,23 @@ export default () => {
 
   React.useEffect(() => {
     if (id) {
-      dispatch(beerActions.getBeer(parseInt(id)));
+      getBeer(id);
     }
-  }, [id, dispatch]);
+  }, []);
 
   React.useEffect(() => {
-    let loaded = true;
-    if (beer && loaded) {
+    if (JSON.stringify(beer) !== "{}") {
       setValues(beer);
     }
-    return () => (loaded = false);
-  }, [beer, setValues]);
+  }, []);
 
   function handleSubmit(e) {
     e.preventDefault();
     if (validate()) {
       if (id) {
-        dispatch(beerActions.updateBeer(id, values));
+        updateBeer(id, values);
       } else {
-        dispatch(beerActions.createBeer(values));
+        createBeer(values);
       }
     }
   }
@@ -225,3 +222,15 @@ export default () => {
     </Container>
   );
 };
+
+const mapStateToProps = (state) => ({
+  beer: state.beers.item,
+});
+
+const mapActionToProps = {
+  getBeer: beerActions.getBeer,
+  updateBeer: beerActions.updateBeer,
+  createBeer: beerActions.createBeer,
+};
+
+export default connect(mapStateToProps, mapActionToProps)(BeerForm);

@@ -6,16 +6,15 @@ import Button from "@material-ui/core/Button";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import useForm from "../hooks/useForm";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import beerActions from "../../actions/beer-actions";
 import reviewActions from "../../actions/review-actions";
 
-export default () => {
+const ReviewForm = ({ ...props }) => {
+  const { beer, beers, getBeer, getBeers, createReview } = props;
   const { id } = useParams();
-  const dispatch = useDispatch();
   const [loaded, setLoaded] = React.useState(true);
-  const beers = useSelector((state) => state.beers.items);
-  const beer = useSelector((state) => state.beers.item);
+
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ("rating" in fieldValues)
@@ -45,9 +44,10 @@ export default () => {
   );
   React.useEffect(() => {
     if (id) {
-      dispatch(beerActions.getBeer(parseInt(id)));
+      getBeer(id);
+    } else {
+      getBeers();
     }
-    dispatch(beerActions.getBeers());
   }, []);
 
   React.useEffect(() => {
@@ -62,7 +62,7 @@ export default () => {
   function handleSubmit(e) {
     e.preventDefault();
     if (validate()) {
-      dispatch(reviewActions.createReview(values));
+      createReview(values);
     }
   }
   return (
@@ -168,3 +168,15 @@ export default () => {
     </Container>
   );
 };
+const mapStateToProps = (state) => ({
+  beers: state.beers.item,
+  beers: state.beers.items,
+});
+
+const mapActionToProps = {
+  getBeer: beerActions.getBeer,
+  getBeers: beerActions.getBeers,
+  createReview: reviewActions.createReview,
+};
+
+export default connect(mapStateToProps, mapActionToProps)(ReviewForm);
