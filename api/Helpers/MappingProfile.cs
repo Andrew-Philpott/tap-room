@@ -1,6 +1,6 @@
 using AutoMapper;
 using TapRoomApi.Entities;
-using TapRoomApi.Models;
+using TapRoomApi.DataTransferObjects;
 
 namespace TapRoomApi.Helpers
 {
