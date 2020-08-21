@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using TapRoomApi.Entities;
-using TapRoomApi.DataTransferObjects;
+using TapRoomApi.DataTransferObjects.V1;
 using TapRoomApi.Services;
 using TapRoomApi.Models;
 using System.Threading.Tasks;

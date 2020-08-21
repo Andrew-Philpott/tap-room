@@ -1,7 +1,8 @@
-namespace TapRoomApi.DataTransferObjects
+namespace TapRoomApi.DataTransferObjects.V1
 {
-  public class CreateBeer
+  public class UpdateBeer
   {
+    public int BeerId { get; set; }
     public string Name { get; set; }
     public string Brand { get; set; }
     public string Color { get; set; }

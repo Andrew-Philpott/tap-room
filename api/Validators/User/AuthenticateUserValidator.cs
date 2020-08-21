@@ -1,5 +1,5 @@
 using FluentValidation;
-using TapRoomApi.DataTransferObjects;
+using TapRoomApi.DataTransferObjects.V1;
 
 namespace TapRoomApi.Validators
 {

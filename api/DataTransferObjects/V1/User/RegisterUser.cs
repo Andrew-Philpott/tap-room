@@ -1,6 +1,6 @@
-namespace TapRoomApi.DataTransferObjects
+namespace TapRoomApi.DataTransferObjects.V1
 {
-  public class UpdateUser
+  public class RegisterUser
   {
     public string FirstName { get; set; }
     public string LastName { get; set; }
