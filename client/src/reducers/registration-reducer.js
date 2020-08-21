@@ -6,8 +6,6 @@ export default (state = {}, action) => {
       return { registering: true };
     case userConstants.REGISTER_SUCCESS:
       return {};
-    case userConstants.REGISTER_FAILURE:
-      return {};
     default:
       return state;
   }

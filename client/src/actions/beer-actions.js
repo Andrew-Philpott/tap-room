@@ -25,7 +25,9 @@ export default {
 function getBeer(id) {
   return (dispatch) => {
     beerService.getBeer(id).then(
-      (beer) => dispatch(getBeerSuccess(beer)),
+      (beer) => {
+        return dispatch(getBeerSuccess(beer));
+      },
       (error) => dispatch(errorActions.error(error.toString()))
     );
   };
