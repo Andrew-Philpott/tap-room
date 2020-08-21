@@ -1,6 +1,7 @@
 import reviewService from "../services/review-service";
 import reviewConstants from "../constants/review-constants.js";
 import errorActions from "./error-actions";
+import history from "../helpers/history";
 
 function getReview(id) {
   return (dispatch) => {
@@ -26,11 +27,16 @@ function getReviews() {
 function getReviewsSuccess(reviews) {
   return { type: reviewConstants.GET_REVIEWS_SUCCESS, payload: reviews };
 }
-function createReview(review) {
+function createReview(id, review) {
   return (dispatch) => {
     reviewService.createReview(review).then(
       (review) => {
         dispatch(createReviewSuccess(review));
+        if (id) {
+          history.push(`/beers/${id}`);
+        } else {
+          history.push("/beers");
+        }
       },
       (error) => dispatch(errorActions.error(error.toString()))
     );

@@ -1,5 +1,7 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using TapRoomApi.Entities;
 using TapRoomApi.DataTransferObjects.V1;
@@ -28,8 +30,8 @@ namespace TapRoomApi.Controllers.V1
       try
       {
         var entity = await _reviewService.FindAsync(id);
-        var model = _mapper.Map<ViewReview>(entity);
-        return Ok(model);
+        var viewDTO = _mapper.Map<ViewReview>(entity);
+        return Ok(viewDTO);
       }
       catch
       {
@@ -44,7 +46,8 @@ namespace TapRoomApi.Controllers.V1
       try
       {
         var entities = await _reviewService.FindAllAsync();
-        return Ok(entities);
+        var viewDTOs = _mapper.Map<IEnumerable<ViewReview>>(entities);
+        return Ok(viewDTOs);
       }
       catch
       {
@@ -53,38 +56,40 @@ namespace TapRoomApi.Controllers.V1
     }
 
     [HttpPost("api/v1/reviews")]
-    public async Task<IActionResult> CreateReview([FromBody] CreateReview model)
+    public async Task<IActionResult> CreateReview([FromBody] CreateReview createDTO)
     {
 
+      System.Console.WriteLine(createDTO);
       var currentUserId = int.Parse(User.Identity.Name);
       try
       {
-        var entity = _mapper.Map<Review>(model);
-        entity.UserId = currentUserId;
-        var (newEntity, message) = await _reviewService.CreateAsync(entity);
-        if (message != null)
-          return BadRequest(new { message = message });
-
-        return Ok(entity);
+        var entityToCreate = _mapper.Map<Review>(createDTO);
+        entityToCreate.UserId = currentUserId;
+        var entity = await _reviewService.CreateAsync(entityToCreate);
+        var viewDTO = _mapper.Map<ViewReview>(entity);
+        return Ok(viewDTO);
       }
-      catch
+      catch (Exception ex)
       {
+        System.Console.WriteLine(ex);
         return StatusCode(500, "Internal server error.");
       }
     }
 
     [HttpPut("api/v1/reviews/{id}")]
-    public async Task<IActionResult> UpdateReview(int id, [FromBody] UpdateReview model)
+    public async Task<IActionResult> UpdateReview(int id, [FromBody] UpdateReview updateDTO)
     {
       var currentUserId = int.Parse(User.Identity.Name);
       try
       {
-        var entity = _mapper.Map<Review>(model);
-        var (updatedEntity, message) = await _reviewService.UpdateAsync(id, entity);
-        if (message != null)
-          return BadRequest(new { message = message });
+        var entity = await _reviewService.FindAsync(id);
+        if (entity == null)
+          return BadRequest(new ErrorResponse(new ErrorModel(null, "Beer does not exist in the database")));
 
-        return Ok(entity);
+        _mapper.Map(updateDTO, entity);
+        var updateEntity = _reviewService.Update(entity);
+        var viewDTO = _mapper.Map<ViewReview>(updateEntity);
+        return Ok(viewDTO);
       }
       catch
       {
@@ -97,11 +102,13 @@ namespace TapRoomApi.Controllers.V1
     {
       try
       {
-        var (entity, message) = await _reviewService.DeleteAsync(id);
-        if (message != null)
-          return BadRequest(new { message = message });
+        var entity = await _reviewService.FindAsync(id);
+        if (entity == null)
+          return BadRequest(new ErrorResponse(new ErrorModel(null, "Beer does not exist in the database")));
 
-        return Ok(entity);
+        _reviewService.Delete(entity);
+        var viewDTO = _mapper.Map<ViewReview>(entity);
+        return Ok(viewDTO);
       }
       catch
       {

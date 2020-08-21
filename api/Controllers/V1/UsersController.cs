@@ -4,10 +4,12 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using TapRoomApi.Entities;
 using TapRoomApi.Services;
+using TapRoomApi.Models;
 using TapRoomApi.DataTransferObjects.V1;
 using TapRoomApi.Helpers;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace TapRoomApi.Controllers.V1
 {
@@ -31,9 +33,8 @@ namespace TapRoomApi.Controllers.V1
       try
       {
         var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-        var (entity, message) = await _userService.AuthenticateAsync(model.Email, model.Password, key);
-        if (message != null)
-          return BadRequest(new { message = message });
+        var entity = await _userService.AuthenticateAsync(model.Email, model.Password, key);
+        if (entity == null) return BadRequest(new ErrorResponse(new ErrorModel(null, "User does not exist or email password combination is incorrect.")));
 
         return Ok(entity);
       }
@@ -45,15 +46,13 @@ namespace TapRoomApi.Controllers.V1
 
     [AllowAnonymous]
     [HttpPost("api/v1/users/register")]
-    public async Task<IActionResult> Register([FromBody] RegisterUser model)
+    public async Task<IActionResult> Register([FromBody] RegisterUser createDTO)
     {
       try
       {
-        var entity = _mapper.Map<User>(model);
-        var (newEntity, message) = await _userService.RegisterAsync(entity, model.Password);
-        if (message != null)
-          return BadRequest(new { message = message });
-
+        var entityToCreate = _mapper.Map<User>(createDTO);
+        var entity = await _userService.RegisterAsync(entityToCreate, createDTO.Password);
+        if (entity == null) return BadRequest(new ErrorResponse(new ErrorModel(null, $"Username {createDTO.UserName} is already taken.")));
         return Ok();
       }
       catch
@@ -68,7 +67,8 @@ namespace TapRoomApi.Controllers.V1
       try
       {
         var entities = await _userService.FindAllAsync();
-        return Ok(entities);
+        var viewDTOs = _mapper.Map<IEnumerable<ViewUser>>(entities);
+        return Ok(viewDTOs);
       }
       catch
       {
@@ -82,7 +82,8 @@ namespace TapRoomApi.Controllers.V1
       try
       {
         var entity = await _userService.FindAsync(id);
-        return Ok(entity);
+        var viewDTO = _mapper.Map<ViewUser>(entity);
+        return Ok(viewDTO);
       }
       catch
       {
@@ -91,18 +92,22 @@ namespace TapRoomApi.Controllers.V1
     }
 
     [HttpPut("api/v1/users/{id}")]
-    public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUser model)
+    public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUser updateDTO)
     {
-      if (model == null)
-        return BadRequest(new { message = "User cannot be null." });
+      if (updateDTO == null)
+        return BadRequest(new ErrorResponse(new ErrorModel(null, "User cannot be null")));
       try
       {
-        var entity = _mapper.Map<User>(model);
-        var (updatedEntity, message) = await _userService.UpdateAsync(id, entity, model.Password);
-        if (message != null)
-          return BadRequest(new { message = message });
+        var entity = await _userService.FindAsync(id);
+        if (entity == null)
+          return BadRequest(new ErrorResponse(new ErrorModel(null, "User does not exist in the database")));
 
-        return Ok(updatedEntity);
+        _mapper.Map(updateDTO, entity);
+        var updateEntity = await _userService.UpdateAsync(
+        entity, updateDTO.Password);
+        if (updateEntity == null) return BadRequest(new ErrorResponse(new ErrorModel(null, "Username " + updateDTO.UserName + " is already taken.")));
+        var viewDTO = _mapper.Map<ViewUser>(updateEntity);
+        return Ok(viewDTO);
       }
       catch
       {
@@ -115,11 +120,12 @@ namespace TapRoomApi.Controllers.V1
     {
       try
       {
-        var (entity, message) = await _userService.DeleteAsync(id);
-        if (message != null)
-          return BadRequest(new { message = message });
+        var entity = await _userService.FindAsync(id);
+        if (entity == null)
+          return BadRequest(new ErrorResponse(new ErrorModel(null, "User does not exist in the database")));
 
-        return Ok(entity);
+        var viewDTO = _mapper.Map<ViewUser>(entity);
+        return Ok(viewDTO);
       }
       catch
       {

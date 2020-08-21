@@ -43,7 +43,7 @@ const ReviewForm = ({ ...props }) => {
     } else {
       getBeers();
     }
-  }, []);
+  }, [id]);
 
   React.useEffect(() => {
     if (beer) {
@@ -56,7 +56,7 @@ const ReviewForm = ({ ...props }) => {
   function handleSubmit(e) {
     e.preventDefault();
     if (validate()) {
-      createReview(values);
+      createReview(id, values);
     }
   }
   return (

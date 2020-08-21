@@ -54,25 +54,25 @@ namespace TapRoomApi.Controllers.V1
     }
 
     [HttpPost("api/v1/beers")]
-    public async Task<IActionResult> CreateBeer([FromBody] CreateBeer model)
+    public async Task<IActionResult> CreateBeer([FromBody] CreateBeer createDTO)
     {
+      if (createDTO == null)
+        return BadRequest(new ErrorResponse(new ErrorModel("Name", "Beer cannot be null.")));
+
       var currentUserId = int.Parse(User.Identity.Name);
       try
       {
         var user = await _userService.FindAsync(currentUserId);
         if (user.Role != "admin")
-          return BadRequest(new ErrorResponse("You must have administrative privileges to create a beer"));
+          return BadRequest(new ErrorResponse(new ErrorModel("Admin", "You must have administrative privileges to create a beer")));
 
-        if (model == null)
-          return BadRequest(new ErrorResponse("Beer cannot be null."));
+        var entityToCreate = _mapper.Map<Beer>(createDTO);
+        var entity = await _beerService.CreateAsync(entityToCreate);
 
-        var entity = _mapper.Map<Beer>(model);
-        var (newEntity, message) = await _beerService.CreateAsync(entity);
+        if (entity != null)
+          return BadRequest(new ErrorResponse(new ErrorModel("Name", "Beer cannot be null.")));
 
-        if (message != null)
-          return BadRequest(message);
-
-        return Ok(newEntity);
+        return Ok(entity);
       }
       catch
       {
@@ -81,29 +81,25 @@ namespace TapRoomApi.Controllers.V1
     }
 
     [HttpPut("api/v1/beers/{id}")]
-    public async Task<IActionResult> UpdateBeer(int id, [FromBody] UpdateBeer model)
+    public async Task<IActionResult> UpdateBeer(int id, [FromBody] UpdateBeer updateDTO)
     {
       var currentUserId = int.Parse(User.Identity.Name);
       try
       {
         var user = await _userService.FindAsync(currentUserId);
         if (user.Role != "admin")
-          return BadRequest(new ErrorResponse("You must have administrative privileges to create a beer"));
+          return BadRequest(new ErrorResponse(new ErrorModel(null, "You must have administrative privileges to create a beer")));
 
-        if (model == null)
-          return BadRequest(new ErrorResponse("Beer cannot be null."));
+        if (updateDTO == null)
+          return BadRequest(new ErrorResponse(new ErrorModel(null, "Beer cannot be null.")));
 
         var entity = await _beerService.FindAsync(id);
         if (entity == null)
-          return BadRequest(new ErrorResponse("Beer does not exist in the database"));
+          return BadRequest(new ErrorResponse(new ErrorModel(null, "Beer does not exist in the database")));
 
-        _mapper.Map(model, entity);
-        var (updatedEntity, message) = await _beerService.UpdateAsync(id, entity);
-
-        if (message != null)
-          return BadRequest(message);
-
-        return Ok(updatedEntity);
+        _mapper.Map(updateDTO, entity);
+        var updateEntity = _beerService.Update(entity);
+        return Ok(updateEntity);
       }
       catch
       {
@@ -116,11 +112,12 @@ namespace TapRoomApi.Controllers.V1
     {
       try
       {
-        var (entity, message) = await _beerService.IncrementPintsByOneAsync(id);
-        if (message != null)
-          return BadRequest(message);
+        var entity = await _beerService.FindAsync(id);
+        if (entity == null)
+          return BadRequest(new ErrorResponse(new ErrorModel(null, "Beer does not exist in the database")));
 
-        return Ok(entity);
+        var updatedEntity = _beerService.IncrementPintsByOne(entity);
+        return Ok(updatedEntity);
       }
       catch
       {
@@ -133,11 +130,12 @@ namespace TapRoomApi.Controllers.V1
     {
       try
       {
-        var (entity, message) = await _beerService.DecrementPintsByOneAsync(id);
-        if (message != null)
-          return BadRequest(message);
+        var entity = await _beerService.FindAsync(id);
+        if (entity == null)
+          return BadRequest(new ErrorResponse(new ErrorModel(null, "Beer does not exist in the database")));
 
-        return Ok(entity);
+        var updateEntity = _beerService.DecrementPintsByOne(entity);
+        return Ok(updateEntity);
       }
       catch
       {
@@ -153,12 +151,13 @@ namespace TapRoomApi.Controllers.V1
       {
         var user = await _userService.FindAsync(currentUserId);
         if (user.Role != "admin")
-          return BadRequest(new ErrorResponse("You must have administrative privileges to create a beer"));
+          return BadRequest(new ErrorResponse(new ErrorModel(null, "You must have administrative privileges to create a beer")));
 
-        var (entity, message) = await _beerService.DeleteAsync(id);
-        if (message != null)
-          return BadRequest(message);
+        var entity = await _beerService.FindAsync(id);
+        if (entity == null)
+          return BadRequest(new ErrorResponse(new ErrorModel(null, "Beer does not exist in the database")));
 
+        _beerService.Delete(entity);
         return Ok(entity);
       }
       catch

@@ -7,6 +7,7 @@ namespace TapRoomApi.Validators
   {
     public CreateBeerValidator()
     {
+      RuleFor(x => x).NotNull();
       RuleFor(x => x.Name).NotEmpty().Matches("^[a-zA-Z0-9 ']*$").MaximumLength(50);
       RuleFor(x => x.Brand).NotEmpty().Matches("^[a-zA-Z0-9 ']*$").MaximumLength(50);
       RuleFor(x => x.Color).NotEmpty().Matches("^[a-zA-Z ]*$").MaximumLength(50);

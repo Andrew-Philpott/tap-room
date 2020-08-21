@@ -1,11 +1,14 @@
+using System.Collections.Generic;
+
 namespace TapRoomApi.Models
 {
   public class ErrorResponse
   {
-    public string ErrorMessage { get; set; }
-    public ErrorResponse(string message)
+    public List<ErrorModel> Errors { get; set; } = new List<ErrorModel>();
+    public ErrorResponse() { }
+    public ErrorResponse(ErrorModel error)
     {
-      ErrorMessage = message;
+      Errors.Add(error);
     }
   }
 }
