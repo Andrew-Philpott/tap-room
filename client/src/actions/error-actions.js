@@ -6,7 +6,7 @@ export default {
 };
 
 function error(message) {
-  return { type: errorConstants.ERROR, message };
+  return { type: errorConstants.ERROR, payload: message };
 }
 
 function clear() {

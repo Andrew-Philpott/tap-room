@@ -38,7 +38,9 @@ function createReview(id, review) {
           history.push("/beers");
         }
       },
-      (error) => dispatch(errorActions.error(error.toString()))
+      (error) => {
+        dispatch(errorActions.error(error));
+      }
     );
   };
 }

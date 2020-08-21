@@ -8,7 +8,7 @@ export default (response) => {
         userService.logout();
       }
 
-      const error = (data && data.message) || response.statusText;
+      const error = (data && data.errors) || response.statusText;
       return Promise.reject(error);
     }
     return data;

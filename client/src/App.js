@@ -25,14 +25,20 @@ function App() {
     history.listen((location, action) => {
       dispatch(errorActions.clear());
     });
-  }, [dispatch]);
+  }, [error]);
   return (
     <div className="App">
       <Router history={history}>
         <NavigationBar />
-        {error && (
-          <h1 className="white-text text-align-center">{error.message}</h1>
-        )}
+        {error &&
+          error.message &&
+          Object.values(error.message).map((x, index) => {
+            return (
+              <p key={index} className="white-text text-align-center">
+                {x}
+              </p>
+            );
+          })}
         <Switch>
           <Route exact path={routes.LANDING} component={Home} />
           <Route exact path={routes.ABOUT} component={About} />

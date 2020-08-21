@@ -9,6 +9,7 @@ namespace TapRoomApi.Validators
     {
       RuleFor(x => x.Rating).InclusiveBetween(1, 5);
       RuleFor(x => x.Description).NotEmpty().Matches("^[a-zA-Z0-9 '\".,]*$").Length(50, 500);
+      RuleFor(x => x.BeerId).NotEmpty();
     }
   }
 }

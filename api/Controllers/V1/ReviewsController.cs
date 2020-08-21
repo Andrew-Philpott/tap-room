@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using System.Collections.Generic;
@@ -58,8 +57,6 @@ namespace TapRoomApi.Controllers.V1
     [HttpPost("api/v1/reviews")]
     public async Task<IActionResult> CreateReview([FromBody] CreateReview createDTO)
     {
-
-      System.Console.WriteLine(createDTO);
       var currentUserId = int.Parse(User.Identity.Name);
       try
       {
@@ -69,9 +66,8 @@ namespace TapRoomApi.Controllers.V1
         var viewDTO = _mapper.Map<ViewReview>(entity);
         return Ok(viewDTO);
       }
-      catch (Exception ex)
+      catch
       {
-        System.Console.WriteLine(ex);
         return StatusCode(500, "Internal server error.");
       }
     }
