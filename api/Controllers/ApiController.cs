@@ -38,12 +38,15 @@ namespace TapRoomApi.Controllers
       try
       {
         var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-        var entity = await _userService.Authenticate(model.Email, model.Password, key);
+        var (entity, message) = await _userService.Authenticate(model.Email, model.Password, key);
+        if (message != null)
+          return BadRequest(new { message = message });
+
         return Ok(entity);
       }
-      catch (Exception ex)
+      catch
       {
-        return BadRequest(new { message = ex.Message });
+        return StatusCode(500, "Internal server error.");
       }
     }
 
@@ -54,12 +57,15 @@ namespace TapRoomApi.Controllers
       try
       {
         var entity = _mapper.Map<User>(model);
-        await _userService.Register(entity, model.Password);
-        return Ok(model);
+        var (newEntity, message) = await _userService.Register(entity, model.Password);
+        if (message != null)
+          return BadRequest(new { message = message });
+
+        return Ok();
       }
-      catch (Exception ex)
+      catch
       {
-        return BadRequest(new { message = ex });
+        return StatusCode(500, "Internal server error.");
       }
     }
 
@@ -99,8 +105,11 @@ namespace TapRoomApi.Controllers
       try
       {
         var entity = _mapper.Map<User>(model);
-        await _userService.Update(id, entity, model.Password);
-        return Ok(entity);
+        var (updatedEntity, message) = await _userService.Update(id, entity, model.Password);
+        if (message != null)
+          return BadRequest(new { message = message });
+
+        return Ok(updatedEntity);
       }
       catch
       {
@@ -113,8 +122,11 @@ namespace TapRoomApi.Controllers
     {
       try
       {
-        await _userService.Delete(id);
-        return Ok();
+        var (entity, message) = await _userService.Delete(id);
+        if (message != null)
+          return BadRequest(new { message = message });
+
+        return Ok(entity);
       }
       catch
       {
@@ -168,8 +180,12 @@ namespace TapRoomApi.Controllers
           return BadRequest(new { message = "Beer cannot be null." });
 
         var entity = _mapper.Map<Beer>(model);
-        entity = await _beerService.Create(entity);
-        return Ok(entity);
+        var (newEntity, message) = await _beerService.Create(entity);
+
+        if (message != null)
+          return BadRequest(new { message = message });
+
+        return Ok(newEntity);
       }
       catch
       {
@@ -191,8 +207,12 @@ namespace TapRoomApi.Controllers
           return BadRequest(new { message = "Beer cannot be null." });
 
         var entity = _mapper.Map<Beer>(model);
-        var updatedEntity = await _beerService.Update(id, entity);
-        return Ok(entity);
+        var (updatedEntity, message) = await _beerService.Update(id, entity);
+
+        if (message != null)
+          return BadRequest(new { message = message });
+
+        return Ok(updatedEntity);
       }
       catch
       {
@@ -205,7 +225,10 @@ namespace TapRoomApi.Controllers
     {
       try
       {
-        var entity = await _beerService.IncrementPintsByOne(id);
+        var (entity, message) = await _beerService.IncrementPintsByOne(id);
+        if (message != null)
+          return BadRequest(new { message = message });
+
         return Ok(entity);
       }
       catch
@@ -219,7 +242,10 @@ namespace TapRoomApi.Controllers
     {
       try
       {
-        var entity = await _beerService.DecrementPintsByOne(id);
+        var (entity, message) = await _beerService.DecrementPintsByOne(id);
+        if (message != null)
+          return BadRequest(new { message = message });
+
         return Ok(entity);
       }
       catch
@@ -237,7 +263,11 @@ namespace TapRoomApi.Controllers
         var user = await _userService.FindAsync(currentUserId);
         if (user.Role != "admin")
           return BadRequest(new { message = "You must have administrative privileges to create a beer" });
-        var entity = await _beerService.Delete(id);
+
+        var (entity, message) = await _beerService.Delete(id);
+        if (message != null)
+          return BadRequest(new { message = message });
+
         return Ok(entity);
       }
       catch
@@ -289,7 +319,10 @@ namespace TapRoomApi.Controllers
       {
         var entity = _mapper.Map<Review>(model);
         entity.UserId = currentUserId;
-        entity = await _reviewService.Create(entity);
+        var (newEntity, message) = await _reviewService.Create(entity);
+        if (message != null)
+          return BadRequest(new { message = message });
+
         return Ok(entity);
       }
       catch
@@ -305,7 +338,10 @@ namespace TapRoomApi.Controllers
       try
       {
         var entity = _mapper.Map<Review>(model);
-        await _reviewService.Update(id, entity);
+        var (updatedEntity, message) = await _reviewService.Update(id, entity);
+        if (message != null)
+          return BadRequest(new { message = message });
+
         return Ok(entity);
       }
       catch
@@ -319,8 +355,11 @@ namespace TapRoomApi.Controllers
     {
       try
       {
-        var entity = await _reviewService.Delete(id);
-        return Ok(id);
+        var (entity, message) = await _reviewService.Delete(id);
+        if (message != null)
+          return BadRequest(new { message = message });
+
+        return Ok(entity);
       }
       catch
       {

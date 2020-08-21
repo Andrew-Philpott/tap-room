@@ -35,12 +35,12 @@ namespace TapRoomApi.Services
 
   public interface IUserService
   {
-    Task<User> Register(User model, string password);
-    Task<AuthenticatedUser> Authenticate(string email, string password, byte[] key);
+    Task<(User, string message)> Register(User model, string password);
+    Task<(AuthenticatedUser, string message)> Authenticate(string email, string password, byte[] key);
     Task<User> FindAsync(int id);
     Task<IList<User>> FindAllAsync();
-    Task<User> Update(int id, User model, string password);
-    Task Delete(int id);
+    Task<(User, string message)> Update(int id, User model, string password);
+    Task<(User, string message)> Delete(int id);
   }
   public class UserService : IUserService
   {
@@ -50,19 +50,16 @@ namespace TapRoomApi.Services
       _tapRoomContext = tapRoomContext;
     }
 
-    public async Task<User> Register(User model, string password)
+    public async Task<(User, string message)> Register(User model, string password)
     {
-      if (string.IsNullOrWhiteSpace(model.FirstName) || string.IsNullOrWhiteSpace(model.LastName))
-        throw new ArgumentException("First name and last name is required.");
+      if (string.IsNullOrWhiteSpace(model.FirstName) || string.IsNullOrWhiteSpace(model.LastName)) return (null, "First name and last name is required.");
 
-      if (string.IsNullOrWhiteSpace(model.UserName) || string.IsNullOrWhiteSpace(password))
-        throw new ArgumentException("Username and password is required.");
+      if (string.IsNullOrWhiteSpace(model.UserName) || string.IsNullOrWhiteSpace(password)) return (null, "Username and password is required.");
 
-      if (string.IsNullOrWhiteSpace(model.Email))
-        throw new ArgumentException("Email is required.");
+      if (string.IsNullOrWhiteSpace(model.Email)) return (null, "Email is required.");
 
-      if (await _tapRoomContext.User.AnyAsync(x => x.UserName == model.UserName))
-        throw new Exception($"Username {model.UserName} is already taken.");
+      if (await _tapRoomContext.User.AnyAsync(x => x.UserName == model.UserName)) return (null, $"Username {model.UserName} is already taken.");
+
       byte[] passwordHash, passwordSalt;
       CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
@@ -70,17 +67,17 @@ namespace TapRoomApi.Services
 
       await _tapRoomContext.User.AddAsync(entity);
       await _tapRoomContext.SaveChangesAsync();
-      return model;
+      return (model, null);
     }
 
-    public async Task<AuthenticatedUser> Authenticate(string email, string password, byte[] key)
+    public async Task<(AuthenticatedUser, string message)> Authenticate(string email, string password, byte[] key)
     {
       var entity = await _tapRoomContext.User.SingleOrDefaultAsync(x => x.Email == email);
       if (entity == null)
-        throw new Exception("User not found in the database.");
+        return (null, "User not found in the database.");
 
       if (!VerifyPasswordHash(password, entity.PasswordHash, entity.PasswordSalt))
-        throw new Exception("Email or password was incorrect.");
+        return (null, "Email or password was incorrect.");
 
       var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -96,15 +93,12 @@ namespace TapRoomApi.Services
       var token = tokenHandler.CreateToken(tokenDescriptor);
       string JWToken = tokenHandler.WriteToken(token);
 
-      return new AuthenticatedUser(entity, JWToken);
+      return (new AuthenticatedUser(entity, JWToken), null);
     }
 
     public async Task<User> FindAsync(int id)
     {
       var entity = await _tapRoomContext.User.FindAsync(id);
-      if (entity == null)
-        throw new Exception("User does not exist in database");
-
       return entity;
     }
 
@@ -113,27 +107,19 @@ namespace TapRoomApi.Services
       var entities = await _tapRoomContext.User.ToListAsync();
       return entities;
     }
-    public async Task<User> Update(int id, User model, string password)
+    public async Task<(User, string message)> Update(int id, User model, string password)
     {
       var entity = await _tapRoomContext.User.FindAsync(id);
-      if (entity == null)
-        throw new Exception("User does not exist in database");
+      if (entity == null) return (null, "User does not exist in database");
 
-      if (string.IsNullOrWhiteSpace(model.FirstName))
-        throw new Exception("First name cannot be blank.");
+      if (string.IsNullOrWhiteSpace(model.FirstName) || string.IsNullOrWhiteSpace(model.LastName))
+        return (null, "First and last name cannot be blank.");
 
-      if (string.IsNullOrWhiteSpace(model.LastName))
-        throw new Exception("Last name cannot be blank.");
-
-      if (string.IsNullOrWhiteSpace(password))
-        throw new Exception("Password cannot be blank.");
+      if (string.IsNullOrWhiteSpace(password)) return (null, "Password cannot be blank.");
 
       if (!string.IsNullOrWhiteSpace(model.UserName) && model.UserName != entity.UserName)
       {
-        if (await _tapRoomContext.User.AnyAsync(x => x.UserName == model.UserName))
-        {
-          throw new Exception("Username " + model.UserName + " is already taken.");
-        }
+        if (await _tapRoomContext.User.AnyAsync(x => x.UserName == model.UserName)) return (null, "Username " + model.UserName + " is already taken.");
       }
 
       byte[] passwordHash, passwordSalt;
@@ -142,18 +128,18 @@ namespace TapRoomApi.Services
       entity.PasswordSalt = passwordSalt;
       _tapRoomContext.User.Update(entity);
       _tapRoomContext.SaveChanges();
-      return entity;
+      return (entity, null);
     }
 
-    public async Task Delete(int id)
+    public async Task<(User, string message)> Delete(int id)
     {
       var entity = await _tapRoomContext.User.FindAsync(id);
-      if (entity == null)
-        throw new Exception("User does not exist in database");
+      if (entity == null) return (null, "User does not exist in database");
+
       _tapRoomContext.User.Remove(entity);
       _tapRoomContext.SaveChanges();
+      return (entity, null);
     }
-
 
     private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
     {

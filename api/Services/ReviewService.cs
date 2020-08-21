@@ -11,9 +11,9 @@ namespace TapRoomApi.Services
   {
     Task<Review> FindAsync(int id);
     Task<IList<Review>> FindAllAsync();
-    Task<Review> Create(Review entity);
-    Task<Review> Update(int id, Review entity);
-    Task<Review> Delete(int id);
+    Task<(Review, string message)> Create(Review entity);
+    Task<(Review, string message)> Update(int id, Review entity);
+    Task<(Review, string message)> Delete(int id);
   }
   public class ReviewService : IReviewService
   {
@@ -32,41 +32,40 @@ namespace TapRoomApi.Services
       var entities = await _tapRoomContext.Review.ToListAsync();
       return entities;
     }
-    public async Task<Review> Create(Review model)
+    public async Task<(Review, string message)> Create(Review model)
     {
-      string message = ValidateModel(model);
-      if (!string.IsNullOrEmpty(message))
-        throw new ArgumentException(message);
+      string result = ValidateModel(model);
+      if (!string.IsNullOrEmpty(result))
+        return (null, result);
 
       await _tapRoomContext.AddAsync(model);
       await _tapRoomContext.SaveChangesAsync();
-      return model;
+      return (model, null);
     }
-    public async Task<Review> Update(int id, Review model)
+    public async Task<(Review, string message)> Update(int id, Review model)
     {
       var entity = await _tapRoomContext.Review.FindAsync(id);
-      if (entity == null)
-        throw new Exception("Review not found in database.");
+      if (entity == null) return (null, "User does not exist in the database.");
 
-      string message = ValidateModel(model);
-      if (!string.IsNullOrEmpty(message))
-        throw new ArgumentException(message);
+      string result = ValidateModel(model);
+      if (!string.IsNullOrEmpty(result))
+        return (null, result);
 
       _tapRoomContext.Update(model);
       _tapRoomContext.SaveChanges();
-      return model;
+      return (entity, null);
     }
-    public async Task<Review> Delete(int id)
+    public async Task<(Review, string message)> Delete(int id)
     {
       var entity = await _tapRoomContext.Review.FindAsync(id);
       if (entity == null)
-        throw new Exception("Review not found in database.");
+        throw new AppException("Review not found in database.");
       _tapRoomContext.Review.Remove(entity);
       _tapRoomContext.SaveChanges();
-      return entity;
+      return (entity, null);
     }
 
-    private static string ValidateModel(Review model)
+    public static string ValidateModel(Review model)
     {
       string message = String.Empty;
       if (model == null)

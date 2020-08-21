@@ -32,14 +32,11 @@ const ReviewForm = ({ ...props }) => {
       return Object.values(temp).every((x) => x === "");
   };
 
-  const { values, setValues, errors, setErrors, handleInputChange } = useForm(
-    {
-      beerId: !id ? 0 : parseInt(id),
-      rating: "",
-      description: "",
-    },
-    validate
-  );
+  const { values, setValues, errors, setErrors, handleInputChange } = useForm({
+    beerId: !id ? 0 : parseInt(id),
+    rating: "",
+    description: "",
+  });
   React.useEffect(() => {
     if (id) {
       getBeer(id);

@@ -54,13 +54,13 @@ const BeerForm = ({ ...props }) => {
     if (id) {
       getBeer(id);
     }
-  }, []);
+  }, [id]);
 
   React.useEffect(() => {
     if (JSON.stringify(beer) !== "{}") {
       setValues(beer);
     }
-  }, []);
+  }, [beer]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -75,7 +75,7 @@ const BeerForm = ({ ...props }) => {
 
   return (
     <Container className="white-text mrgn-t16" maxWidth="sm">
-      <span className="white-text-large">Add a new beer</span>
+      <span className="white-text-large">{!beer && <>Add a new beer</>}</span>
       <form autoComplete="off" method="post" noValidate onSubmit={handleSubmit}>
         <TextField
           type="text"
@@ -163,10 +163,11 @@ const BeerForm = ({ ...props }) => {
           })}
         />
         <TextField
-          type="text"
+          type="number"
           name="price"
           fullWidth
           InputProps={{
+            step: 300,
             classes: { notchedOutline: "white-border" },
             className: "white-text mrgn-t16",
           }}
@@ -180,7 +181,7 @@ const BeerForm = ({ ...props }) => {
           })}
         />
         <TextField
-          type="text"
+          type="number"
           name="alcoholContent"
           fullWidth
           InputProps={{
@@ -197,7 +198,7 @@ const BeerForm = ({ ...props }) => {
           })}
         />
         <TextField
-          type="text"
+          type="number"
           name="pints"
           fullWidth
           InputProps={{
