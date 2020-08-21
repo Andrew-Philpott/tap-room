@@ -31,7 +31,7 @@ namespace TapRoomApi.Controllers.V1
       try
       {
         var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-        var (entity, message) = await _userService.Authenticate(model.Email, model.Password, key);
+        var (entity, message) = await _userService.AuthenticateAsync(model.Email, model.Password, key);
         if (message != null)
           return BadRequest(new { message = message });
 
@@ -50,7 +50,7 @@ namespace TapRoomApi.Controllers.V1
       try
       {
         var entity = _mapper.Map<User>(model);
-        var (newEntity, message) = await _userService.Register(entity, model.Password);
+        var (newEntity, message) = await _userService.RegisterAsync(entity, model.Password);
         if (message != null)
           return BadRequest(new { message = message });
 
@@ -98,7 +98,7 @@ namespace TapRoomApi.Controllers.V1
       try
       {
         var entity = _mapper.Map<User>(model);
-        var (updatedEntity, message) = await _userService.Update(id, entity, model.Password);
+        var (updatedEntity, message) = await _userService.UpdateAsync(id, entity, model.Password);
         if (message != null)
           return BadRequest(new { message = message });
 
@@ -115,7 +115,7 @@ namespace TapRoomApi.Controllers.V1
     {
       try
       {
-        var (entity, message) = await _userService.Delete(id);
+        var (entity, message) = await _userService.DeleteAsync(id);
         if (message != null)
           return BadRequest(new { message = message });
 

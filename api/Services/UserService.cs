@@ -36,12 +36,12 @@ namespace TapRoomApi.Services
 
   public interface IUserService
   {
-    Task<(User, ErrorResponse)> Register(User model, string password);
-    Task<(AuthenticatedUser, ErrorResponse)> Authenticate(string email, string password, byte[] key);
+    Task<(User, ErrorResponse)> RegisterAsync(User model, string password);
+    Task<(AuthenticatedUser, ErrorResponse)> AuthenticateAsync(string email, string password, byte[] key);
     Task<User> FindAsync(int id);
     Task<IList<User>> FindAllAsync();
-    Task<(User, ErrorResponse)> Update(int id, User model, string password);
-    Task<(User, ErrorResponse)> Delete(int id);
+    Task<(User, ErrorResponse)> UpdateAsync(int id, User model, string password);
+    Task<(User, ErrorResponse)> DeleteAsync(int id);
   }
   public class UserService : IUserService
   {
@@ -51,7 +51,7 @@ namespace TapRoomApi.Services
       _tapRoomContext = tapRoomContext;
     }
 
-    public async Task<(User, ErrorResponse)> Register(User model, string password)
+    public async Task<(User, ErrorResponse)> RegisterAsync(User model, string password)
     {
       if (string.IsNullOrWhiteSpace(model.FirstName) || string.IsNullOrWhiteSpace(model.LastName)) return (null, new ErrorResponse("First name and last name is required."));
 
@@ -71,7 +71,7 @@ namespace TapRoomApi.Services
       return (model, null);
     }
 
-    public async Task<(AuthenticatedUser, ErrorResponse)> Authenticate(string email, string password, byte[] key)
+    public async Task<(AuthenticatedUser, ErrorResponse)> AuthenticateAsync(string email, string password, byte[] key)
     {
       var entity = await _tapRoomContext.User.SingleOrDefaultAsync(x => x.Email == email);
       if (entity == null)
@@ -108,7 +108,7 @@ namespace TapRoomApi.Services
       var entities = await _tapRoomContext.User.ToListAsync();
       return entities;
     }
-    public async Task<(User, ErrorResponse)> Update(int id, User model, string password)
+    public async Task<(User, ErrorResponse)> UpdateAsync(int id, User model, string password)
     {
       var entity = await _tapRoomContext.User.FindAsync(id);
       if (entity == null) return (null, new ErrorResponse("User does not exist in database"));
@@ -131,7 +131,7 @@ namespace TapRoomApi.Services
       return (entity, null);
     }
 
-    public async Task<(User, ErrorResponse)> Delete(int id)
+    public async Task<(User, ErrorResponse)> DeleteAsync(int id)
     {
       var entity = await _tapRoomContext.User.FindAsync(id);
       if (entity == null) return (null, new ErrorResponse("User does not exist in database"));

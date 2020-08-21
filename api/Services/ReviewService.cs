@@ -12,9 +12,9 @@ namespace TapRoomApi.Services
   {
     Task<Review> FindAsync(int id);
     Task<IList<Review>> FindAllAsync();
-    Task<(Review, ErrorResponse)> Create(Review entity);
-    Task<(Review, ErrorResponse)> Update(int id, Review entity);
-    Task<(Review, ErrorResponse)> Delete(int id);
+    Task<(Review, ErrorResponse)> CreateAsync(Review entity);
+    Task<(Review, ErrorResponse)> UpdateAsync(int id, Review entity);
+    Task<(Review, ErrorResponse)> DeleteAsync(int id);
   }
   public class ReviewService : IReviewService
   {
@@ -33,7 +33,7 @@ namespace TapRoomApi.Services
       var entities = await _tapRoomContext.Review.ToListAsync();
       return entities;
     }
-    public async Task<(Review, ErrorResponse)> Create(Review model)
+    public async Task<(Review, ErrorResponse)> CreateAsync(Review model)
     {
       string message = ValidateModel(model);
       if (!string.IsNullOrEmpty(message))
@@ -43,7 +43,7 @@ namespace TapRoomApi.Services
       await _tapRoomContext.SaveChangesAsync();
       return (model, null);
     }
-    public async Task<(Review, ErrorResponse)> Update(int id, Review model)
+    public async Task<(Review, ErrorResponse)> UpdateAsync(int id, Review model)
     {
       var entity = await _tapRoomContext.Review.FindAsync(id);
       if (entity == null) return (null, new ErrorResponse("User does not exist in the database."));
@@ -56,7 +56,7 @@ namespace TapRoomApi.Services
       _tapRoomContext.SaveChanges();
       return (entity, null);
     }
-    public async Task<(Review, ErrorResponse)> Delete(int id)
+    public async Task<(Review, ErrorResponse)> DeleteAsync(int id)
     {
       var entity = await _tapRoomContext.Review.FindAsync(id);
       if (entity == null)

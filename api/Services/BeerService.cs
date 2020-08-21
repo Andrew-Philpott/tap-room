@@ -13,11 +13,11 @@ namespace TapRoomApi.Services
   {
     Task<Beer> FindAsync(int id);
     Task<IList<Beer>> FindAllAsync();
-    Task<(Beer, ErrorResponse)> IncrementPintsByOne(int id);
-    Task<(Beer, ErrorResponse)> DecrementPintsByOne(int id);
-    Task<(Beer, ErrorResponse)> Create(Beer entity);
-    Task<(Beer, ErrorResponse)> Update(int id, Beer entity);
-    Task<(Beer, ErrorResponse)> Delete(int id);
+    Task<(Beer, ErrorResponse)> IncrementPintsByOneAsync(int id);
+    Task<(Beer, ErrorResponse)> DecrementPintsByOneAsync(int id);
+    Task<(Beer, ErrorResponse)> CreateAsync(Beer entity);
+    Task<(Beer, ErrorResponse)> UpdateAsync(int id, Beer entity);
+    Task<(Beer, ErrorResponse)> DeleteAsync(int id);
   }
   public class BeerService : IBeerService
   {
@@ -36,7 +36,7 @@ namespace TapRoomApi.Services
       var entities = await _tapRoomContext.Beer.Include(x => x.Reviews).ToListAsync();
       return entities;
     }
-    public async Task<(Beer, ErrorResponse)> IncrementPintsByOne(int id)
+    public async Task<(Beer, ErrorResponse)> IncrementPintsByOneAsync(int id)
     {
       var entity = await _tapRoomContext.Beer.FindAsync(id);
       if (entity == null) return (null, new ErrorResponse("Beer does not exist in the database."));
@@ -46,7 +46,7 @@ namespace TapRoomApi.Services
       _tapRoomContext.SaveChanges();
       return (entity, null);
     }
-    public async Task<(Beer, ErrorResponse)> DecrementPintsByOne(int id)
+    public async Task<(Beer, ErrorResponse)> DecrementPintsByOneAsync(int id)
     {
       var entity = await _tapRoomContext.Beer.FindAsync(id);
       if (entity == null) return (null, new ErrorResponse("Beer does not exist in the database."));
@@ -57,7 +57,7 @@ namespace TapRoomApi.Services
       return (entity, null);
     }
 
-    public async Task<(Beer, ErrorResponse)> Create(Beer model)
+    public async Task<(Beer, ErrorResponse)> CreateAsync(Beer model)
     {
       var exists = await _tapRoomContext.Beer.FirstOrDefaultAsync(x => x.Name == model.Name && x.Brand == model.Brand);
       if (exists != null) return (null, new ErrorResponse("A beer with that name and brand already exists."));
@@ -68,7 +68,7 @@ namespace TapRoomApi.Services
       await _tapRoomContext.SaveChangesAsync();
       return (model, null);
     }
-    public async Task<(Beer, ErrorResponse)> Update(int id, Beer model)
+    public async Task<(Beer, ErrorResponse)> UpdateAsync(int id, Beer model)
     {
       var entity = await _tapRoomContext.Beer.FindAsync(id);
       if (entity == null) return (null, new ErrorResponse("Beer does not exist in the database."));
@@ -79,7 +79,7 @@ namespace TapRoomApi.Services
       _tapRoomContext.SaveChanges();
       return (model, null);
     }
-    public async Task<(Beer, ErrorResponse)> Delete(int id)
+    public async Task<(Beer, ErrorResponse)> DeleteAsync(int id)
     {
       var entity = await _tapRoomContext.Beer.FindAsync(id);
       if (entity == null) return (null, new ErrorResponse("Beer does not exist in the database."));

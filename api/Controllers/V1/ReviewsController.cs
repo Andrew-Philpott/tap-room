@@ -60,7 +60,7 @@ namespace TapRoomApi.Controllers.V1
       {
         var entity = _mapper.Map<Review>(model);
         entity.UserId = currentUserId;
-        var (newEntity, message) = await _reviewService.Create(entity);
+        var (newEntity, message) = await _reviewService.CreateAsync(entity);
         if (message != null)
           return BadRequest(new { message = message });
 
@@ -79,7 +79,7 @@ namespace TapRoomApi.Controllers.V1
       try
       {
         var entity = _mapper.Map<Review>(model);
-        var (updatedEntity, message) = await _reviewService.Update(id, entity);
+        var (updatedEntity, message) = await _reviewService.UpdateAsync(id, entity);
         if (message != null)
           return BadRequest(new { message = message });
 
@@ -96,7 +96,7 @@ namespace TapRoomApi.Controllers.V1
     {
       try
       {
-        var (entity, message) = await _reviewService.Delete(id);
+        var (entity, message) = await _reviewService.DeleteAsync(id);
         if (message != null)
           return BadRequest(new { message = message });
 

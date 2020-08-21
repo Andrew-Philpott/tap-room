@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -67,7 +66,7 @@ namespace TapRoomApi.Controllers.V1
           return BadRequest(new ErrorResponse("Beer cannot be null."));
 
         var entity = _mapper.Map<Beer>(model);
-        var (newEntity, message) = await _beerService.Create(entity);
+        var (newEntity, message) = await _beerService.CreateAsync(entity);
 
         if (message != null)
           return BadRequest(message);
@@ -98,7 +97,7 @@ namespace TapRoomApi.Controllers.V1
           return BadRequest(new ErrorResponse("Beer does not exist in the database"));
 
         _mapper.Map(model, entity);
-        var (updatedEntity, message) = await _beerService.Update(id, entity);
+        var (updatedEntity, message) = await _beerService.UpdateAsync(id, entity);
 
         if (message != null)
           return BadRequest(message);
@@ -116,7 +115,7 @@ namespace TapRoomApi.Controllers.V1
     {
       try
       {
-        var (entity, message) = await _beerService.IncrementPintsByOne(id);
+        var (entity, message) = await _beerService.IncrementPintsByOneAsync(id);
         if (message != null)
           return BadRequest(message);
 
@@ -133,7 +132,7 @@ namespace TapRoomApi.Controllers.V1
     {
       try
       {
-        var (entity, message) = await _beerService.DecrementPintsByOne(id);
+        var (entity, message) = await _beerService.DecrementPintsByOneAsync(id);
         if (message != null)
           return BadRequest(message);
 
@@ -155,7 +154,7 @@ namespace TapRoomApi.Controllers.V1
         if (user.Role != "admin")
           return BadRequest(new ErrorResponse("You must have administrative privileges to create a beer"));
 
-        var (entity, message) = await _beerService.Delete(id);
+        var (entity, message) = await _beerService.DeleteAsync(id);
         if (message != null)
           return BadRequest(message);
 
