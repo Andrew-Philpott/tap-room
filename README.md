@@ -4,7 +4,7 @@
 
 #### By **Andrew Philpott**
 
-[About](#About) | [User Stories](#User-Stories) | | [View URLs](#View-URLs) | [API Endpoints](#API-Endpoints) | [Setup/Installation Requirements](#Setup/Installation-Requirements) | [Bugs](#Known-Bugs) | [Technologies](#Technologies-Used) | [Contact](#Support-and-Contact-Details)
+[About](#About) | [User Stories](#User-Stories) | [URLs](#URLs) | [API Endpoints](#API-Endpoints) | [Setup/Installation Requirements](#Setup/Installation-Requirements) | [Bugs](#Known-Bugs) | [Technologies](#Technologies-Used) | [Contact](#Support-and-Contact-Details)
 
 </div>
 
@@ -32,7 +32,7 @@ Log in with the email 'admin@gmail.com', 'employee@gmail.com', or 'member@gmail.
 - As an admin, I want to be able to delete a beer.
 - As an admin, on clicking remove I want a popup notification asking me to confirm that I want to delete a beer from the list.
 
-## View URLs
+## URLs
 
 | URL Path         | Purpose                             |
 | :--------------- | :---------------------------------- |
@@ -50,26 +50,27 @@ Log in with the email 'admin@gmail.com', 'employee@gmail.com', or 'member@gmail.
 
 ## API Endpoints
 
-| HTTP Method | Endpoint            | Purpose                    |
-| :---------- | :------------------ | :------------------------- |
-| POST        | /users/register     | Create a user              |
-| POST        | /users/authenticate | Authenticate a user        |
-| GET         | /users/{id}         | Retrieve a user            |
-| PUT         | /users/{id}         | Edit a user                |
-| DELETE      | /users/{id}         | Delete a user              |
-| GET         | /beers              | Retrieve a list of beers   |
-| POST        | /beers              | Create a beer              |
-| GET         | /beers/{id}         | Retrieve a beer            |
-| PUT         | /beers/{id}         | Update a beer              |
-| GET         | /reviews            | Retrieve a list of reviews |
-| POST        | /reviews            | Create a review            |
-| GET         | /reviews/{id}       | Retrieve a review          |
-| PUT         | /reviews/{id}       | Update a review            |
+| HTTP Method | Endpoint                   | Purpose                    |
+| :---------- | :------------------------- | :------------------------- |
+| POST        | /api/v1/users/register     | Create a user              |
+| POST        | /api/v1/users/authenticate | Authenticate a user        |
+| GET         | /api/v1/users/{id}         | Retrieve a user            |
+| PUT         | /api/v1/users/{id}         | Edit a user                |
+| DELETE      | /api/v1/users/{id}         | Delete a user              |
+| GET         | /api/v1/beers              | Retrieve a list of beers   |
+| POST        | /api/v1/beers              | Create a beer              |
+| GET         | /api/v1/beers/{id}         | Retrieve a beer            |
+| PUT         | /api/v1/beers/{id}         | Update a beer              |
+| GET         | /api/v1/reviews            | Retrieve a list of reviews |
+| POST        | /api/v1/reviews            | Create a review            |
+| GET         | /api/v1/reviews/{id}       | Retrieve a review          |
+| PUT         | /api/v1/reviews/{id}       | Update a review            |
 
 ## Setup/Installation Requirements
 
 - _Clone this repository._
-- _[Download Sql Server Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15)_
+- _[Download and install .NET Core SDK v3.1.7](https://dotnet.microsoft.com/download/dotnet-core/3.1)_
+- _[Download and install Sql Server Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15)_
 - _Navigate to api directory_
 - _\$dotnet build_
 - _\$dotnet ef migrations add initial_
@@ -103,8 +104,24 @@ No known bugs at this time.
 
 Feel free to provide feedback via email: andrewphilpott92@gmail.com
 
-## License
+## MIT License
 
-This application is licensed under the MIT license.
+Copyright (c) Andrew Philott. All rights reserved.
 
-Copyright (c) 2020 **Andrew Philpott**
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE
