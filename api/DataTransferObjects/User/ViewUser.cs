@@ -1,4 +1,4 @@
-namespace TapRoomApi.Models
+namespace TapRoomApi.DataTransferObjects
 {
   public class ViewUser
   {

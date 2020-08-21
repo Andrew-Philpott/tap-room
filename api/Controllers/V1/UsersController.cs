@@ -4,7 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using TapRoomApi.Entities;
 using TapRoomApi.Services;
-using TapRoomApi.Models;
+using TapRoomApi.DataTransferObjects;
 using TapRoomApi.Helpers;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;

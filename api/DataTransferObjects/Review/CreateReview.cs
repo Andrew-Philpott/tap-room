@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TapRoomApi.Models
+namespace TapRoomApi.DataTransferObjects
 {
   public class CreateReview
   {
