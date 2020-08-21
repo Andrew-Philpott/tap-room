@@ -11,7 +11,7 @@ export default {
   deleteUser,
 };
 
-const baseUrl = "http://localhost:5000/api/users";
+const baseUrl = "http://localhost:5000/api/v1/users";
 
 async function login(model) {
   return await fetch(

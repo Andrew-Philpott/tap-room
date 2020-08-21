@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using TapRoomApi.Models;
 
 namespace TapRoomApi.Services
 {
@@ -35,12 +36,12 @@ namespace TapRoomApi.Services
 
   public interface IUserService
   {
-    Task<(User, string message)> Register(User model, string password);
-    Task<(AuthenticatedUser, string message)> Authenticate(string email, string password, byte[] key);
+    Task<(User, ErrorResponse)> Register(User model, string password);
+    Task<(AuthenticatedUser, ErrorResponse)> Authenticate(string email, string password, byte[] key);
     Task<User> FindAsync(int id);
     Task<IList<User>> FindAllAsync();
-    Task<(User, string message)> Update(int id, User model, string password);
-    Task<(User, string message)> Delete(int id);
+    Task<(User, ErrorResponse)> Update(int id, User model, string password);
+    Task<(User, ErrorResponse)> Delete(int id);
   }
   public class UserService : IUserService
   {
@@ -50,15 +51,15 @@ namespace TapRoomApi.Services
       _tapRoomContext = tapRoomContext;
     }
 
-    public async Task<(User, string message)> Register(User model, string password)
+    public async Task<(User, ErrorResponse)> Register(User model, string password)
     {
-      if (string.IsNullOrWhiteSpace(model.FirstName) || string.IsNullOrWhiteSpace(model.LastName)) return (null, "First name and last name is required.");
+      if (string.IsNullOrWhiteSpace(model.FirstName) || string.IsNullOrWhiteSpace(model.LastName)) return (null, new ErrorResponse("First name and last name is required."));
 
-      if (string.IsNullOrWhiteSpace(model.UserName) || string.IsNullOrWhiteSpace(password)) return (null, "Username and password is required.");
+      if (string.IsNullOrWhiteSpace(model.UserName) || string.IsNullOrWhiteSpace(password)) return (null, new ErrorResponse("Username and password is required."));
 
-      if (string.IsNullOrWhiteSpace(model.Email)) return (null, "Email is required.");
+      if (string.IsNullOrWhiteSpace(model.Email)) return (null, new ErrorResponse("Email is required."));
 
-      if (await _tapRoomContext.User.AnyAsync(x => x.UserName == model.UserName)) return (null, $"Username {model.UserName} is already taken.");
+      if (await _tapRoomContext.User.AnyAsync(x => x.UserName == model.UserName)) return (null, new ErrorResponse($"Username {model.UserName} is already taken."));
 
       byte[] passwordHash, passwordSalt;
       CreatePasswordHash(password, out passwordHash, out passwordSalt);
@@ -70,14 +71,14 @@ namespace TapRoomApi.Services
       return (model, null);
     }
 
-    public async Task<(AuthenticatedUser, string message)> Authenticate(string email, string password, byte[] key)
+    public async Task<(AuthenticatedUser, ErrorResponse)> Authenticate(string email, string password, byte[] key)
     {
       var entity = await _tapRoomContext.User.SingleOrDefaultAsync(x => x.Email == email);
       if (entity == null)
-        return (null, "User not found in the database.");
+        return (null, new ErrorResponse("User not found in the database."));
 
       if (!VerifyPasswordHash(password, entity.PasswordHash, entity.PasswordSalt))
-        return (null, "Email or password was incorrect.");
+        return (null, new ErrorResponse("Email or password was incorrect."));
 
       var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -107,19 +108,18 @@ namespace TapRoomApi.Services
       var entities = await _tapRoomContext.User.ToListAsync();
       return entities;
     }
-    public async Task<(User, string message)> Update(int id, User model, string password)
+    public async Task<(User, ErrorResponse)> Update(int id, User model, string password)
     {
       var entity = await _tapRoomContext.User.FindAsync(id);
-      if (entity == null) return (null, "User does not exist in database");
+      if (entity == null) return (null, new ErrorResponse("User does not exist in database"));
 
       if (string.IsNullOrWhiteSpace(model.FirstName) || string.IsNullOrWhiteSpace(model.LastName))
-        return (null, "First and last name cannot be blank.");
+        return (null, new ErrorResponse("First and last name cannot be blank."));
 
-      if (string.IsNullOrWhiteSpace(password)) return (null, "Password cannot be blank.");
-
+      if (string.IsNullOrWhiteSpace(password)) return (null, new ErrorResponse("Password cannot be blank."));
       if (!string.IsNullOrWhiteSpace(model.UserName) && model.UserName != entity.UserName)
       {
-        if (await _tapRoomContext.User.AnyAsync(x => x.UserName == model.UserName)) return (null, "Username " + model.UserName + " is already taken.");
+        if (await _tapRoomContext.User.AnyAsync(x => x.UserName == model.UserName)) return (null, new ErrorResponse("Username " + model.UserName + " is already taken."));
       }
 
       byte[] passwordHash, passwordSalt;
@@ -131,10 +131,10 @@ namespace TapRoomApi.Services
       return (entity, null);
     }
 
-    public async Task<(User, string message)> Delete(int id)
+    public async Task<(User, ErrorResponse)> Delete(int id)
     {
       var entity = await _tapRoomContext.User.FindAsync(id);
-      if (entity == null) return (null, "User does not exist in database");
+      if (entity == null) return (null, new ErrorResponse("User does not exist in database"));
 
       _tapRoomContext.User.Remove(entity);
       _tapRoomContext.SaveChanges();

@@ -11,7 +11,7 @@ export default {
   decrementPints,
 };
 
-const baseUrl = "http://localhost:5000/api/beers";
+const baseUrl = "http://localhost:5000/api/v1/beers";
 
 async function getBeer(id) {
   return await fetch(`${baseUrl}/${id}`, requestOptions.getOptions()).then(

@@ -9,7 +9,7 @@ export default {
   deleteReview,
 };
 
-const baseUrl = "http://localhost:5000/api/reviews";
+const baseUrl = "http://localhost:5000/api/v1/reviews";
 
 async function getReview(id) {
   return await fetch(`${baseUrl}/${id}`, requestOptions.getOptions).then(

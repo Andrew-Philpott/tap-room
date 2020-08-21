@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using TapRoomApi.Helpers;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using TapRoomApi.Models;
 
 namespace TapRoomApi.Services
 {
@@ -11,9 +12,9 @@ namespace TapRoomApi.Services
   {
     Task<Review> FindAsync(int id);
     Task<IList<Review>> FindAllAsync();
-    Task<(Review, string message)> Create(Review entity);
-    Task<(Review, string message)> Update(int id, Review entity);
-    Task<(Review, string message)> Delete(int id);
+    Task<(Review, ErrorResponse)> Create(Review entity);
+    Task<(Review, ErrorResponse)> Update(int id, Review entity);
+    Task<(Review, ErrorResponse)> Delete(int id);
   }
   public class ReviewService : IReviewService
   {
@@ -32,30 +33,30 @@ namespace TapRoomApi.Services
       var entities = await _tapRoomContext.Review.ToListAsync();
       return entities;
     }
-    public async Task<(Review, string message)> Create(Review model)
+    public async Task<(Review, ErrorResponse)> Create(Review model)
     {
-      string result = ValidateModel(model);
-      if (!string.IsNullOrEmpty(result))
-        return (null, result);
+      string message = ValidateModel(model);
+      if (!string.IsNullOrEmpty(message))
+        return (null, new ErrorResponse(message));
 
       await _tapRoomContext.AddAsync(model);
       await _tapRoomContext.SaveChangesAsync();
       return (model, null);
     }
-    public async Task<(Review, string message)> Update(int id, Review model)
+    public async Task<(Review, ErrorResponse)> Update(int id, Review model)
     {
       var entity = await _tapRoomContext.Review.FindAsync(id);
-      if (entity == null) return (null, "User does not exist in the database.");
+      if (entity == null) return (null, new ErrorResponse("User does not exist in the database."));
 
-      string result = ValidateModel(model);
-      if (!string.IsNullOrEmpty(result))
-        return (null, result);
+      string message = ValidateModel(model);
+      if (!string.IsNullOrEmpty(message))
+        return (null, new ErrorResponse(message));
 
       _tapRoomContext.Update(model);
       _tapRoomContext.SaveChanges();
       return (entity, null);
     }
-    public async Task<(Review, string message)> Delete(int id)
+    public async Task<(Review, ErrorResponse)> Delete(int id)
     {
       var entity = await _tapRoomContext.Review.FindAsync(id);
       if (entity == null)
