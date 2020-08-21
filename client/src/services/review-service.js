@@ -9,37 +9,33 @@ export default {
   deleteReview,
 };
 
-function getReview(id) {
-  return fetch(
-    `http://localhost:5000/api/reviews/${id}`,
-    requestOptions.getOptions
-  ).then(handleResponse);
+const baseUrl = "http://localhost:5000/api/reviews";
+
+async function getReview(id) {
+  return await fetch(`${baseUrl}/${id}`, requestOptions.getOptions).then(
+    handleResponse
+  );
 }
 
 async function getReviews() {
-  await fetch(
-    `http://localhost:5000/api/reviews`,
-    requestOptions.getOptions
-  ).then(handleResponse);
+  return await fetch(baseUrl, requestOptions.getOptions).then(handleResponse);
 }
 
-function createReview(review) {
-  return fetch(
-    `http://localhost:5000/api/reviews`,
-    requestOptions.postOptions(review)
-  ).then(handleResponse);
+async function createReview(review) {
+  return await fetch(`${baseUrl}`, requestOptions.postOptions(review)).then(
+    handleResponse
+  );
 }
 
-function updateReview(id, review) {
-  return fetch(
-    `http://localhost:5000/api/reviews/${id}`,
+async function updateReview(id, review) {
+  return await fetch(
+    `${baseUrl}/${id}`,
     requestOptions.putOptions(review)
   ).then(handleResponse);
 }
 
-function deleteReview(id) {
-  return fetch(
-    `http://localhost:5000/api/reviews/${id}`,
-    requestOptions.deleteOptions
-  ).then(handleResponse);
+async function deleteReview(id) {
+  return await fetch(`${baseUrl}/${id}`, requestOptions.deleteOptions).then(
+    handleResponse
+  );
 }

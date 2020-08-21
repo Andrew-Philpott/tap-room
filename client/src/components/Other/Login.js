@@ -9,9 +9,6 @@ import { userActions } from "../../actions/user-actions";
 
 const Login = ({ ...props }) => {
   const { login, logout } = props;
-  React.useEffect(() => {
-    logout();
-  }, []);
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ("email" in fieldValues)
@@ -19,26 +16,27 @@ const Login = ({ ...props }) => {
         fieldValues.email
       )
         ? ""
-        : "Email is not valid.";
+        : "Email format is invalid.";
     if ("password" in fieldValues)
       temp.password = fieldValues.password ? "" : "Field cannot be blank";
     setErrors({ ...temp });
     if (fieldValues === values)
       return Object.values(temp).every((x) => x === "");
   };
-  const { values, errors, setErrors, handleInputChange } = useForm(
-    {
-      email: "",
-      password: "",
-    },
-    validate
-  );
-  const handleSubmit = (e) => {
+  const { values, errors, setErrors, handleInputChange } = useForm({
+    email: "",
+    password: "",
+  });
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      login(values.email, values.password);
+      await login(values);
     }
   };
+
+  React.useEffect(() => {
+    logout();
+  }, []);
 
   return (
     <Container className="white-text mrgn-t16" maxWidth="sm">

@@ -11,51 +11,46 @@ export default {
   decrementPints,
 };
 
-function getBeer(id) {
-  return fetch(
-    `http://localhost:5000/api/beers/${id}`,
-    requestOptions.getOptions()
-  ).then(handleResponse);
+const baseUrl = "http://localhost:5000/api/beers";
+
+async function getBeer(id) {
+  return await fetch(`${baseUrl}/${id}`, requestOptions.getOptions()).then(
+    handleResponse
+  );
 }
 
-function getBeers() {
-  return fetch(
-    `http://localhost:5000/api/beers`,
-    requestOptions.getOptions
-  ).then(handleResponse);
+async function getBeers() {
+  return await fetch(baseUrl, requestOptions.getOptions).then(handleResponse);
 }
 
-function incrementPints(id) {
-  return fetch(
-    `http://localhost:5000/api/beers/increment/${id}`,
+async function incrementPints(id) {
+  return await fetch(
+    `${baseUrl}/increment/${id}`,
     requestOptions.putOptions({})
   ).then(handleResponse);
 }
 
-function decrementPints(id) {
-  return fetch(
-    `http://localhost:5000/api/beers/decrement/${id}`,
+async function decrementPints(id) {
+  return await fetch(
+    `${baseUrl}/decrement/${id}`,
     requestOptions.putOptions({})
   ).then(handleResponse);
 }
 
-function createBeer(beer) {
-  return fetch(
-    `http://localhost:5000/api/beers`,
-    requestOptions.postOptions(beer)
-  ).then(handleResponse);
+async function createBeer(beer) {
+  return await fetch(`${baseUrl}`, requestOptions.postOptions(beer)).then(
+    handleResponse
+  );
 }
 
 async function updateBeer(id, beer) {
-  return fetch(
-    `http://localhost:5000/api/beers/${id}`,
-    requestOptions.putOptions(beer)
-  ).then(handleResponse);
+  return await fetch(`${baseUrl}/${id}`, requestOptions.putOptions(beer)).then(
+    handleResponse
+  );
 }
 
 async function deleteBeer(id) {
-  return fetch(
-    `http://localhost:5000/api/beers/${id}`,
-    requestOptions.deleteOptions
-  ).then(handleResponse);
+  return await fetch(`${baseUrl}/${id}`, requestOptions.deleteOptions).then(
+    handleResponse
+  );
 }

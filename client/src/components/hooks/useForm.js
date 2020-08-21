@@ -11,7 +11,7 @@ export default (initialFieldValues, validate) => {
       ...values,
       ...fieldValue,
     });
-    validate(fieldValue);
+    validate && validate(fieldValue);
   };
   return {
     values,

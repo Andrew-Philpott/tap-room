@@ -11,14 +11,13 @@ export default {
   deleteUser,
 };
 
-function login(email, password) {
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  };
+const baseUrl = "http://localhost:5000/api/users";
 
-  return fetch(`http://localhost:5000/api/users/authenticate`, requestOptions)
+async function login(model) {
+  return await fetch(
+    `${baseUrl}/authenticate`,
+    requestOptions.postOptions(model)
+  )
     .then(handleResponse)
     .then((user) => {
       localStorage.setItem("user", JSON.stringify(user));
@@ -26,41 +25,37 @@ function login(email, password) {
     });
 }
 
-function logout() {
+async function logout() {
   localStorage.removeItem("user");
 }
 
-function getUser(id) {
-  return fetch(
-    `http://localhost:5000/api/users/${id}`,
-    requestOptions.getOptions
-  ).then(handleResponse);
+async function getUser(id) {
+  return await fetch(`${baseUrl}/${id}`, requestOptions.getOptions).then(
+    handleResponse
+  );
 }
 
-function getUsers() {
-  return fetch(
-    `http://localhost:5000/api/users`,
-    requestOptions.getOptions
-  ).then(handleResponse);
+async function getUsers() {
+  return await fetch(`${baseUrl}`, requestOptions.getOptions).then(
+    handleResponse
+  );
 }
 
-function register(user) {
-  return fetch(
-    `http://localhost:5000/api/users/register`,
+async function register(user) {
+  return await fetch(
+    `${baseUrl}/register`,
     requestOptions.postOptions(user)
   ).then(handleResponse);
 }
 
-function updateUser(user) {
-  return fetch(
-    `http://localhost:5000/api/users`,
-    requestOptions.putOptions(user)
-  ).then(handleResponse);
+async function updateUser(user) {
+  return await fetch(`${baseUrl}`, requestOptions.putOptions(user)).then(
+    handleResponse
+  );
 }
 
-function deleteUser(id) {
-  return fetch(
-    `http://localhost:5000/api/users/${id}`,
-    requestOptions.deleteOptions
-  ).then(handleResponse);
+async function deleteUser(id) {
+  return await fetch(`${baseUrl}/${id}`, requestOptions.deleteOptions).then(
+    handleResponse
+  );
 }
