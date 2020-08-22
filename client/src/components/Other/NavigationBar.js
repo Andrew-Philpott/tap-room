@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -109,53 +108,45 @@ export default () => {
           Log in
         </MenuItem>
       ) : (
-        <MenuItem
-          component={Link}
-          to={routes.ACCOUNT}
-          onClick={handleProfileMenuOpen}
-        >
-          Account
-        </MenuItem>
+        <MenuItem onClick={handleProfileMenuOpen}>Account</MenuItem>
       )}
     </Menu>
   );
 
   return (
     <React.Fragment>
-      <AppBar className="nav-bar" position="static">
-        <Toolbar>
-          <Link to={routes.LANDING}>
-            <img
-              className="taphouse-logo"
-              src={taphouselogo}
-              alt="Tap House Logo"
-            />
-          </Link>
-          <div className="flex-grow-1" />
-          <div className={classes.sectionDesktop}>
-            <Link to={routes.LANDING}>Home</Link>
-            <Link to={routes.BEER_LIST}>On Tap</Link>
-            <Link to={routes.ABOUT}>About</Link>
-            {user ? (
-              <span
-                className="links"
-                aria-controls={menuId}
-                onClick={handleProfileMenuOpen}
-                to={routes.ACCOUNT}
-              >
-                Account
-              </span>
-            ) : (
-              <Link to={routes.LOG_IN}>Log in</Link>
-            )}
-          </div>
-          <div className={classes.sectionMobile}>
-            <IconButton onClick={handleMobileMenuOpen}>
-              <MoreIcon />
-            </IconButton>
-          </div>
-        </Toolbar>
-      </AppBar>
+      <Toolbar className="nav-bar">
+        <Link to={routes.LANDING}>
+          <img
+            className="taphouse-logo"
+            src={taphouselogo}
+            alt="Tap House Logo"
+          />
+        </Link>
+        <div className="flex-grow-1" />
+        <div className={classes.sectionDesktop}>
+          <Link to={routes.LANDING}>Home</Link>
+          <Link to={routes.BEER_LIST}>On Tap</Link>
+          <Link to={routes.ABOUT}>About</Link>
+          {user ? (
+            <span
+              className="links"
+              aria-controls={menuId}
+              onClick={handleProfileMenuOpen}
+              to={routes.ACCOUNT}
+            >
+              Account
+            </span>
+          ) : (
+            <Link to={routes.LOG_IN}>Log in</Link>
+          )}
+        </div>
+        <div className={classes.sectionMobile}>
+          <IconButton onClick={handleMobileMenuOpen}>
+            <MoreIcon />
+          </IconButton>
+        </div>
+      </Toolbar>
       {renderMobileMenu}
       {renderMenu}
     </React.Fragment>
