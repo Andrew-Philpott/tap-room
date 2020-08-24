@@ -9,41 +9,18 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import beerActions from "../../actions/beer-actions";
-import { userActions } from "../../actions/user-actions";
 import * as role from "../../constants/roles";
 import * as route from "../../constants/routes";
 import BeerItem from "./BeerItem";
 
-const BeerList = ({ ...props }) => {
+export default ({ ...props }) => {
   const {
     user,
     beers,
-    getBeers,
-    deleteBeer,
-    incrementPints,
-    decrementPints,
+    onDeleteBeer,
+    onIncrementBeerPints,
+    onDecrementBeerPints,
   } = props;
-  React.useEffect(() => {
-    if (beers.length === 0) {
-      getBeers();
-    }
-  }, [beers]);
-
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this beer?"))
-      deleteBeer(id);
-  };
-
-  const handleIncrementPints = (id) => {
-    incrementPints(id);
-  };
-
-  const handleDecrementPints = (id) => {
-    decrementPints(id);
-  };
-
   return (
     <Container maxWidth="md">
       <Grid className="mrgn-t16" container>
@@ -95,9 +72,9 @@ const BeerList = ({ ...props }) => {
                       key={index}
                       user={user}
                       beer={beer}
-                      onIncrementPints={handleIncrementPints}
-                      onDecrementPints={handleDecrementPints}
-                      onDelete={handleDelete}
+                      onIncrementBeerPints={onIncrementBeerPints}
+                      onDecrementBeerPints={onDecrementBeerPints}
+                      onDeleteBeer={onDeleteBeer}
                     />
                   ))}
               </TableBody>
@@ -108,18 +85,3 @@ const BeerList = ({ ...props }) => {
     </Container>
   );
 };
-
-const mapStateToProps = (state) => ({
-  beers: state.beers.items,
-  user: state.authentication.user,
-});
-
-const mapActionToProps = {
-  getBeers: beerActions.getBeers,
-  deleteBeer: beerActions.deleteBeer,
-  incrementPints: beerActions.incrementPints,
-  decrementPints: beerActions.decrementPints,
-  getUser: userActions.getUser,
-};
-
-export default connect(mapStateToProps, mapActionToProps)(BeerList);

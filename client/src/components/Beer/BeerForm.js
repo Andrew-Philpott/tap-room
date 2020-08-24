@@ -4,11 +4,9 @@ import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import useForm from "../hooks/useForm";
-import beerActions from "../../actions/beer-actions";
-import { connect } from "react-redux";
 
-const BeerForm = ({ ...props }) => {
-  const { beer, getBeer, updateBeer, createBeer } = props;
+export default ({ ...props }) => {
+  const { beers, onBeerFormSubmit } = props;
   const { id } = useParams();
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -23,13 +21,20 @@ const BeerForm = ({ ...props }) => {
     if ("flavor" in fieldValues)
       temp.flavor = fieldValues.flavor ? "" : "Field cannot be blank";
     if ("price" in fieldValues)
-      temp.price = !isNaN(fieldValues.price) ? "" : "Field must be a number";
+      temp.price =
+        typeof parseInt(fieldValues.price) === "number"
+          ? ""
+          : "Field must be a number";
     if ("alcoholContent" in fieldValues)
-      temp.alcoholContent = !isNaN(fieldValues.alcoholContent)
-        ? ""
-        : "Field must be a number";
+      temp.alcoholContent =
+        typeof parseInt(fieldValues.alcoholContent) === "number"
+          ? ""
+          : "Field must be a number";
     if ("pints" in fieldValues)
-      temp.pints = !isNaN(fieldValues.pints) ? "" : "Field must be a number";
+      temp.pints =
+        typeof parseInt(fieldValues.pints) === "number"
+          ? ""
+          : "Field must be a number";
     setErrors({ ...temp });
 
     if (fieldValues === values)
@@ -51,31 +56,22 @@ const BeerForm = ({ ...props }) => {
   );
 
   React.useEffect(() => {
-    if (id) {
-      getBeer(id);
-    }
-  }, [id]);
-
-  React.useEffect(() => {
-    if (JSON.stringify(beer) !== "{}") {
+    if (id && beers) {
+      const beer = beers.find((x) => x.beerId === parseInt(id));
       setValues(beer);
     }
-  }, [beer]);
+  }, [id]);
 
   function handleSubmit(e) {
     e.preventDefault();
     if (validate()) {
-      if (id) {
-        updateBeer(id, values);
-      } else {
-        createBeer(values);
-      }
+      onBeerFormSubmit(id, values);
     }
   }
 
   return (
     <Container className="white-text mrgn-t16" maxWidth="sm">
-      <span className="white-text-large">{!beer && <>Add a new beer</>}</span>
+      <span className="white-text-large">{!id && <>Add a new beer</>}</span>
       <form autoComplete="off" method="post" noValidate onSubmit={handleSubmit}>
         <TextField
           type="text"
@@ -223,15 +219,3 @@ const BeerForm = ({ ...props }) => {
     </Container>
   );
 };
-
-const mapStateToProps = (state) => ({
-  beer: state.beers.item,
-});
-
-const mapActionToProps = {
-  getBeer: beerActions.getBeer,
-  updateBeer: beerActions.updateBeer,
-  createBeer: beerActions.createBeer,
-};
-
-export default connect(mapStateToProps, mapActionToProps)(BeerForm);

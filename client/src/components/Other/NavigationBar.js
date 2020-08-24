@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -32,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default () => {
-  const user = useSelector((state) => state.authentication.user);
+export default ({ ...props }) => {
+  const { user } = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);

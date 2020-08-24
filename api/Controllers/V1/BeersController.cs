@@ -56,8 +56,8 @@ namespace TapRoomApi.Controllers.V1
     [HttpPost("api/v1/beers")]
     public async Task<IActionResult> CreateBeer([FromBody] CreateBeer createDTO)
     {
-      if (createDTO == null)
-        return BadRequest(new ErrorResponse(new ErrorModel("Name", "Beer cannot be null.")));
+      // if (createDTO == null)
+      //   return BadRequest(new ErrorResponse(new ErrorModel("Name", "Beer cannot be null.")));
 
       var currentUserId = int.Parse(User.Identity.Name);
       try

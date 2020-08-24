@@ -1,10 +1,8 @@
-using System;
 using TapRoomApi.Entities;
 using System.Threading.Tasks;
 using TapRoomApi.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using TapRoomApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace TapRoomApi.Services
@@ -33,7 +31,7 @@ namespace TapRoomApi.Services
     }
     public async Task<IList<Beer>> FindAllAsync()
     {
-      var entities = await _tapRoomContext.Beer.Include(x => x.Reviews).ToListAsync();
+      var entities = await _tapRoomContext.Beer.AsQueryable().Include(x => x.Reviews).ThenInclude(x => x.User).ToListAsync();
       return entities;
     }
     public Beer IncrementPintsByOne(Beer entity)

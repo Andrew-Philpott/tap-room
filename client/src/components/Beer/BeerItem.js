@@ -6,7 +6,13 @@ import EditIcon from "@material-ui/icons/Edit";
 import * as role from "../../constants/roles";
 
 export default ({ ...props }) => {
-  const { user, beer, onDelete, onIncrementPints, onDecrementPints } = props;
+  const {
+    user,
+    beer,
+    onDeleteBeer,
+    onIncrementBeerPints,
+    onDecrementBeerPints,
+  } = props;
   return (
     <TableRow key={beer.beerId}>
       <TableCell>
@@ -53,7 +59,7 @@ export default ({ ...props }) => {
           {beer.pints > 0 ? (
             <TableCell align="center">
               <span
-                onClick={() => onDecrementPints(beer.beerId)}
+                onClick={() => onDecrementBeerPints(beer.beerId)}
                 className="action-link"
               >
                 -
@@ -67,7 +73,7 @@ export default ({ ...props }) => {
           <TableCell align="center">
             <span
               className="action-link"
-              onClick={() => onIncrementPints(beer.beerId)}
+              onClick={() => onIncrementBeerPints(beer.beerId)}
             >
               +
             </span>
@@ -87,7 +93,7 @@ export default ({ ...props }) => {
               <TableCell align="center">
                 <span
                   className="action-link"
-                  onClick={() => onDelete(beer.beerId)}
+                  onClick={() => onDeleteBeer(beer.beerId)}
                 >
                   X
                 </span>

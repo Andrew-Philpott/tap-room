@@ -3,12 +3,11 @@ import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import * as routes from "../../constants/routes";
-import { connect } from "react-redux";
-import { userActions } from "../../actions/user-actions";
 import useForm from "../hooks/useForm";
+import userService from "../../services/user-service";
+import history from "../../helpers/history";
 
-const Register = ({ ...props }) => {
-  const { register } = props;
+export default () => {
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ("firstName" in fieldValues)
@@ -22,7 +21,7 @@ const Register = ({ ...props }) => {
         fieldValues.email
       )
         ? ""
-        : "Email is not valid.";
+        : "Email format is invalid.";
     setErrors({ ...temp });
     if (fieldValues === values)
       return Object.values(temp).every((x) => x === "");
@@ -41,7 +40,7 @@ const Register = ({ ...props }) => {
   function handleSubmit(e) {
     e.preventDefault();
     if (validate()) {
-      register(values);
+      userService.register(values).then(() => history.push(routes.LOG_IN));
     }
   }
 
@@ -129,9 +128,3 @@ const Register = ({ ...props }) => {
     </Container>
   );
 };
-
-const mapActionToProps = {
-  register: userActions.register,
-};
-
-export default connect(null, mapActionToProps)(Register);

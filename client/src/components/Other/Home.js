@@ -3,29 +3,23 @@ import CardMedia from "@material-ui/core/CardMedia";
 import BeerPic from "../../assets/img/BeerPic.jpg";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import { connect } from "react-redux";
-import beerActions from "../../actions/beer-actions";
 import { Link } from "react-router-dom";
 
-const Home = ({ ...props }) => {
-  const { beers, getBeers } = props;
-  React.useEffect(() => {
-    if (beers.length === 0) {
-      getBeers();
-    }
-  }, []);
-
+export default ({ ...props }) => {
+  const { beers } = props;
   const average = (array) => array.reduce((a, b) => a + b) / array.length;
-  const highestRatedBeers = beers
-    .filter((x) => x.reviews.length !== 0)
-    .map((x) => {
-      return {
-        beer: x,
-        averageRating: average(x.reviews.map((r) => r.rating)),
-      };
-    })
-    .sort((a, b) => (a.rating > b.rating ? 1 : -1))
-    .slice(0, 3);
+  const highestRatedBeers =
+    beers &&
+    beers
+      .filter((x) => x.reviews.length !== 0)
+      .map((x) => {
+        return {
+          beer: x,
+          averageRating: average(x.reviews.map((r) => r.rating)),
+        };
+      })
+      .sort((a, b) => (a.rating > b.rating ? 1 : -1))
+      .slice(0, 3);
 
   return (
     <Container>
@@ -34,10 +28,8 @@ const Home = ({ ...props }) => {
         <Grid item xs={1} />
         <Grid item xs={6}>
           <h1>
-            {beers ? (
-              <>
-                <i>{beers.length} beers on tap!</i>
-              </>
+            {beers.length !== 0 ? (
+              <i>{beers.length} beers on tap!</i>
             ) : (
               <>Sorry, we're all out at the moment</>
             )}
@@ -69,13 +61,3 @@ const Home = ({ ...props }) => {
     </Container>
   );
 };
-
-const mapStateToProps = (state) => ({
-  beers: state.beers.items,
-});
-
-const mapActionToProps = {
-  getBeers: beerActions.getBeers,
-};
-
-export default connect(mapStateToProps, mapActionToProps)(Home);

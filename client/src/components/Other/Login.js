@@ -4,11 +4,10 @@ import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import { REGISTER } from "../../constants/routes";
 import useForm from "../hooks/useForm";
-import { connect } from "react-redux";
-import { userActions } from "../../actions/user-actions";
+import { Link } from "react-router-dom";
 
-const Login = ({ ...props }) => {
-  const { login, logout } = props;
+export default ({ ...props }) => {
+  const { onLogin, onLogout } = props;
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ("email" in fieldValues)
@@ -27,15 +26,15 @@ const Login = ({ ...props }) => {
     email: "",
     password: "",
   });
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      await login(values);
+      onLogin(values);
     }
   };
 
   React.useEffect(() => {
-    logout();
+    onLogout();
   }, []);
 
   return (
@@ -81,7 +80,8 @@ const Login = ({ ...props }) => {
           <Button
             variant="contained"
             className="buttons float-right"
-            href={REGISTER}
+            component={Link}
+            to={REGISTER}
           >
             Register
           </Button>
@@ -93,10 +93,3 @@ const Login = ({ ...props }) => {
     </Container>
   );
 };
-
-const mapActionToProps = {
-  login: userActions.login,
-  logout: userActions.logout,
-};
-
-export default connect(null, mapActionToProps)(Login);

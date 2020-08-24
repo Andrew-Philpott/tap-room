@@ -8,7 +8,7 @@ namespace TapRoomApi.Validators
     public AuthenticateUserValidator()
     {
       RuleFor(x => x.Email).EmailAddress();
-      RuleFor(x => x.Password).NotEmpty().Matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{10,18}$");
+      // RuleFor(x => x.Password).NotEmpty().Matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{10,18}$");
     }
   }
 }

@@ -6,11 +6,8 @@ import Button from "@material-ui/core/Button";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import useForm from "../hooks/useForm";
-import { connect } from "react-redux";
-import beerActions from "../../actions/beer-actions";
-import reviewActions from "../../actions/review-actions";
 
-const ReviewForm = ({ ...props }) => {
+export default ({ ...props }) => {
   const { beer, beers, getBeer, getBeers, createReview } = props;
   const { id } = useParams();
   const validate = (fieldValues = values) => {
@@ -161,15 +158,3 @@ const ReviewForm = ({ ...props }) => {
     </Container>
   );
 };
-const mapStateToProps = (state) => ({
-  beer: state.beers.item,
-  beers: state.beers.items,
-});
-
-const mapActionToProps = {
-  getBeer: beerActions.getBeer,
-  getBeers: beerActions.getBeers,
-  createReview: reviewActions.createReview,
-};
-
-export default connect(mapStateToProps, mapActionToProps)(ReviewForm);

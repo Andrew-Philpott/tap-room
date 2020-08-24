@@ -19,7 +19,7 @@ export default ({ component: Component, roles, ...rest }) => (
         return <Redirect to={routes.LANDING} />;
       }
 
-      return <Component {...props} />;
+      return <Component user={parsedUser} {...props} />;
     }}
   />
 );

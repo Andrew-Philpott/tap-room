@@ -4,18 +4,11 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import beerActions from "../../actions/beer-actions";
 
-const BeerDetail = ({ ...props }) => {
-  const { beer, user, getBeer } = props;
+export default ({ ...props }) => {
+  const { beers, user } = props;
   const { id } = useParams();
-
-  React.useEffect(() => {
-    if (id) {
-      getBeer(id);
-    }
-  }, [id]);
+  const beer = beers && beers.find((x) => x.beerId === parseInt(id));
 
   return (
     <Container maxWidth="md" className="white-text mrgn-t16">
@@ -48,7 +41,7 @@ const BeerDetail = ({ ...props }) => {
           </Grid>
         </Grid>
       )}
-      {JSON.stringify(beer) !== "{}" && beer.reviews.length !== 0 ? (
+      {beer && beer.reviews && beer.reviews.length !== 0 ? (
         <React.Fragment>
           <h1>Reviews</h1>
           {beer.reviews.map((review, index) => {
@@ -77,13 +70,3 @@ const BeerDetail = ({ ...props }) => {
     </Container>
   );
 };
-const mapStateToProps = (state) => ({
-  beer: state.beers.item,
-  user: state.authentication.user,
-});
-
-const mapActionToProps = {
-  getBeer: beerActions.getBeer,
-};
-
-export default connect(mapStateToProps, mapActionToProps)(BeerDetail);

@@ -1,9 +1,8 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import Container from "@material-ui/core/Container";
 
-export default () => {
-  const user = useSelector((state) => state.authentication.user);
+export default ({ ...props }) => {
+  const { user } = props;
   return (
     <Container>
       <h1>Welcome {user.userName}</h1>
