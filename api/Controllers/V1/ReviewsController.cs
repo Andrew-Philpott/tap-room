@@ -21,7 +21,6 @@ namespace TapRoomApi.Controllers.V1
       _reviewService = reviewService;
     }
 
-    #region reviews
     [AllowAnonymous]
     [HttpGet("api/v1/reviews/{id}")]
     public async Task<IActionResult> GetReview(int id)
@@ -111,6 +110,5 @@ namespace TapRoomApi.Controllers.V1
         return StatusCode(500, "Internal server error.");
       }
     }
-    #endregion
   }
 }

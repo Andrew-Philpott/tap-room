@@ -25,7 +25,7 @@ namespace TapRoomApi.Controllers.V1
       _userService = userService;
       _appSettings = appSettings.Value;
     }
-    #region users
+
     [AllowAnonymous]
     [HttpPost("api/v1/users/authenticate")]
     public async Task<IActionResult> Authenticate([FromBody] AuthenticateUser model)
@@ -132,7 +132,6 @@ namespace TapRoomApi.Controllers.V1
         return StatusCode(500, "Internal server error.");
       }
     }
-    #endregion
   }
 }
 

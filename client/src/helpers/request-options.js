@@ -13,12 +13,12 @@ const putOptions = (model) => {
   return request;
 };
 
-const deleteOptions = () => {
+function deleteOptions() {
   return {
     method: "DELETE",
     headers: authHeader(),
   };
-};
+}
 
 const postOptions = (model) => {
   const request = {

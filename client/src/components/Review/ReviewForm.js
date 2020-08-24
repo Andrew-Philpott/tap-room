@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
@@ -8,8 +8,10 @@ import InputLabel from "@material-ui/core/InputLabel";
 import useForm from "../hooks/useForm";
 
 export default ({ ...props }) => {
-  const { beer, beers, getBeer, getBeers, createReview } = props;
+  const [beer, setBeer] = useState(null);
+  const { beers, onCreateReview } = props;
   const { id } = useParams();
+
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ("rating" in fieldValues)
@@ -35,25 +37,19 @@ export default ({ ...props }) => {
     description: "",
   });
   React.useEffect(() => {
-    if (id) {
-      getBeer(id);
-    } else {
-      getBeers();
-    }
-  }, [id]);
-
-  React.useEffect(() => {
-    if (beer) {
+    if (id && beers.length !== 0) {
+      const beerToFind = beers.find((x) => x.beerId === parseInt(id));
+      setBeer(beerToFind);
       let temp = { ...values };
-      temp.beerId = beer.beerId;
+      temp.beerId = beerToFind.beerId;
       setValues(temp);
     }
-  }, []);
+  }, [id]);
 
   function handleSubmit(e) {
     e.preventDefault();
     if (validate()) {
-      createReview(id, values);
+      onCreateReview(id, values);
     }
   }
   return (

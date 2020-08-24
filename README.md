@@ -4,7 +4,7 @@
 
 #### By **Andrew Philpott**
 
-[About](#About) | [User Stories](#User-Stories) | [URLs](#URLs) | [API Endpoints](#API-Endpoints) | [Setup/Installation Requirements](#Setup/Installation-Requirements) | [Bugs](#Known-Bugs) | [Technologies](#Technologies-Used) | [Contact](#Support-and-Contact-Details)
+[About](#About) | [Setup/Installation Requirements](#Setup/Installation-Requirements) | [User Stories](#User-Stories) | [URLs](#URLs) | [API Endpoints](#API-Endpoints) | [Parking Lot](#Parking-lot) | [Bugs](#Known-Bugs) | [Technologies](#Technologies-Used) | [Contact](#Support-and-Contact-Details)
 
 </div>
 
@@ -13,6 +13,24 @@
 This is a website for the fake restuarant Tap House that allows users to browse beers and their reviews. The application features authentication and authorization to provide exclusive deals to registered customers, update functionality for employees, and full CRUD functionality for admins.
 
 Log in with the email 'admin@gmail.com', 'employee@gmail.com', or 'member@gmail.com' and password 'test' to view authorization in action.
+
+## Setup/Installation Requirements
+
+- _Clone this repository._
+- _[Download and install .NET Core SDK v3.1.7](https://dotnet.microsoft.com/download/dotnet-core/3.1)_
+- _[Download and install Sql Server Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15)_
+- _Navigate to api directory_
+- _\$dotnet build_
+- _\$dotnet ef migrations add initial_
+- _\$dotnet ef database update_
+- _\$dotnet watch run_
+- _Api will run on localhost:5000_
+- _Open a seperate terminal_
+- _Navigate to app directory_
+- _\$npm install to download dependencies_
+- _\$npm test to run tests_
+- _\$npm run start to run the application_
+- _Application will run on localhost:3000_
 
 ## User Stories
 
@@ -66,23 +84,14 @@ Log in with the email 'admin@gmail.com', 'employee@gmail.com', or 'member@gmail.
 | GET         | /api/v1/reviews/{id}       | Retrieve a review          |
 | PUT         | /api/v1/reviews/{id}       | Update a review            |
 
-## Setup/Installation Requirements
+## Parking Lot
 
-- _Clone this repository._
-- _[Download and install .NET Core SDK v3.1.7](https://dotnet.microsoft.com/download/dotnet-core/3.1)_
-- _[Download and install Sql Server Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15)_
-- _Navigate to api directory_
-- _\$dotnet build_
-- _\$dotnet ef migrations add initial_
-- _\$dotnet ef database update_
-- _\$dotnet watch run_
-- _Api will run on localhost:5000_
-- _Open a seperate terminal_
-- _Navigate to app directory_
-- _\$npm install to download dependencies_
-- _\$npm test to run tests_
-- _\$npm run start to run the application_
-- _Application will run on localhost:3000_
+- Restrict users to only 1 review per beer.
+- Add pagination.
+- Save data into local storage.
+- Return less data for Get All queries.
+- Implement JWT refresh tokens.
+- Implement authorization filters.
 
 ## Known Bugs
 

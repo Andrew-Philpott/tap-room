@@ -49,7 +49,7 @@ export default ({ ...props }) => {
                       <i>{x.beer.name}</i>
                     </Link>
                     &nbsp;&nbsp;
-                    {x.averageRating}/5
+                    {x.averageRating.toFixed(2)}/5
                   </p>
                 );
               })}

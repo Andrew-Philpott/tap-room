@@ -54,13 +54,13 @@ namespace TapRoomApi.Services
       var exists = await _tapRoomContext.Beer.FirstOrDefaultAsync(x => x.Name == entity.Name && x.Brand == entity.Brand);
       if (exists != null) return null;
 
-      await _tapRoomContext.AddAsync(entity);
+      await _tapRoomContext.Beer.AddAsync(entity);
       await _tapRoomContext.SaveChangesAsync();
       return entity;
     }
     public Beer Update(Beer entity)
     {
-      _tapRoomContext.Update(entity);
+      _tapRoomContext.Beer.Update(entity);
       _tapRoomContext.SaveChanges();
       return entity;
     }

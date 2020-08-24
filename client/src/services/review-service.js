@@ -12,13 +12,13 @@ export default {
 const baseUrl = "http://localhost:5000/api/v1/reviews";
 
 async function getReview(id) {
-  return await fetch(`${baseUrl}/${id}`, requestOptions.getOptions).then(
+  return await fetch(`${baseUrl}/${id}`, requestOptions.getOptions()).then(
     handleResponse
   );
 }
 
 async function getReviews() {
-  return await fetch(baseUrl, requestOptions.getOptions).then(handleResponse);
+  return await fetch(baseUrl, requestOptions.getOptions()).then(handleResponse);
 }
 
 async function createReview(review) {
@@ -35,7 +35,7 @@ async function updateReview(id, review) {
 }
 
 async function deleteReview(id) {
-  return await fetch(`${baseUrl}/${id}`, requestOptions.deleteOptions).then(
+  return await fetch(`${baseUrl}/${id}`, requestOptions.deleteOptions()).then(
     handleResponse
   );
 }

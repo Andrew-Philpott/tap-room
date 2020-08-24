@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
+import InputLabel from "@material-ui/core/InputLabel";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import useForm from "../hooks/useForm";
@@ -21,20 +22,17 @@ export default ({ ...props }) => {
     if ("flavor" in fieldValues)
       temp.flavor = fieldValues.flavor ? "" : "Field cannot be blank";
     if ("price" in fieldValues)
-      temp.price =
-        typeof parseInt(fieldValues.price) === "number"
-          ? ""
-          : "Field must be a number";
+      temp.price = !isNaN(parseInt(fieldValues.price))
+        ? ""
+        : "Field must be a number";
     if ("alcoholContent" in fieldValues)
-      temp.alcoholContent =
-        typeof parseInt(fieldValues.alcoholContent) === "number"
-          ? ""
-          : "Field must be a number";
+      temp.alcoholContent = !isNaN(parseInt(fieldValues.alcoholContent))
+        ? ""
+        : "Field must be a number";
     if ("pints" in fieldValues)
-      temp.pints =
-        typeof parseInt(fieldValues.pints) === "number"
-          ? ""
-          : "Field must be a number";
+      temp.pints = !isNaN(parseInt(fieldValues.pints))
+        ? ""
+        : "Field must be a number";
     setErrors({ ...temp });
 
     if (fieldValues === values)
@@ -70,18 +68,20 @@ export default ({ ...props }) => {
   }
 
   return (
-    <Container className="white-text mrgn-t16" maxWidth="sm">
+    <Container className="white-text" maxWidth="sm">
       <span className="white-text-large">{!id && <>Add a new beer</>}</span>
       <form autoComplete="off" method="post" noValidate onSubmit={handleSubmit}>
+        <InputLabel className="white-text mrgn-t16" htmlFor="name">
+          Name
+        </InputLabel>
         <TextField
           type="text"
           name="name"
           fullWidth
           InputProps={{
             classes: { notchedOutline: "white-border" },
-            className: "white-text mrgn-t16",
+            className: "white-text",
           }}
-          placeholder="Name"
           value={values.name}
           onChange={handleInputChange}
           variant="outlined"
@@ -90,15 +90,17 @@ export default ({ ...props }) => {
             helperText: errors.name,
           })}
         />
+        <InputLabel className="white-text mrgn-t16" htmlFor="brand">
+          Brand
+        </InputLabel>
         <TextField
           type="text"
           name="brand"
           fullWidth
           InputProps={{
             classes: { notchedOutline: "white-border" },
-            className: "white-text mrgn-t16",
+            className: "white-text",
           }}
-          placeholder="Brand"
           value={values.brand}
           onChange={handleInputChange}
           variant="outlined"
@@ -107,15 +109,17 @@ export default ({ ...props }) => {
             helperText: errors.brand,
           })}
         />
+        <InputLabel className="white-text mrgn-t16" htmlFor="color">
+          Color
+        </InputLabel>
         <TextField
           type="text"
           name="color"
           fullWidth
           InputProps={{
             classes: { notchedOutline: "white-border" },
-            className: "white-text mrgn-t16",
+            className: "white-text",
           }}
-          placeholder="Color"
           value={values.color}
           onChange={handleInputChange}
           variant="outlined"
@@ -124,15 +128,17 @@ export default ({ ...props }) => {
             helperText: errors.color,
           })}
         />
+        <InputLabel className="white-text mrgn-t16" htmlFor="aroma">
+          Aroma
+        </InputLabel>
         <TextField
           type="text"
           name="aroma"
           fullWidth
           InputProps={{
             classes: { notchedOutline: "white-border" },
-            className: "white-text mrgn-t16",
+            className: "white-text",
           }}
-          placeholder="Aroma"
           value={values.aroma}
           onChange={handleInputChange}
           variant="outlined"
@@ -141,15 +147,17 @@ export default ({ ...props }) => {
             helperText: errors.aroma,
           })}
         />
+        <InputLabel className="white-text mrgn-t16" htmlFor="flavor">
+          Flavor
+        </InputLabel>
         <TextField
           type="text"
           name="flavor"
           fullWidth
           InputProps={{
             classes: { notchedOutline: "white-border" },
-            className: "white-text mrgn-t16",
+            className: "white-text",
           }}
-          placeholder="Flavor"
           value={values.flavor}
           onChange={handleInputChange}
           variant="outlined"
@@ -158,16 +166,17 @@ export default ({ ...props }) => {
             helperText: errors.flavor,
           })}
         />
+        <InputLabel className="white-text mrgn-t16" htmlFor="price">
+          Price
+        </InputLabel>
         <TextField
-          type="number"
+          type="text"
           name="price"
           fullWidth
           InputProps={{
-            step: 300,
             classes: { notchedOutline: "white-border" },
-            className: "white-text mrgn-t16",
+            className: "white-text",
           }}
-          placeholder="Price"
           value={values.price}
           onChange={handleInputChange}
           variant="outlined"
@@ -176,15 +185,17 @@ export default ({ ...props }) => {
             helperText: errors.price,
           })}
         />
+        <InputLabel className="white-text mrgn-t16" htmlFor="alcoholContent">
+          Alcohol Content
+        </InputLabel>
         <TextField
-          type="number"
+          type="text"
           name="alcoholContent"
           fullWidth
           InputProps={{
             classes: { notchedOutline: "white-border" },
-            className: "white-text mrgn-t16",
+            className: "white-text",
           }}
-          placeholder="Alcohol Content"
           value={values.alcoholContent}
           onChange={handleInputChange}
           variant="outlined"
@@ -193,15 +204,17 @@ export default ({ ...props }) => {
             helperText: errors.alcoholContent,
           })}
         />
+        <InputLabel className="white-text mrgn-t16" htmlFor="pints">
+          Pints
+        </InputLabel>
         <TextField
-          type="number"
+          type="text"
           name="pints"
           fullWidth
           InputProps={{
             classes: { notchedOutline: "white-border" },
-            className: "white-text mrgn-t16",
+            className: "white-text",
           }}
-          placeholder="# of pints"
           value={values.pints}
           onChange={handleInputChange}
           variant="outlined"

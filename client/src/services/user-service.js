@@ -25,7 +25,7 @@ async function login(model) {
     });
 }
 
-async function logout() {
+function logout() {
   localStorage.removeItem("user");
 }
 

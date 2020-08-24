@@ -20,7 +20,7 @@ async function getBeer(id) {
 }
 
 async function getBeers() {
-  return await fetch(baseUrl, requestOptions.getOptions).then(handleResponse);
+  return await fetch(baseUrl, requestOptions.getOptions()).then(handleResponse);
 }
 
 async function incrementPints(id) {
@@ -50,7 +50,7 @@ async function updateBeer(id, beer) {
 }
 
 async function deleteBeer(id) {
-  return await fetch(`${baseUrl}/${id}`, requestOptions.deleteOptions).then(
+  return await fetch(`${baseUrl}/${id}`, requestOptions.deleteOptions()).then(
     handleResponse
   );
 }
