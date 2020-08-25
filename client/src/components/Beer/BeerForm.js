@@ -223,7 +223,7 @@ export default ({ ...props }) => {
             helperText: errors.pints,
           })}
         />
-        <div className="mrgn-t16">
+        <div style={{ minHeight: "38px" }} className="mrgn-t8">
           <Button className="buttons float-right" type="submit">
             Submit
           </Button>

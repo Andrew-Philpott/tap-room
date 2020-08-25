@@ -38,36 +38,36 @@ export default ({ ...props }) => {
             </Button>
           )}
         </Grid>
-        <Grid item xs={12}>
-          <TableContainer>
-            <Table className="beer-list-table" aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="left">On Tap</TableCell>
-                  <TableCell align="left">Brand</TableCell>
-                  <TableCell align="left">Flavor</TableCell>
-                  <TableCell align="left">ABV</TableCell>
-                  <TableCell align="left">Price</TableCell>
-                  <TableCell align="left">Pints</TableCell>
-                  {user &&
-                    (user.role === role.EMPLOYEE ||
-                      user.role === role.ADMIN) && (
-                      <React.Fragment>
-                        <TableCell align="left">Buy</TableCell>
-                        <TableCell align="left">Restock</TableCell>
-                        {user.role === role.ADMIN && (
-                          <React.Fragment>
-                            <TableCell align="left">Edit</TableCell>
-                            <TableCell align="left">Remove</TableCell>
-                          </React.Fragment>
-                        )}
-                      </React.Fragment>
-                    )}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {beers &&
-                  beers.map((beer, index) => (
+        {beers.length !== 0 && (
+          <Grid item xs={12}>
+            <TableContainer>
+              <Table className="beer-list-table" aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="left">On Tap</TableCell>
+                    <TableCell align="left">Brand</TableCell>
+                    <TableCell align="left">Flavor</TableCell>
+                    <TableCell align="left">ABV</TableCell>
+                    <TableCell align="left">Price</TableCell>
+                    <TableCell align="left">Pints</TableCell>
+                    {user &&
+                      (user.role === role.EMPLOYEE ||
+                        user.role === role.ADMIN) && (
+                        <React.Fragment>
+                          <TableCell align="left">Buy</TableCell>
+                          <TableCell align="left">Restock</TableCell>
+                          {user.role === role.ADMIN && (
+                            <React.Fragment>
+                              <TableCell align="left">Edit</TableCell>
+                              <TableCell align="left">Remove</TableCell>
+                            </React.Fragment>
+                          )}
+                        </React.Fragment>
+                      )}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {beers.map((beer, index) => (
                     <BeerItem
                       key={index}
                       user={user}
@@ -77,10 +77,11 @@ export default ({ ...props }) => {
                       onDeleteBeer={onDeleteBeer}
                     />
                   ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Grid>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+        )}
       </Grid>
     </Container>
   );

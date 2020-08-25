@@ -6,6 +6,7 @@ import * as routes from "../../constants/routes";
 import useForm from "../hooks/useForm";
 import userService from "../../services/user-service";
 import history from "../../helpers/history";
+import { Link } from "react-router-dom";
 
 export default () => {
   const validate = (fieldValues = values) => {
@@ -116,8 +117,8 @@ export default () => {
             helperText: errors.password,
           })}
         />
-        <div className="mrgn-t8">
-          <Button className="buttons" href={routes.LANDING}>
+        <div className="mrgn-t8" style={{ minHeight: "38px" }}>
+          <Button component={Link} to={routes.LANDING} className="buttons">
             Cancel
           </Button>
           <Button type="submit" className="buttons float-right">

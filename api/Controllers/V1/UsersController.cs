@@ -34,7 +34,12 @@ namespace TapRoomApi.Controllers.V1
       {
         var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
         var entity = await _userService.AuthenticateAsync(model.Email, model.Password, key);
-        if (entity == null) return BadRequest(new ErrorResponse(new ErrorModel(null, "User does not exist or email password combination is incorrect.")));
+        if (entity == null)
+        {
+          ErrorResponse response = new ErrorResponse();
+          response.Errors.Add(new ErrorModel(null, "User does not exist or email password combination is incorrect."));
+          return BadRequest(response);
+        }
 
         return Ok(entity);
       }

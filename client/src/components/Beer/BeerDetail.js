@@ -12,7 +12,7 @@ export default ({ ...props }) => {
 
   return (
     <Container maxWidth="md" className="white-text mrgn-t16">
-      {beer && (
+      {beer ? (
         <Grid container>
           <Grid item xs={8}>
             <h1>{beer.name}</h1>
@@ -39,33 +39,36 @@ export default ({ ...props }) => {
             <p>Price: ${beer.price}</p>
             <p>Pints Left: {beer.pints}</p>
           </Grid>
+          {beer.reviews && beer.reviews.length !== 0 ? (
+            <React.Fragment>
+              <h1>Reviews</h1>
+              {beer.reviews.map((review, index) => {
+                return (
+                  <Grid direction="column" container key={index}>
+                    <Grid item xs={10}>
+                      <p>
+                        User:{" "}
+                        <Link to={`/reviews/user/${review.user.userId}`}>
+                          {review.user.userName}
+                        </Link>
+                      </p>
+                      <p>Rating: {review.rating}</p>
+                      <p>Description: {review.description}</p>
+                    </Grid>
+                    <Grid item xs={2} />
+                  </Grid>
+                );
+              })}
+            </React.Fragment>
+          ) : (
+            <h1>
+              No reviews for this beer yet. Create an account to provide
+              feedback!
+            </h1>
+          )}
         </Grid>
-      )}
-      {beer && beer.reviews && beer.reviews.length !== 0 ? (
-        <React.Fragment>
-          <h1>Reviews</h1>
-          {beer.reviews.map((review, index) => {
-            return (
-              <Grid direction="column" container key={index}>
-                <Grid item xs={10}>
-                  <p>
-                    User:{" "}
-                    <Link to={`/reviews/user/${review.user.userId}`}>
-                      {review.user.userName}
-                    </Link>
-                  </p>
-                  <p>Rating: {review.rating}</p>
-                  <p>Description: {review.description}</p>
-                </Grid>
-                <Grid item xs={2} />
-              </Grid>
-            );
-          })}
-        </React.Fragment>
       ) : (
-        <h1>
-          No reviews for this beer yet. Create an account to provide feedback!
-        </h1>
+        <h1>Loading</h1>
       )}
     </Container>
   );

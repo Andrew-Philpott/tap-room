@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 import history from "./helpers/history";
 import Home from "./components/Other/Home";
@@ -18,23 +18,32 @@ import getUserFromLs from "./helpers/get-user-from-ls";
 import beerService from "./services/beer-service";
 import reviewService from "./services/review-service";
 import userService from "./services/user-service";
-import useBeerList from "./components/hooks/useBeerList";
 import "./App.css";
 
 function App() {
   const [user, setUser] = React.useState(null);
-  const { beers, setBeers } = useBeerList();
-  const [error, setError] = React.useState({ message: {} });
+  const [beers, setBeers] = useState([]);
+  const [error, setError] = React.useState({ errors: {} });
+  useEffect(() => {
+    history.listen(() => {
+      const temp = { ...error };
+      temp.errors = {};
+      setError(temp);
+    });
+  }, []);
 
+  console.log(error);
   React.useEffect(() => {
     if (beers.length === 0) {
       beerService
         .getBeers()
         .then((response) => setBeers(response))
         .catch(() =>
-          setError(
-            "Something went wrong trying to fetch the list beers. Please try again later."
-          )
+          setError({
+            errors: [
+              "Something went wrong trying to fetch the list beers. Please try again later.",
+            ],
+          })
         );
     }
   }, [beers]);
@@ -53,7 +62,11 @@ function App() {
         localStorage.setItem("user", JSON.stringify(response));
         history.push(routes.BEER_LIST);
       })
-      .catch(setError("Error trying to login. Please try again later."));
+      .catch((err) =>
+        setError({
+          errors: err,
+        })
+      );
   };
 
   const handleLogout = () => {
@@ -62,7 +75,7 @@ function App() {
   };
 
   const handleBeerFormSubmit = async (id, values) => {
-    values.price = parseInt(values.price);
+    values.price = 0;
     values.alcoholContent = parseInt(values.alcoholContent);
     values.pints = parseInt(values.price);
     if (id) {
@@ -74,10 +87,10 @@ function App() {
           ]);
           history.push(routes.BEER_LIST);
         })
-        .catch(() =>
-          setError(
-            "There was a problem updating the beer. Please try again later."
-          )
+        .catch((err) =>
+          setError({
+            errors: err,
+          })
         );
     } else {
       await beerService
@@ -86,10 +99,10 @@ function App() {
           setBeers([...beers, response]);
           history.push(routes.BEER_LIST);
         })
-        .catch(() =>
-          setError(
-            "There was a problem updating the beer. Please try again later."
-          )
+        .catch((err) =>
+          setError({
+            errors: err,
+          })
         );
     }
   };
@@ -101,8 +114,10 @@ function App() {
         .then((beer) => {
           setBeers([...beers.filter((x) => x.beerId !== beer.beerId)]);
         })
-        .catch(() =>
-          setError("Something went wrong while trying to delete the beer.")
+        .catch((err) =>
+          setError({
+            errors: err,
+          })
         );
   };
 
@@ -112,28 +127,28 @@ function App() {
       .then((beer) => {
         setBeers([...beers.map((x) => (x.beerId === beer.beerId ? beer : x))]);
       })
-      .catch(() =>
-        setError(
-          "Something went wrong while trying to increment the number of pints."
-        )
+      .catch((err) =>
+        setError({
+          errors: err,
+        })
       );
+
   const handleDecrementBeerPints = (id) =>
     beerService
       .decrementPints(id)
       .then((beer) => {
         setBeers([...beers.map((x) => (x.beerId === beer.beerId ? beer : x))]);
       })
-      .catch(() =>
-        setError(
-          "Something went wrong while trying to decrement the number of pints."
-        )
+      .catch((err) =>
+        setError({
+          errors: err,
+        })
       );
 
   const handleCreateReview = (id, values) => {
     reviewService
       .createReview(values)
       .then((res) => {
-        console.log(res);
         const newState = [...beers];
         const beer = newState.find((x) => x.beerId === res.beerId);
         beer.reviews.push(res);
@@ -141,18 +156,18 @@ function App() {
         setBeers(newState);
         history.push(`/beers/${id}`);
       })
-      .catch((err) => {
-        console.log(err);
-        const temp = { ...error };
-        temp.message = err;
-        setError(temp);
-      });
+      .catch((err) =>
+        setError({
+          errors: err,
+        })
+      );
   };
 
   return (
     <div className="App">
       <Router history={history}>
         <NavigationBar user={user} />
+
         <Switch>
           <Route exact path={routes.LANDING}>
             <Home beers={beers} />
@@ -177,7 +192,7 @@ function App() {
           </Route>
           <PrivateRoute
             path={routes.NEW_BEER}
-            roles={["hello", roles.ADMIN]}
+            roles={[roles.ADMIN]}
             component={() => (
               <BeerForm beers={beers} onBeerFormSubmit={handleBeerFormSubmit} />
             )}
@@ -208,15 +223,17 @@ function App() {
           />
           <Redirect from="*" to="/" />
         </Switch>
-        {error &&
-          error.message &&
-          Object.values(error.message).map((x, index) => {
-            return (
-              <p key={index} className="white-text text-align-center">
-                {x}
-              </p>
-            );
-          })}
+        <React.Fragment>
+          {error &&
+            error.errors &&
+            Object.values(error.errors).map((element, index) => {
+              return (
+                <p key={index} className="white-text text-align-center">
+                  {element}
+                </p>
+              );
+            })}
+        </React.Fragment>
       </Router>
     </div>
   );

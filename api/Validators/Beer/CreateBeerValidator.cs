@@ -12,7 +12,7 @@ namespace TapRoomApi.Validators
       RuleFor(x => x.Color).NotEmpty().Matches("^[a-zA-Z ]*$").MaximumLength(50);
       RuleFor(x => x.Aroma).NotEmpty().Matches("^[a-zA-Z ]*$").MaximumLength(100);
       RuleFor(x => x.Flavor).NotEmpty().Matches("^[a-zA-Z ]*$").MaximumLength(100);
-      RuleFor(x => x.Price).InclusiveBetween(0, 10000);
+      RuleFor(x => x.Price).InclusiveBetween(1, 10000);
       RuleFor(x => x.AlcoholContent).InclusiveBetween(0, 100);
       RuleFor(x => x.Pints).InclusiveBetween(0, 10000);
     }

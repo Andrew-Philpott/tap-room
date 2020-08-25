@@ -75,7 +75,7 @@ export default ({ ...props }) => {
             helperText: errors.password,
           })}
         />
-        <div className="mrgn-t8">
+        <div className="mrgn-t8" style={{ minHeight: "38px" }}>
           <span className="mrgn-r8">No Account?</span>
           <Button
             variant="contained"

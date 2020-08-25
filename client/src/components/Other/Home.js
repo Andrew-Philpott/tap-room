@@ -27,13 +27,18 @@ export default ({ ...props }) => {
       <Grid className="white-text" container>
         <Grid item xs={1} />
         <Grid item xs={6}>
-          <h1>
-            {beers.length !== 0 ? (
-              <i>{beers.length} beers on tap!</i>
-            ) : (
-              <>Sorry, we're all out at the moment</>
-            )}
-          </h1>
+          {beers.length !== 0 && (
+            <React.Fragment>
+              <h1>
+                <i>{beers.length} beers on tap!</i>
+              </h1>
+              <ul>
+                {beers.map((x) => {
+                  return <li>{x.name}</li>;
+                })}
+              </ul>
+            </React.Fragment>
+          )}
         </Grid>
         <Grid item xs={4}>
           {highestRatedBeers.length !== 0 && (

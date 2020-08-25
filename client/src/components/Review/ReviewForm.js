@@ -147,9 +147,11 @@ export default ({ ...props }) => {
             helperText: errors.description,
           })}
         />
-        <Button className="buttons mrgn-t16 float-right" type="submit">
-          Submit
-        </Button>
+        <div className="mrgn-t8" style={{ minHeight: "38px" }}>
+          <Button className="buttons float-right" type="submit">
+            Submit
+          </Button>
+        </div>
       </form>
     </Container>
   );
