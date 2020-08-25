@@ -1,13 +1,10 @@
 **/bin
 **/obj
-**/appsettings.json
-**/appsettings.Development.json
+api/appsettings.json
+api/appsettings.Development.json
 **/node_modules
 **/.vscode
 **/build
 **/.DS_Store
-**/.env.local
-**/.env.development.local
-**/.env.test.local
-**/.env.production.local
+.env
 migrations

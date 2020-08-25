@@ -7,10 +7,12 @@ using TapRoomApi.DataTransferObjects.V1;
 using TapRoomApi.Services;
 using TapRoomApi.Models;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace TapRoomApi.Controllers.V1
 {
   [ApiController]
+  [Authorize]
   public class ReviewsController : ControllerBase
   {
     private IMapper _mapper;
@@ -28,12 +30,12 @@ namespace TapRoomApi.Controllers.V1
       try
       {
         var entity = await _reviewService.FindAsync(id);
-        var viewDTO = _mapper.Map<ViewReview>(entity);
-        return Ok(viewDTO);
+        var view = _mapper.Map<ViewReview>(entity);
+        return Ok(view);
       }
       catch
       {
-        return StatusCode(500, "Internal server error.");
+        return StatusCode(500);
       }
     }
 
@@ -44,51 +46,126 @@ namespace TapRoomApi.Controllers.V1
       try
       {
         var entities = await _reviewService.FindAllAsync();
-        var viewDTOs = _mapper.Map<IEnumerable<ViewReview>>(entities);
-        return Ok(viewDTOs);
+        var view = _mapper.Map<IEnumerable<ViewReview>>(entities);
+        return Ok(view);
       }
       catch
       {
-        return StatusCode(500, "Internal server error.");
+        return StatusCode(500);
       }
     }
+
+    [HttpGet("api/v1/reviews/me")]
+    public async Task<IActionResult> GetMyReviews()
+    {
+      try
+      {
+        var userId = HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+
+        var entities = await _reviewService.FindAllByUserIdAsync(userId);
+        var view = _mapper.Map<IEnumerable<ViewReview>>(entities);
+        return Ok(view);
+      }
+      catch
+      {
+        return StatusCode(500);
+      }
+    }
+
+    [HttpPost("api/v1/reviews/like")]
+    public async Task<IActionResult> CreateLike([FromBody] CreateReviewLike createDTO)
+    {
+      try
+      {
+        var userId = HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+        var entityToCreate = _mapper.Map<ReviewLike>(createDTO);
+        entityToCreate.UserId = userId;
+        var entity = await _reviewService.CreateReviewLikeAsync(entityToCreate);
+        var view = _mapper.Map<ViewReviewLike>(entity);
+        return Ok(view);
+      }
+      catch
+      {
+        return StatusCode(500);
+      }
+    }
+
+    [HttpDelete("api/v1/reviews/like/{id}")]
+    public async Task<IActionResult> DeleteLike(int id)
+    {
+      try
+      {
+        var userId = HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+
+        var entity = await _reviewService.FindReviewLikeAsync(id, userId);
+        _reviewService.DeleteReviewLike(entity);
+        var view = _mapper.Map<ViewReviewLike>(entity);
+        return Ok(view);
+      }
+      catch
+      {
+        return StatusCode(500);
+      }
+    }
+
 
     [HttpPost("api/v1/reviews")]
     public async Task<IActionResult> CreateReview([FromBody] CreateReview createDTO)
     {
-      var currentUserId = int.Parse(User.Identity.Name);
       try
       {
+        var userId = HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+        var nameClaim = HttpContext.User.FindFirst("name").Value;
+
+        int indexOfSpace = nameClaim.IndexOf(" ");
+        string firstLetter = nameClaim.Substring(0, 1);
+        string lastName = nameClaim.Substring(indexOfSpace + 1, nameClaim.Length - (indexOfSpace + 1));
+        string name = firstLetter + " " + lastName;
+
         var entityToCreate = _mapper.Map<Review>(createDTO);
-        entityToCreate.UserId = currentUserId;
+        entityToCreate.UserId = userId;
+        entityToCreate.Name = name;
         var entity = await _reviewService.CreateAsync(entityToCreate);
-        var viewDTO = _mapper.Map<ViewReview>(entity);
-        return Ok(viewDTO);
+        var view = _mapper.Map<ViewReview>(entity);
+        return Ok(view);
       }
       catch
       {
-        return StatusCode(500, "Internal server error.");
+        return StatusCode(500);
       }
     }
 
     [HttpPut("api/v1/reviews/{id}")]
     public async Task<IActionResult> UpdateReview(int id, [FromBody] UpdateReview updateDTO)
     {
-      var currentUserId = int.Parse(User.Identity.Name);
       try
       {
+        if (id != updateDTO.ReviewId) return BadRequest();
+
+        var userId = HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+        var nameClaim = HttpContext.User.FindFirst("name").Value;
+
+        int indexOfSpace = nameClaim.IndexOf(" ");
+        string firstLetter = nameClaim.Substring(0, 1);
+        string lastName = nameClaim.Substring(indexOfSpace + 1, nameClaim.Length - (indexOfSpace + 1));
+        string name = firstLetter + " " + lastName;
+
         var entity = await _reviewService.FindAsync(id);
         if (entity == null)
-          return BadRequest(new ErrorResponse(new ErrorModel(null, "Beer does not exist in the database")));
+          return BadRequest(new ValidationErrorResponse(new ValidationErrorModel(null, "Beer does not exist in the database")));
+
+        if (entity.UserId != userId) return Forbid();
 
         _mapper.Map(updateDTO, entity);
-        var updateEntity = _reviewService.Update(entity);
-        var viewDTO = _mapper.Map<ViewReview>(updateEntity);
-        return Ok(viewDTO);
+        entity.UserId = userId;
+        entity.Name = name;
+        var updatedEntity = _reviewService.Update(entity);
+        var view = _mapper.Map<ViewReview>(updatedEntity);
+        return Ok(view);
       }
       catch
       {
-        return StatusCode(500, "Internal server error.");
+        return StatusCode(500);
       }
     }
 
@@ -97,17 +174,20 @@ namespace TapRoomApi.Controllers.V1
     {
       try
       {
+        var userId = HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
         var entity = await _reviewService.FindAsync(id);
         if (entity == null)
-          return BadRequest(new ErrorResponse(new ErrorModel(null, "Beer does not exist in the database")));
+          return BadRequest(new ValidationErrorResponse(new ValidationErrorModel(null, "Beer does not exist in the database")));
+
+        if (entity.UserId != userId) return Forbid();
 
         _reviewService.Delete(entity);
-        var viewDTO = _mapper.Map<ViewReview>(entity);
-        return Ok(viewDTO);
+        var view = _mapper.Map<ViewReview>(entity);
+        return Ok(view);
       }
       catch
       {
-        return StatusCode(500, "Internal server error.");
+        return StatusCode(500);
       }
     }
   }

@@ -12,6 +12,8 @@ namespace TapRoomApi.Helpers
       CreateMap<CreateBeer, Beer>();
 
       CreateMap<UpdateBeer, Beer>();
+
+      CreateMap<Beer, ViewBeer>();
       #endregion
 
       #region Review
@@ -22,13 +24,12 @@ namespace TapRoomApi.Helpers
       CreateMap<UpdateReview, Review>();
       #endregion
 
-      #region User
-      CreateMap<User, ViewUser>();
+      #region ReviewLike
+      CreateMap<ReviewLike, ViewReviewLike>();
 
-      CreateMap<RegisterUser, User>();
-
-      CreateMap<UpdateUser, User>();
+      CreateMap<CreateReviewLike, ReviewLike>();
       #endregion
+
     }
   }
 }

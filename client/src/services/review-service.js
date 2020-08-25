@@ -4,38 +4,62 @@ import handleResponse from "../helpers/handle-response";
 export default {
   getReview,
   getReviews,
+  getMyReviews,
   createReview,
   updateReview,
   deleteReview,
+  createLike,
+  deleteLike,
 };
 
-const baseUrl = "http://localhost:5000/api/v1/reviews";
+const baseUrl = "https://taproomapi.azurewebsites.net/api/v1/reviews";
 
 async function getReview(id) {
-  return await fetch(`${baseUrl}/${id}`, requestOptions.getOptions()).then(
-    handleResponse
-  );
+  return await fetch(`${baseUrl}/${id}`, requestOptions.getOptions());
 }
 
 async function getReviews() {
-  return await fetch(baseUrl, requestOptions.getOptions()).then(handleResponse);
+  return await fetch(baseUrl, requestOptions.getOptions());
 }
 
-async function createReview(review) {
-  return await fetch(`${baseUrl}`, requestOptions.postOptions(review)).then(
-    handleResponse
-  );
-}
-
-async function updateReview(id, review) {
+async function getMyReviews(auth) {
   return await fetch(
-    `${baseUrl}/${id}`,
-    requestOptions.putOptions(review)
+    baseUrl + "/me",
+    requestOptions.getOptions(await auth)
   ).then(handleResponse);
 }
 
-async function deleteReview(id) {
-  return await fetch(`${baseUrl}/${id}`, requestOptions.deleteOptions()).then(
-    handleResponse
-  );
+async function createReview(auth, review) {
+  return await fetch(
+    baseUrl,
+    requestOptions.postOptions(await auth, review)
+  ).then(handleResponse);
+}
+
+async function updateReview(auth, id, review) {
+  return await fetch(
+    `${baseUrl}/${id}`,
+    requestOptions.putOptions(await auth, review)
+  ).then(handleResponse);
+}
+
+async function deleteReview(auth, id) {
+  return await fetch(
+    `${baseUrl}/${id}`,
+    requestOptions.deleteOptions(await auth)
+  ).then(handleResponse);
+}
+
+async function createLike(auth, like) {
+  return await fetch(
+    `${baseUrl}/like`,
+    requestOptions.postOptions(await auth, like)
+  ).then(handleResponse);
+}
+
+async function deleteLike(auth, id) {
+  return await fetch(
+    `${baseUrl}/like/${id}`,
+    requestOptions.deleteOptions(await auth)
+  ).then(handleResponse);
 }

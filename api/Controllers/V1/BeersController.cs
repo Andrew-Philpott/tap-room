@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using TapRoomApi.Entities;
 using TapRoomApi.DataTransferObjects.V1;
@@ -10,119 +11,110 @@ using System.Threading.Tasks;
 namespace TapRoomApi.Controllers.V1
 {
   [ApiController]
+  [Authorize(AuthenticationSchemes = "AzureAd")]
   public class BeersController : ControllerBase
   {
     private IMapper _mapper;
     private IBeerService _beerService;
-    private IUserService _userService;
-    public BeersController(IBeerService beerService, IUserService userService, IMapper mapper)
+    public BeersController(IBeerService beerService, IMapper mapper)
     {
       _mapper = mapper;
       _beerService = beerService;
-      _userService = userService;
     }
 
-    // [AllowAnonymous]
-    // [HttpGet("api/v1/beers/{id}")]
-    // public async Task<IActionResult> GetBeer(int id)
-    // {
-    //   try
-    //   {
-    //     var entity = await _beerService.FindAsync(id);
-    //     return Ok(entity);
-    //   }
-    //   catch
-    //   {
-    //     return StatusCode(500, "Internal server error.");
-    //   }
-    // }
-
-    [AllowAnonymous]
     [HttpGet("api/v1/beers")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetBeers()
     {
       try
       {
         var entities = await _beerService.FindAllAsync();
-        return Ok(entities);
+        var view = _mapper.Map<IEnumerable<ViewBeer>>(entities);
+        return Ok(view);
       }
       catch
       {
-        return StatusCode(500, "Internal server error.");
+        return StatusCode(500);
       }
     }
+
+    [HttpGet("api/v1/beers/{id}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetBeer(int id)
+    {
+      try
+      {
+        var entities = await _beerService.FindAsync(id);
+        var view = _mapper.Map<ViewBeer>(entities);
+        return Ok(view);
+      }
+      catch
+      {
+        return StatusCode(500);
+      }
+    }
+
 
     [HttpPost("api/v1/beers")]
     public async Task<IActionResult> CreateBeer([FromBody] CreateBeer createDTO)
     {
-      if (createDTO == null)
-        return BadRequest(new ErrorResponse(new ErrorModel("Name", "Beer cannot be null.")));
-
-      var currentUserId = int.Parse(User.Identity.Name);
       try
       {
-        var user = await _userService.FindAsync(currentUserId);
-        if (user.Role != "admin")
-          return BadRequest(new ErrorResponse(new ErrorModel("Admin", "You must have administrative privileges to create a beer")));
+        var userId = HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+
+        if (createDTO == null)
+          return BadRequest(new ValidationErrorResponse(new ValidationErrorModel("Name", "Beer cannot be null.")));
 
         var entityToCreate = _mapper.Map<Beer>(createDTO);
+        entityToCreate.UserId = userId;
         var entity = await _beerService.CreateAsync(entityToCreate);
-
-        return Ok(entity);
+        var view = _mapper.Map<ViewBeer>(entity);
+        return Ok(view);
       }
       catch
       {
-        return StatusCode(500, "Internal server error.");
+        return StatusCode(500);
       }
     }
 
     [HttpPut("api/v1/beers/{id}")]
     public async Task<IActionResult> UpdateBeer(int id, [FromBody] UpdateBeer updateDTO)
     {
-      var currentUserId = int.Parse(User.Identity.Name);
       try
       {
-        var user = await _userService.FindAsync(currentUserId);
-        if (user.Role != "admin")
-          return BadRequest(new ErrorResponse(new ErrorModel(null, "You must have administrative privileges to create a beer")));
-
-        if (updateDTO == null)
-          return BadRequest(new ErrorResponse(new ErrorModel(null, "Beer cannot be null.")));
+        if (id != updateDTO.BeerId) return BadRequest(new ValidationErrorResponse(new ValidationErrorModel(null, "Beer id doesn't match.")));
 
         var entity = await _beerService.FindAsync(id);
         if (entity == null)
-          return BadRequest(new ErrorResponse(new ErrorModel(null, "Beer does not exist in the database")));
+          return BadRequest(new ValidationErrorResponse(new ValidationErrorModel(null, "Beer does not exist in the database")));
 
         _mapper.Map(updateDTO, entity);
-        var updateEntity = _beerService.Update(entity);
-        return Ok(updateEntity);
+        var updatedEntity = _beerService.Update(entity);
+        var view = _mapper.Map<ViewBeer>(updatedEntity);
+        return Ok(view);
       }
       catch
       {
-        return StatusCode(500, "Internal server error.");
+        return StatusCode(500);
       }
     }
 
     [HttpDelete("api/v1/beers/{id}")]
     public async Task<IActionResult> DeleteBeer(int id)
     {
-      var currentUserId = int.Parse(User.Identity.Name);
       try
       {
-        var user = await _userService.FindAsync(currentUserId);
-        if (user.Role != "admin")
-          return BadRequest(new ErrorResponse(new ErrorModel(null, "You must have administrative privileges to create a beer")));
-
         var entity = await _beerService.FindAsync(id);
         if (entity == null)
-          return BadRequest(new ErrorResponse(new ErrorModel(null, "Beer does not exist in the database")));
+          return BadRequest(new ValidationErrorResponse(new ValidationErrorModel(null, "Beer does not exist in the database")));
 
         _beerService.Delete(entity);
-        return Ok(entity);
+        var view = _mapper.Map<ViewBeer>(entity);
+        return Ok(view);
       }
       catch
       {
-        return StatusCode(500, "Internal server error.");
+        return StatusCode(500);
       }
     }
 
@@ -133,14 +125,15 @@ namespace TapRoomApi.Controllers.V1
       {
         var entity = await _beerService.FindAsync(id);
         if (entity == null)
-          return BadRequest(new ErrorResponse(new ErrorModel(null, "Beer does not exist in the database")));
+          return BadRequest(new ValidationErrorResponse(new ValidationErrorModel(null, "Beer does not exist in the database")));
 
         var updatedEntity = _beerService.IncrementPintsByOne(entity);
-        return Ok(updatedEntity);
+        var view = _mapper.Map<ViewBeer>(updatedEntity);
+        return Ok(view);
       }
       catch
       {
-        return StatusCode(500, "Internal server error.");
+        return StatusCode(500);
       }
     }
 
@@ -151,14 +144,15 @@ namespace TapRoomApi.Controllers.V1
       {
         var entity = await _beerService.FindAsync(id);
         if (entity == null)
-          return BadRequest(new ErrorResponse(new ErrorModel(null, "Beer does not exist in the database")));
+          return BadRequest(new ValidationErrorResponse(new ValidationErrorModel(null, "Beer does not exist in the database")));
 
-        var updateEntity = _beerService.DecrementPintsByOne(entity);
-        return Ok(updateEntity);
+        var updatedEntity = _beerService.DecrementPintsByOne(entity);
+        var view = _mapper.Map<ViewBeer>(updatedEntity);
+        return Ok(view);
       }
       catch
       {
-        return StatusCode(500, "Internal server error.");
+        return StatusCode(500);
       }
     }
   }

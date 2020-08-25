@@ -11,7 +11,7 @@ export default {
   decrementPints,
 };
 
-const baseUrl = "http://localhost:5000/api/v1/beers";
+const baseUrl = "https://taproomapi.azurewebsites.net/api/v1/beers";
 
 async function getBeer(id) {
   return await fetch(`${baseUrl}/${id}`, requestOptions.getOptions()).then(
@@ -23,34 +23,37 @@ async function getBeers() {
   return await fetch(baseUrl, requestOptions.getOptions()).then(handleResponse);
 }
 
-async function incrementPints(id) {
+async function incrementPints(auth, id) {
   return await fetch(
     `${baseUrl}/increment/${id}`,
-    requestOptions.putOptions({})
+    requestOptions.putOptions(await auth, {})
   ).then(handleResponse);
 }
 
-async function decrementPints(id) {
+async function decrementPints(auth, id) {
   return await fetch(
     `${baseUrl}/decrement/${id}`,
-    requestOptions.putOptions({})
+    requestOptions.putOptions(await auth, {})
   ).then(handleResponse);
 }
 
-async function createBeer(beer) {
-  return await fetch(`${baseUrl}`, requestOptions.postOptions(beer)).then(
-    handleResponse
-  );
+async function createBeer(auth, beer) {
+  return await fetch(
+    `${baseUrl}`,
+    requestOptions.postOptions(await auth, beer)
+  ).then(handleResponse);
 }
 
-async function updateBeer(id, beer) {
-  return await fetch(`${baseUrl}/${id}`, requestOptions.putOptions(beer)).then(
-    handleResponse
-  );
+async function updateBeer(auth, id, beer) {
+  return await fetch(
+    `${baseUrl}/${id}`,
+    requestOptions.putOptions(await auth, beer)
+  ).then(handleResponse);
 }
 
-async function deleteBeer(id) {
-  return await fetch(`${baseUrl}/${id}`, requestOptions.deleteOptions()).then(
-    handleResponse
-  );
+async function deleteBeer(auth, id) {
+  return await fetch(
+    `${baseUrl}/${id}`,
+    requestOptions.deleteOptions(await auth)
+  ).then(handleResponse);
 }

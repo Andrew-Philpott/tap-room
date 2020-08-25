@@ -1,18 +1,11 @@
-import userService from "../services/user-service";
-
 export default (response) => {
-  console.log(response);
   return response.text().then((text) => {
+    if (response.status === 500) return Promise.reject(500);
     const data = text && JSON.parse(text);
     if (!response.ok) {
-      if (response.status === 401) {
-        userService.logout();
-      }
-
-      const error = (data && data.errors) || response.statusText;
-      console.log(error);
+      const error = (data && data.validationErrors) || response.statusText;
       return Promise.reject(error);
     }
-    return data;
+    return Promise.resolve(data);
   });
 };

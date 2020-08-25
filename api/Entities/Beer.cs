@@ -13,6 +13,7 @@ namespace TapRoomApi.Entities
     public double Price { get; set; }
     public double AlcoholContent { get; set; }
     public int Pints { get; set; }
+    public string UserId { get; set; }
     public virtual ICollection<Review> Reviews { get; set; }
   }
 }

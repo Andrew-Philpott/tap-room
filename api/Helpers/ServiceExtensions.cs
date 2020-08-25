@@ -1,68 +1,67 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using TapRoomApi.Services;
+using Microsoft.AspNetCore.Authorization;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 
 namespace TapRoomApi.Helpers
 {
   public static class ServiceExtensions
   {
-    public static void ConfigureSqlServerContext(this IServiceCollection services, IConfiguration config)
+    public static void ConfigureAzureSqlServerContext(this IServiceCollection services, IConfiguration configuration)
     {
-      var connectionString = config["ConnectionStrings:DefaultConnection"];
-      services.AddDbContext<TapRoomContext>(o => o.UseSqlServer(connectionString));
-
+      services.AddDbContext<TapRoomContext>(o => o.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
     }
-
-    public static void ConfigureJWTAuthentication(this IServiceCollection services, IConfiguration config)
-    {
-      var appSettingsSection = config.GetSection("AppSettings");
-      services.Configure<AppSettings>(appSettingsSection);
-
-      var appSettings = appSettingsSection.Get<AppSettings>();
-      var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-
-      services.AddAuthentication(x =>
-      {
-        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-      })
-      .AddJwtBearer(x =>
-      {
-        x.Events = new JwtBearerEvents
-        {
-          OnTokenValidated = async context =>
-                {
-                  var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                  var userId = int.Parse(context.Principal.Identity.Name);
-                  var user = await userService.FindAsync(userId);
-                  if (user == null)
-                  {
-                    context.Fail("Unauthorized");
-                  }
-                }
-        };
-        x.RequireHttpsMetadata = false;
-        x.SaveToken = true;
-        x.TokenValidationParameters = new TokenValidationParameters
-        {
-          ValidateIssuerSigningKey = true,
-          IssuerSigningKey = new SymmetricSecurityKey(key),
-          ValidateIssuer = false,
-          ValidateAudience = false
-        };
-      });
-
-    }
-
     public static void ConfigureEntityServices(this IServiceCollection services)
     {
       services.AddScoped<IReviewService, ReviewService>();
       services.AddScoped<IBeerService, BeerService>();
-      services.AddScoped<IUserService, UserService>();
+    }
+    public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
+    {
+      services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddMicrosoftIdentityWebApi(options =>
+        {
+          configuration.Bind("AzureAdB2C", options);
+          options.TokenValidationParameters.NameClaimType = "name";
+        },
+        options =>
+        {
+          configuration.Bind("AzureAdB2C", options);
+        }, "AzureAdB2C");
+      services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                     .AddMicrosoftIdentityWebApi(options =>
+             {
+               configuration.Bind("AzureAd", options);
+               options.TokenValidationParameters.NameClaimType = "name";
+             },
+             options =>
+             {
+               configuration.Bind("AzureAd", options);
+             }, "AzureAd");
+    }
+    public static void ConfigureAuthorization(this IServiceCollection services)
+    {
+      services.AddAuthorization(options =>
+      {
+        var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder("AzureAdB2C",
+                "AzureAd");
+        defaultAuthorizationPolicyBuilder =
+            defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
+        options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
+      });
+    }
+    public static void ConfigureMVCPipeline(this IServiceCollection services)
+    {
+      services.AddMvc(options => { options.EnableEndpointRouting = false; }).
+      AddFluentValidation(mvcConfiguration => mvcConfiguration.RegisterValidatorsFromAssemblyContaining<Startup>()).AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+      services.AddCors(o => o.AddDefaultPolicy(builder =>
+       {
+         builder.WithOrigins("https://taproom.azurewebsites.net").AllowAnyHeader().AllowAnyMethod().WithExposedHeaders("WWW-Authenticate");
+       }));
     }
   }
 }

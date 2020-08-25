@@ -1,242 +1,272 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 import history from "./helpers/history";
-import Home from "./components/Other/Home";
-import Login from "./components/Other/Login";
-import Register from "./components/Other/Register";
-import BeerDetail from "./components/Beer/BeerDetail";
-import BeerList from "./components/Beer/BeerList";
-import BeerForm from "./components/Beer/BeerForm";
-import NavigationBar from "./components/Other/NavigationBar";
-import ReviewForm from "./components/Review/ReviewForm";
-import PrivateRoute from "./components/Other/PrivateRoute";
-import About from "./components/Other/About";
-import Account from "./components/Other/Account";
+import Home from "./pages/Home";
+import BeerDetail from "./pages/BeerDetail";
+import BeerList from "./pages/BeerList";
+import BeerForm from "./pages/BeerForm";
+import NavigationBar from "./components/NavigationBar";
+import ReviewForm from "./pages/ReviewForm";
+import About from "./pages/About";
+import SignIn from "./pages/SignIn";
+import Account from "./pages/Account";
 import * as routes from "../src/constants/routes";
-import * as roles from "../src/constants/roles";
-import getUserFromLs from "./helpers/get-user-from-ls";
+import withAuth from "../src/components/withAuth";
 import beerService from "./services/beer-service";
 import reviewService from "./services/review-service";
-import userService from "./services/user-service";
+import AuthRoute from "./components/AuthRoute";
+import Footer from "./components/Footer";
+import ErrorDisplay from "./components/ErrorDisplay";
+import Grid from "@material-ui/core/Grid";
 import "./App.css";
 
-function App() {
-  const [user, setUser] = React.useState(null);
-  const [beers, setBeers] = useState([]);
-  const [error, setError] = React.useState({ errors: {} });
-  useEffect(() => {
+function App({
+  signIn,
+  signOut,
+  userId,
+  isAuth,
+  isAdmin,
+  getToken,
+  userName,
+  roles,
+}) {
+  const [beers, setBeers] = React.useState([]);
+  const [myReviews, setMyReviews] = React.useState([]);
+  const [error, setError] = React.useState((err) => {
+    const validationErrors =
+      err && err.validationErrors ? err.validationErrors : null;
+    const status =
+      typeof err === "number" && err === 500 ? "Internal server error." : null;
+    return { validationErrors: validationErrors, status: status };
+  });
+
+  React.useEffect(() => {
     history.listen(() => {
       const temp = { ...error };
-      temp.errors = {};
+      temp.validationErrors = null;
+      temp.status = null;
       setError(temp);
     });
   }, []);
 
-  console.log(error);
   React.useEffect(() => {
     if (beers.length === 0) {
-      beerService
-        .getBeers()
-        .then((response) => setBeers(response))
-        .catch(() =>
-          setError({
-            errors: [
-              "Something went wrong trying to fetch the list beers. Please try again later.",
-            ],
+      (async () => {
+        beerService
+          .getBeers()
+          .then((res) => {
+            setBeers(res);
           })
-        );
+          .catch(setError);
+      })();
     }
-  }, [beers]);
+  }, [setBeers]);
 
   React.useEffect(() => {
-    if (!user) {
-      setUser(getUserFromLs());
-    }
-  }, [user]);
-
-  const handleLogin = (values) => {
-    userService
-      .login(values)
-      .then((response) => {
-        setUser(response);
-        localStorage.setItem("user", JSON.stringify(response));
-        history.push(routes.BEER_LIST);
-      })
-      .catch((err) =>
-        setError({
-          errors: err,
+    if (
+      isAuth === true &&
+      myReviews.length === 0 &&
+      (history.location.pathname === "/account" ||
+        history.location.pathname.indexOf("/reviews/") !== -1)
+    ) {
+      reviewService
+        .getMyReviews(getToken())
+        .then((res) => {
+          setMyReviews(res);
         })
-      );
+        .catch(setError);
+    }
+  }, [history.location.pathname]);
+
+  const handleSignInOrSignOut = (isAdmin) => {
+    !isAuth ? (isAdmin ? signIn(true) : signIn(false)) : signOut();
   };
 
-  const handleLogout = () => {
-    userService.logout();
-    setUser(null);
-  };
-
-  const handleBeerFormSubmit = async (id, values) => {
-    values.price = 0;
-    values.alcoholContent = parseInt(values.alcoholContent);
-    values.pints = parseInt(values.price);
-    if (id) {
-      await beerService
-        .updateBeer(parseInt(id), values)
-        .then((response) => {
-          setBeers([
-            ...beers.map((x) => (x.beerId === response.beerId ? response : x)),
-          ]);
-          history.push(routes.BEER_LIST);
-        })
-        .catch((err) =>
-          setError({
-            errors: err,
+  const handleBeerFormSubmit = (id, values) => {
+    id
+      ? beerService
+          .updateBeer(getToken(), id, values)
+          .then((response) => {
+            setBeers([
+              ...beers.map((x) =>
+                x.beerId === response.beerId ? response : x
+              ),
+            ]);
+            history.push(routes.BEER_LIST);
           })
-        );
-    } else {
-      await beerService
-        .createBeer(values)
-        .then((response) => {
-          setBeers([...beers, response]);
-          history.push(routes.BEER_LIST);
-        })
-        .catch((err) =>
-          setError({
-            errors: err,
+          .catch(setError)
+      : beerService
+          .createBeer(getToken(), values)
+          .then((response) => {
+            setBeers([...beers, response]);
+            history.push(routes.BEER_LIST);
           })
-        );
-    }
+          .catch(setError);
   };
 
   const handleDeleteBeer = (id) => {
-    if (window.confirm("Are you sure you want to delete this beer?"))
+    if (window.confirm("Are you sure you want to delete this beer?")) {
       beerService
-        .deleteBeer(parseInt(id))
+        .deleteBeer(getToken(), id)
         .then((beer) => {
           setBeers([...beers.filter((x) => x.beerId !== beer.beerId)]);
         })
-        .catch((err) =>
-          setError({
-            errors: err,
-          })
-        );
+        .catch(setError);
+    }
   };
 
-  const handleIncrementBeerPints = (id) =>
+  const handleIncrementBeerPints = (id) => {
     beerService
-      .incrementPints(id)
-      .then((beer) => {
-        setBeers([...beers.map((x) => (x.beerId === beer.beerId ? beer : x))]);
-      })
-      .catch((err) =>
-        setError({
-          errors: err,
-        })
-      );
-
-  const handleDecrementBeerPints = (id) =>
-    beerService
-      .decrementPints(id)
-      .then((beer) => {
-        setBeers([...beers.map((x) => (x.beerId === beer.beerId ? beer : x))]);
-      })
-      .catch((err) =>
-        setError({
-          errors: err,
-        })
-      );
-
-  const handleCreateReview = (id, values) => {
-    reviewService
-      .createReview(values)
+      .incrementPints(getToken(), id)
       .then((res) => {
-        const newState = [...beers];
-        const beer = newState.find((x) => x.beerId === res.beerId);
-        beer.reviews.push(res);
-        newState.map((x) => (x.beerId === beer.beerId ? beer : x));
-        setBeers(newState);
-        history.push(`/beers/${id}`);
+        setBeers([...beers.map((x) => (x.beerId === res.beerId ? res : x))]);
       })
-      .catch((err) =>
-        setError({
-          errors: err,
-        })
-      );
+      .catch(setError);
+  };
+
+  const handleDecrementBeerPints = (id) => {
+    beerService
+      .decrementPints(getToken(), id)
+      .then((res) => {
+        setBeers([...beers.map((x) => (x.beerId === res.beerId ? res : x))]);
+      })
+      .catch(setError);
+  };
+
+  const handleReviewFormSubmit = (id, values) => {
+    id
+      ? reviewService
+          .updateReview(getToken(), id, values)
+          .then((response) => {
+            setMyReviews([
+              ...myReviews.map((x) =>
+                x.reviewId === response.reviewId ? response : x
+              ),
+            ]);
+            history.push(`/beers/details/${values.beerId}`);
+          })
+          .catch(setError)
+      : reviewService
+          .createReview(getToken(), values)
+          .then((response) => {
+            setMyReviews([...myReviews, response]);
+            history.push(`/beers/details/${values.beerId}`);
+          })
+          .catch(setError);
+  };
+
+  const handleDeleteReview = async (id) => {
+    reviewService
+      .deleteReview(getToken(), id)
+      .then((res) => {
+        setMyReviews([...myReviews.filter((x) => x.reviewId !== res.reviewId)]);
+      })
+      .catch(setError);
   };
 
   return (
     <div className="App">
       <Router history={history}>
-        <NavigationBar user={user} />
-
-        <Switch>
-          <Route exact path={routes.LANDING}>
-            <Home beers={beers} />
-          </Route>
-          <Route exact path={routes.REGISTER} component={Register} />
-          <Route exact path={routes.ABOUT} component={About} />
-          <Route exact path={routes.LOG_IN}>
-            <Login
-              onLogin={handleLogin}
-              onLogout={handleLogout}
-              setUser={setUser}
-            />
-          </Route>
-          <Route exact path={routes.BEER_LIST}>
-            <BeerList
-              user={user}
-              beers={beers}
-              onDeleteBeer={handleDeleteBeer}
-              onIncrementBeerPints={handleIncrementBeerPints}
-              onDecrementBeerPints={handleDecrementBeerPints}
-            />
-          </Route>
-          <PrivateRoute
-            path={routes.NEW_BEER}
-            roles={[roles.ADMIN]}
-            component={() => (
-              <BeerForm beers={beers} onBeerFormSubmit={handleBeerFormSubmit} />
-            )}
-          />
-          <PrivateRoute
-            exact
-            path={routes.EDIT_BEER}
-            roles={[roles.ADMIN]}
-            component={() => (
-              <BeerForm beers={beers} onBeerFormSubmit={handleBeerFormSubmit} />
-            )}
-          />
-          <Route exact path={routes.BEER_DETAILS}>
-            <BeerDetail user={user} beers={beers} />
-          </Route>
-          <PrivateRoute
-            exact
-            path={routes.NEW_REVIEW}
-            roles={[roles.MEMBER, roles.EMPLOYEE, roles.ADMIN]}
-          >
-            <ReviewForm beers={beers} onCreateReview={handleCreateReview} />
-          </PrivateRoute>
-          <PrivateRoute
-            exact
-            path={routes.ACCOUNT}
-            roles={[roles.ADMIN]}
-            component={Account}
-          />
-          <Redirect from="*" to="/" />
-        </Switch>
-        <React.Fragment>
-          {error &&
-            error.errors &&
-            Object.values(error.errors).map((element, index) => {
-              return (
-                <p key={index} className="white-text text-align-center">
-                  {element}
-                </p>
-              );
-            })}
-        </React.Fragment>
+        <NavigationBar
+          isAuth={isAuth}
+          onSignInOrSignOut={handleSignInOrSignOut}
+        />
+        <Grid container>
+          <Grid item xs={1} />
+          <Grid item xs={10}>
+            <Switch>
+              <Route exact path={routes.ADMIN}>
+                <SignIn onSignInOrSignOut={handleSignInOrSignOut} />
+              </Route>
+              <Route exact path={routes.LANDING}>
+                <Home beers={beers} />
+              </Route>
+              <Route exact path={routes.ABOUT} component={About} />
+              <Route exact path={routes.BEER_LIST}>
+                <BeerList
+                  roles={roles}
+                  beers={beers}
+                  isAdmin={isAdmin}
+                  isAuth={isAuth}
+                  onDeleteBeer={handleDeleteBeer}
+                  onIncrementBeerPints={handleIncrementBeerPints}
+                  onDecrementBeerPints={handleDecrementBeerPints}
+                />
+              </Route>
+              <AuthRoute
+                isAuth={isAuth}
+                isAdmin={isAdmin}
+                adminRequired={true}
+                path={routes.NEW_BEER}
+              >
+                <BeerForm
+                  beers={beers}
+                  onBeerFormSubmit={handleBeerFormSubmit}
+                />
+              </AuthRoute>
+              <AuthRoute
+                isAuth={isAuth}
+                isAdmin={isAdmin}
+                adminRequired={true}
+                path={routes.BEER_EDIT}
+              >
+                <BeerForm
+                  beers={beers}
+                  onBeerFormSubmit={handleBeerFormSubmit}
+                />
+              </AuthRoute>
+              <AuthRoute isAuth={isAuth} exact path={routes.NEW_REVIEW}>
+                <ReviewForm
+                  beers={beers}
+                  myReviews={myReviews}
+                  onReviewFormSubmit={handleReviewFormSubmit}
+                />
+              </AuthRoute>
+              <AuthRoute
+                isAuth={isAuth}
+                exact
+                path={routes.NEW_REVIEW_FOR_BEER}
+              >
+                <ReviewForm
+                  beers={beers}
+                  myReviews={myReviews}
+                  onReviewFormSubmit={handleReviewFormSubmit}
+                />
+              </AuthRoute>
+              <AuthRoute isAuth={isAuth} exact path={routes.EDIT_REVIEW}>
+                <ReviewForm
+                  beers={beers}
+                  myReviews={myReviews}
+                  onReviewFormSubmit={handleReviewFormSubmit}
+                />
+              </AuthRoute>
+              <AuthRoute isAuth={isAuth} exact path={routes.ACCOUNT}>
+                <Account
+                  setError={setError}
+                  myReviews={myReviews}
+                  onDeleteReview={handleDeleteReview}
+                  userId={userId}
+                  userName={userName}
+                />
+              </AuthRoute>
+              <Route exact path={routes.BEER_DETAILS}>
+                <BeerDetail
+                  userId={userId}
+                  getToken={getToken}
+                  setError={setError}
+                  isAuth={isAuth}
+                />
+              </Route>
+              <ErrorDisplay error={error} />
+              <Redirect to="/" from="*" />
+            </Switch>
+          </Grid>
+          <Grid item xs={1} />
+        </Grid>
+        <Footer />
       </Router>
     </div>
   );
 }
 
-export default App;
+export default withAuth(App);

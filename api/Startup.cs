@@ -4,7 +4,6 @@ using TapRoomApi.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
-using FluentValidation.AspNetCore;
 
 namespace TapRoomApi
 {
@@ -18,21 +17,18 @@ namespace TapRoomApi
     }
     public void ConfigureServices(IServiceCollection services)
     {
-      services.ConfigureSqlServerContext(_configuration);
-      services.AddCors();
-      services.AddMvc(options => { options.EnableEndpointRouting = false; }).
-      AddFluentValidation(mvcConfiguration => mvcConfiguration.RegisterValidatorsFromAssemblyContaining<Startup>()).AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+      services.ConfigureAuthentication(_configuration);
+      services.ConfigureAuthorization();
+      services.ConfigureMVCPipeline();
+      services.ConfigureAzureSqlServerContext(_configuration);
       services.AddAutoMapper(typeof(Startup));
-      services.ConfigureJWTAuthentication(_configuration);
       services.ConfigureEntityServices();
     }
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+      app.UseHttpsRedirection();
       app.UseRouting();
-      app.UseCors(options =>
-      options.WithOrigins("http://localhost:3000")
-      .AllowAnyHeader()
-      .AllowAnyMethod());
+      app.UseCors();
 
       app.UseAuthentication();
       app.UseAuthorization();

@@ -26,12 +26,12 @@ namespace TapRoomApi.Services
     }
     public async Task<Beer> FindAsync(int id)
     {
-      var entity = await _tapRoomContext.Beer.Include(x => x.Reviews).ThenInclude(x => x.User).Where(x => x.BeerId == id).SingleOrDefaultAsync();
+      var entity = await _tapRoomContext.Beer.Include(x => x.Reviews).ThenInclude(x => x.Likes).Where(x => x.BeerId == id).SingleOrDefaultAsync();
       return entity;
     }
     public async Task<IList<Beer>> FindAllAsync()
     {
-      var entities = await _tapRoomContext.Beer.AsQueryable().Include(x => x.Reviews).ThenInclude(x => x.User).ToListAsync();
+      var entities = await _tapRoomContext.Beer.Include(x => x.Reviews).ToListAsync();
       return entities;
     }
     public Beer IncrementPintsByOne(Beer entity)

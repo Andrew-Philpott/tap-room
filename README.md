@@ -99,6 +99,9 @@ No known bugs at this time.
 
 ## Technologies Used
 
+- Azure Active Directory
+- Azure Active Directory B2C
+- Azure Sql Server
 - HTML
 - CSS
 - JavaScript
@@ -107,7 +110,6 @@ No known bugs at this time.
 - C#
 - RESTful API
 - Entity Framework
-- Sql Server
 
 ## Support and Contact Details
 

@@ -1,30 +1,50 @@
-import authHeader from "./authentication-header";
+const origin = "http://localhost:6420";
 
-function getOptions() {
-  return { method: "GET", headers: authHeader() };
+function getOptions(auth) {
+  return {
+    method: "GET",
+    headers: {
+      Authorization:
+        auth && auth.accessToken ? `Bearer ${auth.accessToken}` : "",
+      "Content-Type": "application/json",
+    },
+    origin: origin,
+  };
 }
 
-const putOptions = (model) => {
+const putOptions = (auth, model) => {
   const request = {
     method: "PUT",
-    headers: { ...authHeader(), "Content-Type": "application/json" },
+    headers: {
+      Authorization: `Bearer ${auth.accessToken}`,
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(model),
+    origin: origin,
   };
   return request;
 };
 
-function deleteOptions() {
+function deleteOptions(auth) {
   return {
     method: "DELETE",
-    headers: authHeader(),
+    headers: {
+      Authorization: `Bearer ${auth.accessToken}`,
+      "Content-Type": "application/json",
+    },
+    origin: origin,
   };
 }
 
-const postOptions = (model) => {
+const postOptions = (auth, model) => {
   const request = {
     method: "POST",
-    headers: { ...authHeader(), "Content-Type": "application/json" },
+    headers: {
+      Authorization: `Bearer ${auth.accessToken}`,
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(model),
+    origin: origin,
   };
   return request;
 };
