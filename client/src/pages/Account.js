@@ -25,7 +25,7 @@ export default ({ userId, userName, onDeleteReview, myReviews }) => {
                 item={review}
                 userId={userId}
                 onDeleteReview={onDeleteReview}
-                crudEnabled={true}
+                isAccount={true}
                 key={index}
               />
             );

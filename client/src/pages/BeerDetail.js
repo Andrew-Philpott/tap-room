@@ -9,8 +9,10 @@ import Review from "../components/Review";
 import beerService from "../services/beer-service";
 import reviewService from "../services/review-service";
 
-export default ({ userId, isAuth, getToken, setError }) => {
+export default ({ userId, isAuth, getToken, setError, myReviews }) => {
+  console.log(myReviews);
   const { id } = useParams();
+  console.log(id);
   const [beer, setBeer] = React.useState(null);
   React.useEffect(() => {
     if (id) {
@@ -94,7 +96,7 @@ export default ({ userId, isAuth, getToken, setError }) => {
               className="beer-detail-img"
               alt="Glass of dark beer on a table"
             />
-            {isAuth && (
+            {isAuth && !myReviews.includes((x) => x.beerId === id) && (
               <Button
                 style={{
                   float: "right",
@@ -119,7 +121,7 @@ export default ({ userId, isAuth, getToken, setError }) => {
                       item={review}
                       onLikeReview={handleLike}
                       userId={userId}
-                      crudEnabled={false}
+                      isAccount={false}
                       key={index}
                     />
                   );

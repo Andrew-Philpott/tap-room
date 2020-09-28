@@ -5,13 +5,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import { Link } from "react-router-dom";
 
-export default ({
-  item,
-  onLikeReview,
-  userId,
-  onDeleteReview,
-  crudEnabled,
-}) => {
+export default ({ item, onLikeReview, userId, onDeleteReview, isAccount }) => {
   const [isLiked, setIsLiked] = React.useState(false);
   const handleClick = () => {
     onLikeReview(item);
@@ -28,12 +22,13 @@ export default ({
 
   return (
     <div className="review">
-      <h2>{item.name}</h2>
+      <h2>{isAccount ? item.beer.name : item.name}</h2>
       <p>{item.dateCreated}</p>
       <div>
         <Rating rating={item.rating} max={5} />
         <h3>{item.headline}</h3>
       </div>
+
       <p>{item.description}</p>
       <p>
         {item.likes.length > 0 && (
@@ -56,7 +51,7 @@ export default ({
               <span>Like</span>
             </React.Fragment>
           )}
-          {crudEnabled && (
+          {isAccount && (
             <React.Fragment>
               <DeleteIcon
                 onClick={() => onDeleteReview(item.reviewId)}

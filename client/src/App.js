@@ -63,11 +63,13 @@ function App({
   }, [setBeers]);
 
   React.useEffect(() => {
+    const path = history.location.pathname;
     if (
       isAuth === true &&
       myReviews.length === 0 &&
-      (history.location.pathname === "/account" ||
-        history.location.pathname.indexOf("/reviews/") !== -1)
+      (path === "/account" ||
+        path.indexOf("/reviews") !== -1 ||
+        path.indexOf("/details") !== -1)
     ) {
       reviewService
         .getMyReviews(getToken())
@@ -255,6 +257,7 @@ function App({
                   getToken={getToken}
                   setError={setError}
                   isAuth={isAuth}
+                  myReviews={myReviews}
                 />
               </Route>
               <ErrorDisplay error={error} />
