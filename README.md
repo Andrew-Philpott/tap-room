@@ -4,33 +4,13 @@
 
 #### By **Andrew Philpott**
 
-[About](#About) | [Setup/Installation Requirements](#Setup/Installation-Requirements) | [User Stories](#User-Stories) | [URLs](#URLs) | [API Endpoints](#API-Endpoints) | [Parking Lot](#Parking-lot) | [Bugs](#Known-Bugs) | [Technologies](#Technologies-Used) | [Contact](#Support-and-Contact-Details)
+[About](#About) | [User Stories](#User-Stories) | [URLs](#URLs) | [API Endpoints](#API-Endpoints) | [Parking Lot](#Parking-lot) | [Bugs](#Known-Bugs) | [Technologies](#Technologies-Used) | [Contact](#Support-and-Contact-Details)
 
 </div>
 
 ## About
 
-This is a website for the fake restuarant Tap House that allows users to browse beers and their reviews. The application features authentication and authorization to provide exclusive deals to registered customers, update functionality for employees, and full CRUD functionality for admins.
-
-Log in with the email 'admin@gmail.com', 'employee@gmail.com', or 'member@gmail.com' and password 'test' to view authorization in action.
-
-## Setup/Installation Requirements
-
-- _Clone this repository._
-- _[Download and install .NET Core SDK v3.1.7](https://dotnet.microsoft.com/download/dotnet-core/3.1)_
-- _[Download and install Sql Server Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15)_
-- _Navigate to api directory_
-- _\$dotnet build_
-- _\$dotnet ef migrations add initial_
-- _\$dotnet ef database update_
-- _\$dotnet watch run_
-- _Api will run on localhost:5000_
-- _Open a seperate terminal_
-- _Navigate to app directory_
-- _\$npm install to download dependencies_
-- _\$npm test to run tests_
-- _\$npm run start to run the application_
-- _Application will run on localhost:3000_
+This is a website for the fake restuarant Tap House that lists their beer menu and reviews for each beer. The application features authentication and authorization to provide members the ability to write reviews for beers, and admins CRUD functionality for beers and reviews.
 
 ## User Stories
 
@@ -52,46 +32,44 @@ Log in with the email 'admin@gmail.com', 'employee@gmail.com', or 'member@gmail.
 
 ## URLs
 
-| URL Path         | Purpose                             |
-| :--------------- | :---------------------------------- |
-| /                | Landing page                        |
-| /login           | Form to login                       |
-| /register        | Form to register                    |
-| /account         | Member exclusive deals              |
-| /about           | About the company                   |
-| /beers           | List of beers                       |
-| /beers/:id       | Beer details                        |
-| /beers/edit/:id  | Form to update beer information     |
-| /beers/new       | Form to add a beer to the beer list |
-| /reviews/new     | Form to add a review for any beer   |
-| /reviews/:id/new | Form to add a review for a beer     |
+| URL Path           | Purpose                                              |
+| :----------------- | :--------------------------------------------------- |
+| /                  | Landing page with list of beers on tap and favorites |
+| /account           | List of user reviews and member deals                |
+| /admin             | Page for admin signin                                |
+| /about             | About the company                                    |
+| /beers             | List of beers                                        |
+| /beers/details/:id | Beer details                                         |
+| /beers/edit/:id    | Form to update beer information                      |
+| /beers/new         | Form to add a beer to the beer list                  |
+| /reviews/new       | Form to add a review for a beer                      |
+| /reviews/new/:id   | Form to add a review for a specific beer             |
+| /reviews/edit/:id  | Form to edit a review for a specific beer            |
 
 ## API Endpoints
 
-| HTTP Method | Endpoint                   | Purpose                    |
-| :---------- | :------------------------- | :------------------------- |
-| POST        | /api/v1/users/register     | Create a user              |
-| POST        | /api/v1/users/authenticate | Authenticate a user        |
-| GET         | /api/v1/users/{id}         | Retrieve a user            |
-| PUT         | /api/v1/users/{id}         | Edit a user                |
-| DELETE      | /api/v1/users/{id}         | Delete a user              |
-| GET         | /api/v1/beers              | Retrieve a list of beers   |
-| POST        | /api/v1/beers              | Create a beer              |
-| GET         | /api/v1/beers/{id}         | Retrieve a beer            |
-| PUT         | /api/v1/beers/{id}         | Update a beer              |
-| GET         | /api/v1/reviews            | Retrieve a list of reviews |
-| POST        | /api/v1/reviews            | Create a review            |
-| GET         | /api/v1/reviews/{id}       | Retrieve a review          |
-| PUT         | /api/v1/reviews/{id}       | Update a review            |
+| HTTP Method | Endpoint                     | Purpose                            |
+| :---------- | :--------------------------- | :--------------------------------- |
+| GET         | /api/v1/beers                | Retrieve a list of beers           |
+| POST        | /api/v1/beers                | Create a beer                      |
+| GET         | /api/v1/beers/{id}           | Retrieve a beer                    |
+| PUT         | /api/v1/beers/{id}           | Update a beer                      |
+| PUT         | /api/v1/beers/{id}/increment | Increase the # of pints for a beer |
+| PUT         | /api/v1/beers/{id}/decrement | Decrease the # of pints for a beer |
+| GET         | /api/v1/reviews              | Retrieve a list of reviews         |
+| POST        | /api/v1/reviews              | Create a review                    |
+| GET         | /api/v1/reviews/{id}         | Retrieve a review                  |
+| PUT         | /api/v1/reviews/{id}         | Update a review                    |
+| DELETE      | /api/v1/reviews/{id}         | Delete a review                    |
+| GET         | /api/v1/reviews/me           | Retrieve a user's reviews          |
+| POST        | /api/v1/reviews/like         | Create a reviewlike for a review   |
+| DELETE      | /api/v1/reviews/like/{id}    | Delete a reviewlike for a review   |
 
 ## Parking Lot
 
-- Restrict users to only 1 review per beer.
 - Add pagination.
 - Save data into local storage.
 - Return less data for Get All queries.
-- Implement JWT refresh tokens.
-- Implement authorization filters.
 
 ## Known Bugs
 
@@ -101,6 +79,8 @@ No known bugs at this time.
 
 - Azure Active Directory
 - Azure Active Directory B2C
+- Azure App Service
+- Azure Devops
 - Azure Sql Server
 - HTML
 - CSS

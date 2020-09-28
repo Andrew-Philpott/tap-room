@@ -1,6 +1,5 @@
 export const LANDING = "/";
 export const BEER_LIST = "/beers";
-export const FOOD = "/food";
 export const ABOUT = "/about";
 export const ACCOUNT = "/account";
 export const ADMIN = "/admin";
