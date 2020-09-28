@@ -3,12 +3,6 @@
   display: block;
   min-height: 100vh;
   overflow: hidden;
-  padding-bottom: 4rem;
-  position: relative;
-  background-attachment: fixed;
-  background-image: url("./assets/img/BeersOnShelf.jpg");
-  background-position: center;
-  background-size: cover;
 }
 * {
   box-sizing: border-box;
@@ -25,6 +19,14 @@
   float: left;
   max-height: 200px;
   margin-right: 10px;
+}
+.App {
+  position: relative;
+  padding-bottom: 4rem;
+  background-attachment: fixed;
+  background-image: url("./assets/img/BeersOnShelf.jpg");
+  background-position: center;
+  background-size: cover;
 }
 .beer-detail-img {
   height: auto;
