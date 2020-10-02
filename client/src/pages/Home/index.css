@@ -1,0 +1,14 @@
+.home img {
+  height: auto;
+  max-height: 600px;
+  width: 100%;
+}
+.home ul {
+  padding-left: 0px;
+}
+.home li {
+  list-style: none;
+}
+.home li a {
+  text-decoration: none;
+}

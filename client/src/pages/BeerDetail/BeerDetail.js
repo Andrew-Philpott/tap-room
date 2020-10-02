@@ -3,11 +3,12 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import { Link, useParams } from "react-router-dom";
-import Rating from "../components/Rating";
-import DarkBeer from "../assets/img/DarkBeer.jpg";
-import Review from "../components/Review";
-import beerService from "../services/beer-service";
-import reviewService from "../services/review-service";
+import Rating from "../../components/Rating/Rating";
+import DarkBeer from "../../assets/img/DarkBeer.jpg";
+import Review from "../../components/Review/Review";
+import beerService from "../../services/beer-service";
+import reviewService from "../../services/review-service";
+import "./index.css";
 
 export default ({ userId, isAuth, getToken, setError, myReviews }) => {
   console.log(myReviews);
@@ -61,7 +62,7 @@ export default ({ userId, isAuth, getToken, setError, myReviews }) => {
     average(beer.reviews.map((r) => r.rating));
 
   return (
-    <Container className="main-content" maxWidth="lg">
+    <Container className="main-content">
       {beer ? (
         <Grid container>
           <Grid item xs={7} sm={6}>

@@ -2,29 +2,15 @@ import React from "react";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
-import Carousel from "react-material-ui-carousel";
-import BeerBar from "../assets/img/BeerBar.jpg";
-import FlightOfBeers from "../assets/img/FlightOfBeers.jpg";
-import FriendsBeers from "../assets/img/FriendsBeers.jpg";
+import BeerBar from "../../assets/img/BeerBar.jpg";
+import "./index.css";
 
 export default ({ beers }) => {
   const average = (array) => array.reduce((a, b) => a + b) / array.length;
   return (
-    <Container className="main-content home" maxWidth="lg">
+    <Container className="main-content home">
       <Grid item xs={12}>
-        <Carousel interval={8000} indicators={false} startAt={0}>
-          <img key={1} src={BeerBar} alt="Glass of a light beer on the bar" />
-          <img
-            key={2}
-            src={FlightOfBeers}
-            alt="A flight of assorted craft beers"
-          />
-          <img
-            key={3}
-            src={FriendsBeers}
-            alt="Friends enjoying beers together"
-          />
-        </Carousel>
+        <img src={BeerBar} alt="Glass of a light beer on the bar" />
       </Grid>
       <Grid item xs={12}>
         <Grid container>

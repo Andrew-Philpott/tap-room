@@ -1,0 +1,25 @@
+.flex-grow-1 {
+  flex-grow: 1;
+}
+.nav-bar {
+  background-color: rgb(255, 125, 0) !important;
+}
+.nav-bar .MuiButtonBase-root {
+  color: white;
+}
+.section-desktop {
+  display: none;
+  margin-right: 20px;
+}
+.section-desktop .MuiButton-root {
+  min-width: 100px;
+  text-transform: capitalize;
+}
+.section-mobile {
+  display: flex;
+  margin-right: 10px;
+}
+.taphouse-logo {
+  height: 4rem;
+  width: auto;
+}

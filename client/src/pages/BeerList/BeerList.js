@@ -9,9 +9,10 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
-import * as role from "../constants/roles";
-import * as route from "../constants/routes";
-import BeerItem from "../components/BeerItem";
+import * as role from "../../constants/roles";
+import * as route from "../../constants/routes";
+import BeerItem from "../../components/BeerItem/BeerItem";
+import "./index.css";
 
 export default ({
   roles,
@@ -23,7 +24,7 @@ export default ({
   onDecrementBeerPints,
 }) => {
   return (
-    <Container className="main-content" maxWidth="lg">
+    <Container className="main-content">
       <Grid container>
         <Grid item xs={9}>
           <h1>Beers On Tap</h1>

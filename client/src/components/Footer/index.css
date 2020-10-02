@@ -1,0 +1,15 @@
+footer {
+  align-items: center;
+  background-color: rgb(255, 125, 0);
+  bottom: 0px;
+  display: flex;
+  height: 4rem;
+  justify-content: space-evenly;
+  position: absolute;
+  width: 100%;
+}
+footer .MuiButton-root {
+  color: white !important;
+  height: 40px;
+  text-transform: capitalize;
+}

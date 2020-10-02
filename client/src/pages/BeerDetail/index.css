@@ -1,0 +1,11 @@
+.beer-detail-img {
+  height: auto;
+  max-height: 600px;
+  max-width: 600px;
+  position: relative;
+  width: 100%;
+}
+.rating-container span {
+  float: left;
+  font-size: 1.3rem;
+}

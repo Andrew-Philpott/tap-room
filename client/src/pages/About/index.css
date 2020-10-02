@@ -1,0 +1,11 @@
+.about img:first-of-type {
+  max-height: 400px;
+  width: 100%;
+}
+.about img:last-of-type {
+  float: left;
+  width: 50%;
+  max-width: 320px;
+  height: auto;
+  margin-right: 8px;
+}

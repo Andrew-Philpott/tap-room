@@ -3,8 +3,9 @@ import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import MenuItem from "@material-ui/core/MenuItem";
-import useForm from "../components/useForm";
+import useForm from "../../components/useForm";
 import { useParams, useLocation } from "react-router-dom";
+import "./index.css";
 
 const initalFieldValues = {
   beerId: "",
@@ -77,7 +78,7 @@ export default ({ beers, myReviews, onReviewFormSubmit }) => {
     }
   }
   return (
-    <Container className="main-content" maxWidth="md">
+    <Container className="main-content">
       {beers.length === 0 ? (
         <h1>There are no beers to review, sorry!</h1>
       ) : isEditReview ||

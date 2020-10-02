@@ -3,10 +3,11 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import { Link } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
-import * as role from "../constants/roles";
+import * as role from "../../constants/roles";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import RemoveIcon from "@material-ui/icons/Remove";
+import "./index.css";
 
 export default ({
   roles,

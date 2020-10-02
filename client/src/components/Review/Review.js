@@ -1,9 +1,10 @@
 import React from "react";
-import Rating from "./Rating";
+import Rating from "../Rating/Rating";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import { Link } from "react-router-dom";
+import "./index.css";
 
 export default ({ item, onLikeReview, userId, onDeleteReview, isAccount }) => {
   const [isLiked, setIsLiked] = React.useState(false);

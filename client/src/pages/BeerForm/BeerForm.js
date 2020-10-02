@@ -2,7 +2,7 @@ import React from "react";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
-import useForm from "../components/useForm";
+import useForm from "../../components/useForm";
 import { useParams } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 
@@ -92,7 +92,7 @@ export default ({ beers, onBeerFormSubmit }) => {
   }
 
   return (
-    <Container className="main-content" maxWidth="md">
+    <Container className="main-content">
       <h1>{!id && <>Add a new beer</>}</h1>
       <form autoComplete="off" method="post" noValidate onSubmit={handleSubmit}>
         <label htmlFor="name">Name</label>

@@ -1,10 +1,11 @@
 import React from "react";
 import Container from "@material-ui/core/Container";
-import Review from "../components/Review";
+import Review from "../../components/Review/Review";
+import "./index.css";
 
 export default ({ userId, userName, onDeleteReview, myReviews }) => {
   return (
-    <Container className="main-content" maxWidth="lg">
+    <Container className="main-content">
       <p>
         Welcome, <b>{userName}</b>
       </p>

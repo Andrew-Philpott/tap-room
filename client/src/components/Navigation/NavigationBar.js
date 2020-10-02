@@ -6,8 +6,9 @@ import Menu from "@material-ui/core/Menu";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
-import taphouselogo from "../assets/img/taphouselogo.png";
-import * as routes from "../constants/routes";
+import taphouselogo from "../../assets/img/taphouselogo.png";
+import * as routes from "../../constants/routes";
+import "./index.css";
 
 export default ({ isAuth, onSignInOrSignOut }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);

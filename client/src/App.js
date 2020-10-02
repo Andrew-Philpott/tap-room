@@ -1,24 +1,25 @@
 import React from "react";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 import history from "./helpers/history";
-import Home from "./pages/Home";
-import BeerDetail from "./pages/BeerDetail";
-import BeerList from "./pages/BeerList";
-import BeerForm from "./pages/BeerForm";
-import NavigationBar from "./components/NavigationBar";
-import ReviewForm from "./pages/ReviewForm";
-import About from "./pages/About";
-import SignIn from "./pages/SignIn";
-import Account from "./pages/Account";
+import Home from "./pages/Home/Home";
+import BeerDetail from "./pages/BeerDetail/BeerDetail";
+import BeerList from "./pages/BeerList/BeerList";
+import BeerForm from "./pages/BeerForm/BeerForm";
+import NavigationBar from "./components/Navigation/NavigationBar";
+import ReviewForm from "./pages/ReviewForm/ReviewForm";
+import About from "./pages/About/About";
+import SignIn from "./pages/SignIn/SignIn";
+import Account from "./pages/Account/Account";
 import * as routes from "../src/constants/routes";
 import withAuth from "../src/components/withAuth";
 import beerService from "./services/beer-service";
 import reviewService from "./services/review-service";
 import AuthRoute from "./components/AuthRoute";
-import Footer from "./components/Footer";
+import Footer from "./components/Footer/Footer";
 import ErrorDisplay from "./components/ErrorDisplay";
 import Grid from "@material-ui/core/Grid";
 import "./App.css";
+import { Container } from "@material-ui/core";
 
 function App({
   signIn,
@@ -173,99 +174,101 @@ function App({
           isAuth={isAuth}
           onSignInOrSignOut={handleSignInOrSignOut}
         />
-        <Grid container>
-          <Grid item xs={1} />
-          <Grid item xs={10}>
-            <Switch>
-              <Route exact path={routes.ADMIN}>
-                <SignIn onSignInOrSignOut={handleSignInOrSignOut} />
-              </Route>
-              <Route exact path={routes.LANDING}>
-                <Home beers={beers} />
-              </Route>
-              <Route exact path={routes.ABOUT} component={About} />
-              <Route exact path={routes.BEER_LIST}>
-                <BeerList
-                  roles={roles}
-                  beers={beers}
+        <Container maxWidth="lg">
+          <Grid container>
+            <Grid item xs={1} />
+            <Grid item xs={10}>
+              <Switch>
+                <Route exact path={routes.ADMIN}>
+                  <SignIn onSignInOrSignOut={handleSignInOrSignOut} />
+                </Route>
+                <Route exact path={routes.LANDING}>
+                  <Home beers={beers} />
+                </Route>
+                <Route exact path={routes.ABOUT} component={About} />
+                <Route exact path={routes.BEER_LIST}>
+                  <BeerList
+                    roles={roles}
+                    beers={beers}
+                    isAdmin={isAdmin}
+                    isAuth={isAuth}
+                    onDeleteBeer={handleDeleteBeer}
+                    onIncrementBeerPints={handleIncrementBeerPints}
+                    onDecrementBeerPints={handleDecrementBeerPints}
+                  />
+                </Route>
+                <AuthRoute
+                  isAuth={isAuth}
                   isAdmin={isAdmin}
+                  adminRequired={true}
+                  path={routes.NEW_BEER}
+                >
+                  <BeerForm
+                    beers={beers}
+                    onBeerFormSubmit={handleBeerFormSubmit}
+                  />
+                </AuthRoute>
+                <AuthRoute
                   isAuth={isAuth}
-                  onDeleteBeer={handleDeleteBeer}
-                  onIncrementBeerPints={handleIncrementBeerPints}
-                  onDecrementBeerPints={handleDecrementBeerPints}
-                />
-              </Route>
-              <AuthRoute
-                isAuth={isAuth}
-                isAdmin={isAdmin}
-                adminRequired={true}
-                path={routes.NEW_BEER}
-              >
-                <BeerForm
-                  beers={beers}
-                  onBeerFormSubmit={handleBeerFormSubmit}
-                />
-              </AuthRoute>
-              <AuthRoute
-                isAuth={isAuth}
-                isAdmin={isAdmin}
-                adminRequired={true}
-                path={routes.BEER_EDIT}
-              >
-                <BeerForm
-                  beers={beers}
-                  onBeerFormSubmit={handleBeerFormSubmit}
-                />
-              </AuthRoute>
-              <AuthRoute isAuth={isAuth} exact path={routes.NEW_REVIEW}>
-                <ReviewForm
-                  beers={beers}
-                  myReviews={myReviews}
-                  onReviewFormSubmit={handleReviewFormSubmit}
-                />
-              </AuthRoute>
-              <AuthRoute
-                isAuth={isAuth}
-                exact
-                path={routes.NEW_REVIEW_FOR_BEER}
-              >
-                <ReviewForm
-                  beers={beers}
-                  myReviews={myReviews}
-                  onReviewFormSubmit={handleReviewFormSubmit}
-                />
-              </AuthRoute>
-              <AuthRoute isAuth={isAuth} exact path={routes.EDIT_REVIEW}>
-                <ReviewForm
-                  beers={beers}
-                  myReviews={myReviews}
-                  onReviewFormSubmit={handleReviewFormSubmit}
-                />
-              </AuthRoute>
-              <AuthRoute isAuth={isAuth} exact path={routes.ACCOUNT}>
-                <Account
-                  setError={setError}
-                  myReviews={myReviews}
-                  onDeleteReview={handleDeleteReview}
-                  userId={userId}
-                  userName={userName}
-                />
-              </AuthRoute>
-              <Route exact path={routes.BEER_DETAILS}>
-                <BeerDetail
-                  userId={userId}
-                  getToken={getToken}
-                  setError={setError}
+                  isAdmin={isAdmin}
+                  adminRequired={true}
+                  path={routes.BEER_EDIT}
+                >
+                  <BeerForm
+                    beers={beers}
+                    onBeerFormSubmit={handleBeerFormSubmit}
+                  />
+                </AuthRoute>
+                <AuthRoute isAuth={isAuth} exact path={routes.NEW_REVIEW}>
+                  <ReviewForm
+                    beers={beers}
+                    myReviews={myReviews}
+                    onReviewFormSubmit={handleReviewFormSubmit}
+                  />
+                </AuthRoute>
+                <AuthRoute
                   isAuth={isAuth}
-                  myReviews={myReviews}
-                />
-              </Route>
-              <ErrorDisplay error={error} />
-              <Redirect to="/" from="*" />
-            </Switch>
+                  exact
+                  path={routes.NEW_REVIEW_FOR_BEER}
+                >
+                  <ReviewForm
+                    beers={beers}
+                    myReviews={myReviews}
+                    onReviewFormSubmit={handleReviewFormSubmit}
+                  />
+                </AuthRoute>
+                <AuthRoute isAuth={isAuth} exact path={routes.EDIT_REVIEW}>
+                  <ReviewForm
+                    beers={beers}
+                    myReviews={myReviews}
+                    onReviewFormSubmit={handleReviewFormSubmit}
+                  />
+                </AuthRoute>
+                <AuthRoute isAuth={isAuth} exact path={routes.ACCOUNT}>
+                  <Account
+                    setError={setError}
+                    myReviews={myReviews}
+                    onDeleteReview={handleDeleteReview}
+                    userId={userId}
+                    userName={userName}
+                  />
+                </AuthRoute>
+                <Route exact path={routes.BEER_DETAILS}>
+                  <BeerDetail
+                    userId={userId}
+                    getToken={getToken}
+                    setError={setError}
+                    isAuth={isAuth}
+                    myReviews={myReviews}
+                  />
+                </Route>
+                <ErrorDisplay error={error} />
+                <Redirect to="/" from="*" />
+              </Switch>
+            </Grid>
+            <Grid item xs={1} />
           </Grid>
-          <Grid item xs={1} />
-        </Grid>
+        </Container>
         <Footer />
       </Router>
     </div>

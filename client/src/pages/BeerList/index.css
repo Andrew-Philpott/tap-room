@@ -1,0 +1,5 @@
+.beer-list-table .MuiTableCell-root {
+  border-bottom: none;
+  color: white !important;
+  overflow-y: visible;
+}
