@@ -9,6 +9,7 @@ import reviewService from "./services/review-service";
 import AuthRoute from "./components/AuthRoute";
 import Footer from "./components/Footer";
 import ErrorDisplay from "./components/ErrorDisplay";
+import ErrorBoundary from "./components/ErrorBoundary";
 import "./App.css";
 
 const Home = React.lazy(() => import("./pages/Home"));
@@ -20,25 +21,6 @@ const About = React.lazy(() => import("./pages/About"));
 const SignIn = React.lazy(() => import("./pages/SignIn"));
 const Account = React.lazy(() => import("./pages/Account"));
 const renderLoader = () => <p>Loading</p>;
-
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getStateFromError(error) {
-    return { hasError: true };
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return <p>Loading failed.</p>;
-    }
-
-    return this.props.children;
-  }
-}
 
 function App({
   signIn,

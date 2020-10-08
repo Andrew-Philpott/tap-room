@@ -13,6 +13,7 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -36,6 +37,7 @@
   "devDependencies": {
     "dotenv": "^8.2.0",
     "imagemin": "^7.0.1",
-    "imagemin-webp": "^6.0.0"
+    "imagemin-webp": "^6.0.0",
+    "source-map-explorer": "^2.5.0"
   }
 }

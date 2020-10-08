@@ -44,7 +44,8 @@ export default ({ isAuth, onSignInOrSignOut }) => {
       <div className="nav-bar">
         <Link to={routes.LANDING}>
           <img
-            className="taphouse-logo"
+            width="80px"
+            height="80px"
             src={taphouselogo}
             alt="Tap House Logo"
           />

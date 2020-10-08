@@ -1,4 +1,5 @@
 .about img:first-of-type {
+  height: auto;
   max-height: 400px;
   width: 100%;
 }

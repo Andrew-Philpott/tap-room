@@ -1,6 +1,6 @@
 import React from "react";
-import { UserAgentApplication, InteractionRequiredAuthError } from "msal";
-import * as msalAAD from "@azure/msal-browser";
+import { UserAgentApplication } from "msal";
+import { PublicClientApplication } from "@azure/msal-browser";
 import {
   msalConfigB2C,
   loginRequestB2C,
@@ -30,7 +30,7 @@ export default function withAuth(WrappedComponent) {
       this.AuthRedirectCallback = this.AuthRedirectCallback.bind(this);
       this.msalB2C.handleRedirectCallback(this.AuthRedirectCallback);
       this.HandleResponse = this.HandleResponse.bind(this);
-      this.msalAAD = new msalAAD.PublicClientApplication(msalConfigAAD);
+      this.msalAAD = new PublicClientApplication(msalConfigAAD);
     }
 
     componentDidMount() {
