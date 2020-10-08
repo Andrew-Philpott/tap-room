@@ -1,7 +1,6 @@
 import React from "react";
 import useForm from "../../components/useForm";
 import { useParams } from "react-router-dom";
-import "./index.css";
 
 export default ({ beers, onBeerFormSubmit }) => {
   const { id } = useParams();

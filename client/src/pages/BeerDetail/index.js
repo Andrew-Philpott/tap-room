@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import Rating from "../../components/Rating";
-import DarkBeer from "../../assets/img/DarkBeer.jpg";
+import DarkBeer from "../../assets/img/DarkBeer.webp";
 import Review from "../../components/Review";
 import beerService from "../../services/beer-service";
 import reviewService from "../../services/review-service";

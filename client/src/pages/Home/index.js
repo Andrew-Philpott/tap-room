@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import BeerBar from "../../assets/img/BeerBar.jpg";
+import BeerBar from "../../assets/img/BeerBar.webp";
 import "./index.css";
 
 export default ({ beers }) => {

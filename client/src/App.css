@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "Roboto";
+  src: url("./assets/fonts/Roboto-Italic.ttf");
+}
+
 #root {
   color: white;
   display: block;
@@ -14,10 +19,10 @@
 .App {
   position: relative;
   padding-bottom: 4rem;
-  background-attachment: fixed;
-  background-image: url("./assets/img/BeersOnShelf.jpg");
+  /* background-attachment: fixed;
+  background-image: url("./assets/img/Beers.webp");
   background-position: center;
-  background-size: cover;
+  background-size: cover; */
   min-height: 100vh;
 }
 .button {

@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import EditIcon from "@material-ui/icons/Edit";
-import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/Delete";
-import RemoveIcon from "@material-ui/icons/Remove";
+import Plus from "../../assets/svg/plus.svg";
+import Minus from "../../assets/svg/minus.svg";
+import Trash from "../../assets/svg/trash.svg";
+import Pencil from "../../assets/svg/pencil-alt.svg";
 import * as role from "../../constants/roles";
 import * as route from "../../constants/routes";
 import "./index.css";
@@ -51,7 +51,7 @@ const BeerItem = ({
           roles.indexOf(role.ADMIN) !== -1) && (
           <React.Fragment>
             <td>
-              <RemoveIcon
+              <Minus
                 className="minus"
                 onClick={() =>
                   beer.pints > 0 && onDecrementBeerPints(beer.beerId)
@@ -59,7 +59,7 @@ const BeerItem = ({
               />
             </td>
             <td>
-              <AddIcon
+              <Plus
                 className="plus"
                 onClick={() => onIncrementBeerPints(beer.beerId)}
               />
@@ -68,13 +68,13 @@ const BeerItem = ({
               <React.Fragment>
                 <td>
                   <Link to={`/beers/edit/${beer.beerId}`}>
-                    <EditIcon className="edit" />
+                    <Pencil className="edit" />
                   </Link>
                 </td>
                 <td>
-                  <DeleteIcon
-                    className="delete"
+                  <Trash
                     onClick={() => onDeleteBeer(beer.beerId)}
+                    className="delete"
                   />
                 </td>
               </React.Fragment>

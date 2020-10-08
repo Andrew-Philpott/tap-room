@@ -1,8 +1,8 @@
 import React from "react";
 import Rating from "../Rating";
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
+import ThumbsUp from "../../assets/svg/thumbs-up.svg";
+import Trash from "../../assets/svg/trash.svg";
+import Pencil from "../../assets/svg/pencil-alt.svg";
 import { Link } from "react-router-dom";
 import "./index.css";
 
@@ -44,7 +44,7 @@ export default ({ item, onLikeReview, userId, onDeleteReview, isAccount }) => {
         <React.Fragment>
           {likeEnabled && (
             <React.Fragment>
-              <ThumbUpIcon
+              <ThumbsUp
                 style={{ cursor: "pointer" }}
                 onClick={() => handleClick()}
                 className={isLiked === true ? "ming-c" : ""}
@@ -54,12 +54,12 @@ export default ({ item, onLikeReview, userId, onDeleteReview, isAccount }) => {
           )}
           {isAccount && (
             <React.Fragment>
-              <DeleteIcon
+              <Trash
                 onClick={() => onDeleteReview(item.reviewId)}
                 className="delete"
               />
               <Link to={`/reviews/edit/${item.reviewId}`}>
-                <EditIcon className="edit" />
+                <Pencil className="edit" />
               </Link>
             </React.Fragment>
           )}

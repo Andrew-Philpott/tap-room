@@ -1,7 +1,6 @@
 import React from "react";
-import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
-import taphouselogo from "../../assets/img/taphouselogo.png";
+import taphouselogo from "../../assets/img/taphouselogo.webp";
 import * as routes from "../../constants/routes";
 import "./index.css";
 
@@ -57,7 +56,7 @@ export default ({ isAuth, onSignInOrSignOut }) => {
         </div>
         <div className="section-mobile">
           {!openMenu ? (
-            <MoreIcon onClick={() => setOpenMenu(true)} />
+            <span onClick={() => setOpenMenu(true)}>more</span>
           ) : (
             <ul ref={menuRef}>
               {navItems.map((x, i) => {
@@ -66,9 +65,6 @@ export default ({ isAuth, onSignInOrSignOut }) => {
             </ul>
           )}
         </div>
-
-        {/* {mobileMenu}
-        {desktopMenu} */}
       </div>
     </React.Fragment>
   );

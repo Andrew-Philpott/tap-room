@@ -1,26 +1,25 @@
 import React from "react";
-import StarIcon from "@material-ui/icons/Star";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
-import StarHalfIcon from "@material-ui/icons/StarHalf";
+import Star from "../../assets/svg/star.svg";
+import StarHalf from "../../assets/svg/star-half-alt.svg";
 
 export default ({ rating, max }) => {
   const remaining = rating % 1;
   const star =
     remaining === 0 ? null : remaining > 0.75 ? (
-      <StarIcon />
+      <Star />
     ) : remaining < 0.25 ? (
-      <StarBorderIcon />
+      <Star />
     ) : (
-      <StarHalfIcon />
+      <StarHalf />
     );
 
   const fullStars = [];
   const emptyStars = [];
   for (let i = 0; i < Math.floor(rating); i++) {
-    fullStars.push(<StarIcon key={i} />);
+    fullStars.push(<Star key={i} />);
   }
   for (let j = 0; j < Math.floor(max - rating); j++) {
-    emptyStars.push(<StarBorderIcon key={j} />);
+    emptyStars.push(<Star key={j} />);
   }
   return (
     <React.Fragment>
