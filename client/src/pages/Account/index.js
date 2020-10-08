@@ -1,11 +1,10 @@
 import React from "react";
-import Container from "@material-ui/core/Container";
-import Review from "../../components/Review/Review";
+import Review from "../../components/Review";
 import "./index.css";
 
 export default ({ userId, userName, onDeleteReview, myReviews }) => {
   return (
-    <Container className="main-content">
+    <div className="main-content">
       <p>
         Welcome, <b>{userName}</b>
       </p>
@@ -35,6 +34,6 @@ export default ({ userId, userName, onDeleteReview, myReviews }) => {
       ) : (
         <h1>You dont have any reviews yet!</h1>
       )}
-    </Container>
+    </div>
   );
 };

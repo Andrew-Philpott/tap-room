@@ -5,13 +5,3 @@
   position: absolute;
   right: 4px;
 }
-.text-align-center {
-  text-align: center;
-}
-.text-box-container {
-  position: relative;
-}
-.text-box-container textarea,
-.text-box-container input {
-  margin-bottom: 8px;
-}

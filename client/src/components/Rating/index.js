@@ -2,7 +2,6 @@ import React from "react";
 import StarIcon from "@material-ui/icons/Star";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import StarHalfIcon from "@material-ui/icons/StarHalf";
-import "./index.css";
 
 export default ({ rating, max }) => {
   const remaining = rating % 1;

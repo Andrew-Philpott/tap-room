@@ -8,8 +8,6 @@ footer {
   position: absolute;
   width: 100%;
 }
-footer .MuiButton-root {
-  color: white !important;
-  height: 40px;
-  text-transform: capitalize;
+footer > a {
+  font-style: italic;
 }

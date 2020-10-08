@@ -1,19 +1,14 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Container from "@material-ui/core/Container";
-import Button from "@material-ui/core/Button";
 import { Link, useParams } from "react-router-dom";
-import Rating from "../../components/Rating/Rating";
+import Rating from "../../components/Rating";
 import DarkBeer from "../../assets/img/DarkBeer.jpg";
-import Review from "../../components/Review/Review";
+import Review from "../../components/Review";
 import beerService from "../../services/beer-service";
 import reviewService from "../../services/review-service";
 import "./index.css";
 
 export default ({ userId, isAuth, getToken, setError, myReviews }) => {
-  console.log(myReviews);
   const { id } = useParams();
-  console.log(id);
   const [beer, setBeer] = React.useState(null);
   React.useEffect(() => {
     if (id) {
@@ -62,59 +57,50 @@ export default ({ userId, isAuth, getToken, setError, myReviews }) => {
     average(beer.reviews.map((r) => r.rating));
 
   return (
-    <Container className="main-content">
+    <div id="beer-detail" className="main-content">
       {beer ? (
-        <Grid container>
-          <Grid item xs={7} sm={6}>
-            <h1>{beer.name}</h1>
-            {averageRating && (
-              <div className="rating-container">
-                <span>Rating&nbsp;/</span>
-                <span>&nbsp;</span>
-                <Rating rating={averageRating} max={5} />
-              </div>
-            )}
-            <Grid container>
-              <Grid item xs={7} sm={6} md={5}>
-                <p>Brand: {beer.brand}</p>
-                <p>Color: {beer.color}</p>
-                <p>Aroma: {beer.aroma}</p>
-                <p>Flavor: {beer.flavor}</p>
-              </Grid>
-              <Grid item xs={5} sm={4} md={4}>
-                <div>
-                  <p>ABV: {beer.alcoholContent}%</p>
-                  <p>Price: ${beer.price}</p>
-                  <p>Pints Left: {beer.pints}</p>
+        <React.Fragment>
+          <div>
+            <div>
+              <h1>{beer.name}</h1>
+              {averageRating && (
+                <div className="rating-container">
+                  <span>Rating&nbsp;/</span>
+                  <span>&nbsp;</span>
+                  <Rating rating={averageRating} max={5} />
                 </div>
-              </Grid>
-              <Grid item sm={2} md={3} />
-            </Grid>
-          </Grid>
-          <Grid item xs={5} sm={6}>
-            <img
-              src={DarkBeer}
-              className="beer-detail-img"
-              alt="Glass of dark beer on a table"
-            />
-            {isAuth && !myReviews.includes((x) => x.beerId === id) && (
-              <Button
-                style={{
-                  float: "right",
-                  marginTop: "8px",
-                  marginRight: "6px",
-                }}
-                component={Link}
-                to={`/reviews/new/${beer.beerId}`}
-                className="button"
-              >
-                Write your own review
-              </Button>
-            )}
-          </Grid>
-          <Grid container>
+              )}
+              <p>Brand: {beer.brand}</p>
+              <p>Color: {beer.color}</p>
+              <p>Aroma: {beer.aroma}</p>
+              <p>Flavor: {beer.flavor}</p>
+              <p>ABV: {beer.alcoholContent}%</p>
+              <p>Price: ${beer.price}</p>
+              <p>Pints Left: {beer.pints}</p>
+            </div>
+            <div style={{ width: "50%" }}>
+              <img
+                src={DarkBeer}
+                className="beer-detail-img"
+                alt="Glass of dark beer on a table"
+              />
+              {isAuth && !myReviews.includes((x) => x.beerId === id) && (
+                <Link
+                  style={{
+                    float: "right",
+                    marginTop: "8px",
+                    marginRight: "6px",
+                  }}
+                  to={`/reviews/new/${beer.beerId}`}
+                >
+                  Write your own review
+                </Link>
+              )}
+            </div>
+          </div>
+          <div>
             {beer.reviews && beer.reviews.length !== 0 ? (
-              <Grid item xs={12}>
+              <div>
                 <h1>Reviews</h1>
                 {beer.reviews.map((review, index) => {
                   return (
@@ -127,18 +113,18 @@ export default ({ userId, isAuth, getToken, setError, myReviews }) => {
                     />
                   );
                 })}
-              </Grid>
+              </div>
             ) : (
               <h1>
                 No reviews for this beer yet.{" "}
                 {!isAuth && <>Create an account to provide feedback!</>}
               </h1>
             )}
-          </Grid>
-        </Grid>
+          </div>
+        </React.Fragment>
       ) : (
         <h1>Loading</h1>
       )}
-    </Container>
+    </div>
   );
 };

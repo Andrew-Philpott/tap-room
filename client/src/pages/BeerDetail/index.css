@@ -1,9 +1,15 @@
-.beer-detail-img {
+#beer-detail img {
   height: auto;
   max-height: 600px;
   max-width: 600px;
   position: relative;
   width: 100%;
+}
+#beer-detail > div:first-of-type {
+  display: flex;
+}
+#beer-detail > div:first-of-type > div {
+  width: 50%;
 }
 .rating-container span {
   float: left;

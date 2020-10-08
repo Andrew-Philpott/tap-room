@@ -44,13 +44,16 @@
   color: green;
 }
 .main-content {
+  max-width: 1280px;
   background-color: rgba(0, 21, 36, 0.95);
   border: 10px solid white;
   border-radius: 4px;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 40px;
   margin-top: 40px;
-  padding-left: 60px;
-  padding-right: 60px;
+  padding-left: 4rem;
+  padding-right: 4rem;
   padding-top: 20px;
   padding-bottom: 100px;
 }
@@ -60,11 +63,43 @@
 .ming-c {
   color: rgb(21, 97, 109);
 }
+.input {
+  border: 1px solid white;
+  border-radius: 4px;
+  background: none;
+  padding: 22.5px 14px;
+  color: white;
+  font-family: inherit;
+  min-height: 4rem;
+  width: 100%;
+  font-size: 20px;
+}
 .MuiInputBase-input {
   color: white !important;
 }
 .MuiOutlinedInput-notchedOutline {
   border-color: white !important;
+}
+form > .form-control {
+  width: 100%;
+  min-height: 5.2rem;
+  position: relative;
+  margin-bottom: 1rem;
+}
+form > .form-control > svg {
+  position: absolute;
+  right: 0px;
+  height: 4rem;
+  pointer-events: none;
+}
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+option {
+  color: black;
+  font-family: inherit;
 }
 .orange-c {
   color: rgb(255, 125, 0);
@@ -87,14 +122,6 @@
     font-size: 12px;
   }
 }
-@media screen and (min-width: 600px) {
-  .section-desktop {
-    display: flex;
-  }
-  .section-mobile {
-    display: none;
-  }
-}
 @media screen and (min-width: 800px) {
   html,
   body {
@@ -107,20 +134,15 @@
 a {
   color: white;
 }
-a:hover {
+a:hover,
+span:hover {
   color: #b51fb7;
 }
 form .MuiButtonBase-root:last-of-type {
   float: right;
-  margin-top: 8px;
 }
 form > .MuiGrid-container {
   margin-top: 4px;
-}
-form > label {
-  color: white;
-  display: inline-block;
-  margin-top: 8px;
 }
 form label:first-of-type {
   display: inline-block;

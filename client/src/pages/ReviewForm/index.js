@@ -1,8 +1,4 @@
 import React from "react";
-import TextField from "@material-ui/core/TextField";
-import Container from "@material-ui/core/Container";
-import Button from "@material-ui/core/Button";
-import MenuItem from "@material-ui/core/MenuItem";
 import useForm from "../../components/useForm";
 import { useParams, useLocation } from "react-router-dom";
 import "./index.css";
@@ -78,7 +74,7 @@ export default ({ beers, myReviews, onReviewFormSubmit }) => {
     }
   }
   return (
-    <Container className="main-content">
+    <div className="main-content">
       {beers.length === 0 ? (
         <h1>There are no beers to review, sorry!</h1>
       ) : isEditReview ||
@@ -107,63 +103,67 @@ export default ({ beers, myReviews, onReviewFormSubmit }) => {
           >
             {!beerSelected && !isEditReview && (
               <React.Fragment>
-                <label htmlFor="beerId">Select a beer</label>
-                <TextField
-                  name="beerId"
-                  fullWidth
-                  select
-                  value={values.beerId}
-                  onChange={handleInputChange}
-                  variant="outlined"
-                >
-                  <MenuItem key="" value=""></MenuItem>
-                  {availableBeersToReview &&
-                    availableBeersToReview.map((beer, index) => {
-                      return (
-                        <MenuItem key={index} value={beer.beerId}>
-                          {beer.name}
-                        </MenuItem>
-                      );
-                    })}
-                </TextField>
+                <div className="form-control">
+                  <label htmlFor="beerId">Select a beer</label>
+                  <select
+                    className="input"
+                    name="beerId"
+                    value={values.beerId}
+                    onChange={handleInputChange}
+                  >
+                    <option key="" value="" />
+                    {availableBeersToReview &&
+                      availableBeersToReview.map((beer, index) => {
+                        return (
+                          <option key={index} value={beer.beerId}>
+                            {beer.name}
+                          </option>
+                        );
+                      })}
+                  </select>
+                  <svg viewBox="0 0 24 24">
+                    <path fill="white" d="M 7 10 l 5 5 l 5 -5 Z" />
+                  </svg>
+                </div>
               </React.Fragment>
             )}
-            <label htmlFor="rating">Rating</label>
-            <TextField
-              name="rating"
-              fullWidth
-              select
-              placeholder="Rating"
-              value={values.rating}
-              onChange={handleInputChange}
-              variant="outlined"
-            >
-              <MenuItem key={1} value={1}>
-                1 Star
-              </MenuItem>
-              <MenuItem key={2} value={2}>
-                2 Stars
-              </MenuItem>
-              <MenuItem key={3} value={3}>
-                3 Stars
-              </MenuItem>
-              <MenuItem key={4} value={4}>
-                4 Stars
-              </MenuItem>
-              <MenuItem key={5} value={5}>
-                5 Stars
-              </MenuItem>
-            </TextField>
-            {errors.rating && <div>{errors.rating}</div>}
-            <label htmlFor="headline">Headline (20-80 characters)</label>
-            <div className="text-box-container">
-              <TextField
+            <div className="form-control">
+              <label htmlFor="rating">Rating</label>
+              <select
+                className="input"
+                name="rating"
+                value={values.rating}
+                onChange={handleInputChange}
+              >
+                <option key="" value="" />
+                <option key={1} value={1}>
+                  1 Star
+                </option>
+                <option key={2} value={2}>
+                  2 Stars
+                </option>
+                <option key={3} value={3}>
+                  3 Stars
+                </option>
+                <option key={4} value={4}>
+                  4 Stars
+                </option>
+                <option key={5} value={5}>
+                  5 Stars
+                </option>
+              </select>
+              <svg viewBox="0 0 24 24">
+                <path fill="white" d="M 7 10 l 5 5 l 5 -5 Z" />
+              </svg>
+              {errors.rating && <div>{errors.rating}</div>}
+            </div>
+            <div className="form-control">
+              <label htmlFor="headline">Headline (20-80 characters)</label>
+              <input
+                className="input"
                 type="text"
                 name="headline"
-                fullWidth
-                value={values.headline}
                 onChange={handleInputChange}
-                variant="outlined"
               />
               {values.headline.length > 0 && (
                 <span className="character-count">
@@ -172,17 +172,17 @@ export default ({ beers, myReviews, onReviewFormSubmit }) => {
               )}
               {errors.headline && <div>{errors.headline}</div>}
             </div>
-            <label htmlFor="description">Description (50-500 characters)</label>
-            <div className="text-box-container">
-              <TextField
-                type="text"
+
+            <div className="form-control">
+              <label htmlFor="description">
+                Description (50-500 characters)
+              </label>
+              <textarea
+                className="input"
                 name="description"
-                fullWidth
-                multiline={true}
                 rows={5}
                 value={values.description}
                 onChange={handleInputChange}
-                variant="outlined"
               />
               {values.description.length > 0 && (
                 <span className="character-count">
@@ -191,14 +191,14 @@ export default ({ beers, myReviews, onReviewFormSubmit }) => {
               )}
               {errors.description && <div>{errors.description}</div>}
             </div>
-            <Button className="button" type="submit">
+            <button className="button" type="submit">
               Submit
-            </Button>
+            </button>
           </form>
         </React.Fragment>
       ) : (
         <h1>You've reviewed all of our beers already!</h1>
       )}
-    </Container>
+    </div>
   );
 };
