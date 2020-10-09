@@ -1,11 +1,23 @@
 import React from "react";
 import useForm from "../../components/useForm";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
-export default ({ beers, onBeerFormSubmit }) => {
+const initalFieldValues = {
+  name: "",
+  brand: "",
+  color: "",
+  aroma: "",
+  flavor: "",
+  price: "",
+  alcoholContent: "",
+  pints: "",
+};
+
+export default ({ beers, setBeers, setError, getToken }) => {
   const { id } = useParams();
+  const history = useHistory();
   const validate = (fieldValues = values) => {
-    let temp = { ...errors };
+    let temp = { ...formErrors };
     let fieldNumber;
     if ("name" in fieldValues)
       temp.name = fieldValues.name ? "" : "Field cannot be blank";
@@ -53,25 +65,19 @@ export default ({ beers, onBeerFormSubmit }) => {
         }
       }
     }
-    setErrors({ ...temp });
+    setFormErrors({ ...temp });
 
     if (fieldValues === values)
       return Object.values(temp).every((x) => x === "");
   };
 
-  const { values, setValues, errors, setErrors, handleInputChange } = useForm(
-    {
-      name: "",
-      brand: "",
-      color: "",
-      aroma: "",
-      flavor: "",
-      price: "",
-      alcoholContent: "",
-      pints: "",
-    },
-    validate
-  );
+  const {
+    values,
+    setValues,
+    formErrors,
+    setFormErrors,
+    handleInputChange,
+  } = useForm(initalFieldValues, validate);
 
   React.useEffect(() => {
     const beer = beers && id && beers.find((x) => x.beerId === parseInt(id));
@@ -83,7 +89,21 @@ export default ({ beers, onBeerFormSubmit }) => {
   function handleSubmit(e) {
     e.preventDefault();
     if (validate()) {
-      onBeerFormSubmit(id, values);
+      getToken((token) => {
+        const { updateBeer, createBeer } = import(
+          "../../services/beer-service"
+        );
+        return id ? updateBeer(token, id, values) : createBeer(token, values);
+      })
+        .then((res) => {
+          setBeers(
+            id
+              ? [...beers.map((x) => (x.beerId === res.beerId ? res : x))]
+              : [...beers, res]
+          );
+          history.push("/beers");
+        })
+        .catch(setError);
     }
   }
 
@@ -100,7 +120,7 @@ export default ({ beers, onBeerFormSubmit }) => {
             value={values.name}
             onChange={handleInputChange}
           />
-          {errors.name && <div>{errors.name}</div>}
+          {formErrors.name && <div>{formErrors.name}</div>}
         </div>
         <div className="form-control">
           <label htmlFor="brand">Brand</label>
@@ -111,7 +131,7 @@ export default ({ beers, onBeerFormSubmit }) => {
             value={values.brand}
             onChange={handleInputChange}
           />
-          {errors.brand && <div>{errors.brand}</div>}
+          {formErrors.brand && <div>{formErrors.brand}</div>}
         </div>
         <div className="form-control">
           <label htmlFor="color">Color</label>
@@ -122,7 +142,7 @@ export default ({ beers, onBeerFormSubmit }) => {
             value={values.color}
             onChange={handleInputChange}
           />
-          {errors.color && <div>{errors.color}</div>}
+          {formErrors.color && <div>{formErrors.color}</div>}
         </div>
         <div className="form-control">
           <label htmlFor="aroma">Aroma</label>
@@ -133,7 +153,7 @@ export default ({ beers, onBeerFormSubmit }) => {
             value={values.aroma}
             onChange={handleInputChange}
           />
-          {errors.aroma && <div>{errors.aroma}</div>}
+          {formErrors.aroma && <div>{formErrors.aroma}</div>}
         </div>
         <div className="form-control">
           <label htmlFor="flavor">Flavor</label>
@@ -144,7 +164,7 @@ export default ({ beers, onBeerFormSubmit }) => {
             value={values.flavor}
             onChange={handleInputChange}
           />
-          {errors.flavor && <div>{errors.flavor}</div>}
+          {formErrors.flavor && <div>{formErrors.flavor}</div>}
         </div>
         <div>
           <div>
@@ -157,7 +177,7 @@ export default ({ beers, onBeerFormSubmit }) => {
                 value={values.price}
                 onChange={handleInputChange}
               />
-              {errors.price && <div>{errors.price}</div>}
+              {formErrors.price && <div>{formErrors.price}</div>}
             </div>
           </div>
           <div>
@@ -170,7 +190,9 @@ export default ({ beers, onBeerFormSubmit }) => {
                 value={values.alcoholContent}
                 onChange={handleInputChange}
               />
-              {errors.alcoholContent && <div>{errors.alcoholContent}</div>}
+              {formErrors.alcoholContent && (
+                <div>{formErrors.alcoholContent}</div>
+              )}
             </div>
           </div>
           <div>
@@ -183,7 +205,7 @@ export default ({ beers, onBeerFormSubmit }) => {
                 value={values.pints}
                 onChange={handleInputChange}
               />
-              {errors.pints && <div>{errors.pints}</div>}
+              {formErrors.pints && <div>{formErrors.pints}</div>}
             </div>
           </div>
         </div>

@@ -1,8 +1,24 @@
 import React from "react";
 import Review from "../../components/Review";
+import { deleteReview } from "../../services/review-service";
 import "./index.css";
 
-export default ({ userId, userName, onDeleteReview, myReviews }) => {
+export default ({
+  userId,
+  userName,
+  getToken,
+  myReviews,
+  setMyReviews,
+  setError,
+}) => {
+  const handleDeleteReview = async (id) => {
+    deleteReview(getToken(), id)
+      .then((res) => {
+        setMyReviews([...myReviews.filter((x) => x.reviewId !== res.reviewId)]);
+      })
+      .catch(setError);
+  };
+
   return (
     <div className="main-content">
       <p>
@@ -24,7 +40,7 @@ export default ({ userId, userName, onDeleteReview, myReviews }) => {
               <Review
                 item={review}
                 userId={userId}
-                onDeleteReview={onDeleteReview}
+                onDeleteReview={handleDeleteReview}
                 isAccount={true}
                 key={index}
               />

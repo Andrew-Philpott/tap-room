@@ -1,0 +1,9 @@
+.rating {
+  display: inline-block;
+  height: 100%;
+}
+.rating > img {
+  height: 1.2rem;
+  width: 1.2rem;
+  color: white;
+}

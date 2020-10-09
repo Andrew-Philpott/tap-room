@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import taphouselogo from "../../assets/img/taphouselogo.webp";
+import Bars from "../../assets/svg/bars.svg";
 import * as routes from "../../constants/routes";
 import "./index.css";
 
@@ -34,8 +35,8 @@ export default ({ isAuth, onSignInOrSignOut }) => {
     <Link key={3} to={routes.ABOUT}>
       About
     </Link>,
-    <span key={4} onClick={() => !isAuth && signInSignOut()}>
-      {!isAuth ? "Sign In" : "Account"}
+    <span key={4} onClick={() => signInSignOut()}>
+      {!isAuth ? "Sign In" : "Sign Out"}
     </span>,
   ];
 
@@ -43,12 +44,7 @@ export default ({ isAuth, onSignInOrSignOut }) => {
     <React.Fragment>
       <div className="nav-bar">
         <Link to={routes.LANDING}>
-          <img
-            width="80px"
-            height="80px"
-            src={taphouselogo}
-            alt="Tap House Logo"
-          />
+          <img width="70" height="70" src={taphouselogo} alt="Tap House Logo" />
         </Link>
         <div className="section-desktop">
           {navItems.map((x) => {
@@ -57,7 +53,13 @@ export default ({ isAuth, onSignInOrSignOut }) => {
         </div>
         <div className="section-mobile">
           {!openMenu ? (
-            <span onClick={() => setOpenMenu(true)}>more</span>
+            <img
+              height="30"
+              width="30"
+              onClick={() => setOpenMenu(true)}
+              src={Bars}
+              alt=""
+            />
           ) : (
             <ul ref={menuRef}>
               {navItems.map((x, i) => {

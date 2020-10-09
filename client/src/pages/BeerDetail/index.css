@@ -1,4 +1,4 @@
-#beer-detail img {
+.beer-detail-img {
   height: auto;
   max-height: 600px;
   max-width: 600px;
@@ -10,6 +10,10 @@
 }
 #beer-detail > div:first-of-type > div {
   width: 50%;
+}
+.rating-container {
+  height: 1.3rem;
+  width: 100%;
 }
 .rating-container span {
   float: left;

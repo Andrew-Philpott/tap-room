@@ -1,6 +1,7 @@
 import React from "react";
 import useForm from "../../components/useForm";
-import { useParams, useLocation } from "react-router-dom";
+import { createReview, updateReview } from "../../services/review-service";
+import { useParams, useLocation, useHistory } from "react-router-dom";
 import "./index.css";
 
 const initalFieldValues = {
@@ -10,8 +11,9 @@ const initalFieldValues = {
   headline: "",
 };
 
-export default ({ beers, myReviews, onReviewFormSubmit }) => {
+export default ({ beers, myReviews, setMyReviews, getToken, setError }) => {
   const { id } = useParams();
+  const history = useHistory();
   const path = useLocation().pathname;
   const parsedId = parseInt(id);
   const beerSelected = path.indexOf("/reviews/new/") !== -1 ? true : false;
@@ -24,7 +26,7 @@ export default ({ beers, myReviews, onReviewFormSubmit }) => {
       : [];
 
   const validate = (fieldValues = values) => {
-    let temp = { ...errors };
+    let temp = { ...formErrors };
     if ("rating" in fieldValues)
       temp.rating =
         fieldValues.rating >= 1 && fieldValues.rating <= 5
@@ -42,14 +44,18 @@ export default ({ beers, myReviews, onReviewFormSubmit }) => {
           ? ""
           : "Description must be between 50 and 500 characters.";
 
-    setErrors({ ...temp });
+    setFormErrors({ ...temp });
     if (fieldValues === values)
       return Object.values(temp).every((x) => x === "");
   };
 
-  const { values, setValues, errors, setErrors, handleInputChange } = useForm(
-    initalFieldValues
-  );
+  const {
+    values,
+    setValues,
+    formErrors,
+    setFormErrors,
+    handleInputChange,
+  } = useForm(initalFieldValues);
 
   React.useEffect(() => {
     if (beers.length !== 0) {
@@ -67,10 +73,23 @@ export default ({ beers, myReviews, onReviewFormSubmit }) => {
   function handleSubmit(e) {
     e.preventDefault();
     if (validate()) {
-      isEditReview
-        ? onReviewFormSubmit(parsedId, values)
-        : onReviewFormSubmit(null, values);
-      setValues(initalFieldValues);
+      parsedId
+        ? updateReview(getToken(), parsedId, values)
+            .then((response) => {
+              setMyReviews([
+                ...myReviews.map((x) =>
+                  x.reviewId === response.reviewId ? response : x
+                ),
+              ]);
+              history.push(`/beers/details/${values.beerId}`);
+            })
+            .catch(setError)
+        : createReview(getToken(), values)
+            .then((response) => {
+              setMyReviews([...myReviews, response]);
+              history.push(`/beers/details/${values.beerId}`);
+            })
+            .catch(setError);
     }
   }
   return (
@@ -155,7 +174,7 @@ export default ({ beers, myReviews, onReviewFormSubmit }) => {
               <svg viewBox="0 0 24 24">
                 <path fill="white" d="M 7 10 l 5 5 l 5 -5 Z" />
               </svg>
-              {errors.rating && <div>{errors.rating}</div>}
+              {formErrors.rating && <div>{formErrors.rating}</div>}
             </div>
             <div className="form-control">
               <label htmlFor="headline">Headline (20-80 characters)</label>
@@ -170,7 +189,7 @@ export default ({ beers, myReviews, onReviewFormSubmit }) => {
                   Headline: {values.headline.length} characters
                 </span>
               )}
-              {errors.headline && <div>{errors.headline}</div>}
+              {formErrors.headline && <div>{formErrors.headline}</div>}
             </div>
 
             <div className="form-control">
@@ -189,7 +208,7 @@ export default ({ beers, myReviews, onReviewFormSubmit }) => {
                   Description: {values.description.length} characters
                 </span>
               )}
-              {errors.description && <div>{errors.description}</div>}
+              {formErrors.description && <div>{formErrors.description}</div>}
             </div>
             <button className="button" type="submit">
               Submit

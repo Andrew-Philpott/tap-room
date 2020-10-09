@@ -12,7 +12,10 @@
 }
 .home li {
   list-style: none;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 .home li a {
   text-decoration: none;
+  height: 100%;
 }

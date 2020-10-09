@@ -4,14 +4,11 @@ import history from "./helpers/history";
 import NavigationBar from "./components/Navigation";
 import * as routes from "../src/constants/routes";
 import withAuth from "../src/components/withAuth";
-import beerService from "./services/beer-service";
-import reviewService from "./services/review-service";
 import AuthRoute from "./components/AuthRoute";
 import Footer from "./components/Footer";
 import ErrorDisplay from "./components/ErrorDisplay";
 import ErrorBoundary from "./components/ErrorBoundary";
 import "./App.css";
-
 const Home = React.lazy(() => import("./pages/Home"));
 const BeerDetail = React.lazy(() => import("./pages/BeerDetail"));
 const BeerList = React.lazy(() => import("./pages/BeerList"));
@@ -20,6 +17,7 @@ const ReviewForm = React.lazy(() => import("./pages/ReviewForm"));
 const About = React.lazy(() => import("./pages/About"));
 const SignIn = React.lazy(() => import("./pages/SignIn"));
 const Account = React.lazy(() => import("./pages/Account"));
+
 const renderLoader = () => <p>Loading</p>;
 
 function App({
@@ -43,19 +41,21 @@ function App({
   });
 
   React.useEffect(() => {
-    history.listen(() => {
-      const temp = { ...error };
-      temp.validationErrors = null;
-      temp.status = null;
-      setError(temp);
-    });
-  }, []);
+    (async () => {
+      history.listen(() => {
+        const temp = { ...error };
+        temp.validationErrors = null;
+        temp.status = null;
+        setError(temp);
+      });
+    })();
+  }, [error, setError]);
 
   React.useEffect(() => {
     if (beers.length === 0) {
       (async () => {
-        beerService
-          .getBeers()
+        const { getBeers } = await import("./services/beer-service");
+        getBeers()
           .then((res) => {
             setBeers(res);
           })
@@ -73,111 +73,31 @@ function App({
         path.indexOf("/reviews") !== -1 ||
         path.indexOf("/details") !== -1)
     ) {
-      reviewService
-        .getMyReviews(getToken())
-        .then((res) => {
-          setMyReviews(res);
-        })
-        .catch(setError);
+      (async () => {
+        const { getMyReviews } = await import("./services/review-service");
+        getMyReviews(getToken())
+          .then((res) => {
+            setMyReviews(res);
+          })
+          .catch(setError);
+      })();
     }
-  }, [history.location.pathname]);
+  }, []);
 
   const handleSignInOrSignOut = (isAdmin) => {
     !isAuth ? (isAdmin ? signIn(true) : signIn(false)) : signOut();
   };
 
-  const handleBeerFormSubmit = (id, values) => {
-    id
-      ? beerService
-          .updateBeer(getToken(), id, values)
-          .then((response) => {
-            setBeers([
-              ...beers.map((x) =>
-                x.beerId === response.beerId ? response : x
-              ),
-            ]);
-            history.push(routes.BEER_LIST);
-          })
-          .catch(setError)
-      : beerService
-          .createBeer(getToken(), values)
-          .then((response) => {
-            setBeers([...beers, response]);
-            history.push(routes.BEER_LIST);
-          })
-          .catch(setError);
-  };
-
-  const handleDeleteBeer = (id) => {
-    if (window.confirm("Are you sure you want to delete this beer?")) {
-      beerService
-        .deleteBeer(getToken(), id)
-        .then((beer) => {
-          setBeers([...beers.filter((x) => x.beerId !== beer.beerId)]);
-        })
-        .catch(setError);
-    }
-  };
-
-  const handleIncrementBeerPints = (id) => {
-    beerService
-      .incrementPints(getToken(), id)
-      .then((res) => {
-        setBeers([...beers.map((x) => (x.beerId === res.beerId ? res : x))]);
-      })
-      .catch(setError);
-  };
-
-  const handleDecrementBeerPints = (id) => {
-    beerService
-      .decrementPints(getToken(), id)
-      .then((res) => {
-        setBeers([...beers.map((x) => (x.beerId === res.beerId ? res : x))]);
-      })
-      .catch(setError);
-  };
-
-  const handleReviewFormSubmit = (id, values) => {
-    id
-      ? reviewService
-          .updateReview(getToken(), id, values)
-          .then((response) => {
-            setMyReviews([
-              ...myReviews.map((x) =>
-                x.reviewId === response.reviewId ? response : x
-              ),
-            ]);
-            history.push(`/beers/details/${values.beerId}`);
-          })
-          .catch(setError)
-      : reviewService
-          .createReview(getToken(), values)
-          .then((response) => {
-            setMyReviews([...myReviews, response]);
-            history.push(`/beers/details/${values.beerId}`);
-          })
-          .catch(setError);
-  };
-
-  const handleDeleteReview = async (id) => {
-    reviewService
-      .deleteReview(getToken(), id)
-      .then((res) => {
-        setMyReviews([...myReviews.filter((x) => x.reviewId !== res.reviewId)]);
-      })
-      .catch(setError);
-  };
-
   return (
     <div className="App">
-      <Router history={history}>
-        <NavigationBar
-          isAuth={isAuth}
-          onSignInOrSignOut={handleSignInOrSignOut}
-        />
-        <Switch>
-          <ErrorBoundary>
-            <React.Suspense fallback={renderLoader()}>
+      <ErrorBoundary>
+        <React.Suspense fallback={renderLoader()}>
+          <Router history={history}>
+            <NavigationBar
+              isAuth={isAuth}
+              onSignInOrSignOut={handleSignInOrSignOut}
+            />
+            <Switch>
               <Route exact path={routes.ADMIN}>
                 <SignIn onSignInOrSignOut={handleSignInOrSignOut} />
               </Route>
@@ -188,25 +108,22 @@ function App({
               <Route exact path={routes.BEER_LIST}>
                 <BeerList
                   roles={roles}
-                  beers={beers}
+                  getToken={getToken}
                   isAdmin={isAdmin}
                   isAuth={isAuth}
-                  onDeleteBeer={handleDeleteBeer}
-                  onIncrementBeerPints={handleIncrementBeerPints}
-                  onDecrementBeerPints={handleDecrementBeerPints}
+                  beers={beers}
+                  setBeers={setBeers}
+                  setError={setError}
                 />
               </Route>
-              <AuthRoute
-                isAuth={isAuth}
-                isAdmin={isAdmin}
-                adminRequired={true}
-                path={routes.NEW_BEER}
-              >
+              <Route path={routes.NEW_BEER}>
                 <BeerForm
                   beers={beers}
-                  onBeerFormSubmit={handleBeerFormSubmit}
+                  setBeers={setBeers}
+                  setError={setError}
+                  getToken={getToken}
                 />
-              </AuthRoute>
+              </Route>
               <AuthRoute
                 isAuth={isAuth}
                 isAdmin={isAdmin}
@@ -215,39 +132,29 @@ function App({
               >
                 <BeerForm
                   beers={beers}
-                  onBeerFormSubmit={handleBeerFormSubmit}
+                  setBeers={setBeers}
+                  setError={setError}
+                  getToken={getToken}
                 />
               </AuthRoute>
               <AuthRoute isAuth={isAuth} exact path={routes.NEW_REVIEW}>
-                <ReviewForm
-                  beers={beers}
-                  myReviews={myReviews}
-                  onReviewFormSubmit={handleReviewFormSubmit}
-                />
+                <ReviewForm beers={beers} myReviews={myReviews} />
               </AuthRoute>
               <AuthRoute
                 isAuth={isAuth}
                 exact
                 path={routes.NEW_REVIEW_FOR_BEER}
               >
-                <ReviewForm
-                  beers={beers}
-                  myReviews={myReviews}
-                  onReviewFormSubmit={handleReviewFormSubmit}
-                />
+                <ReviewForm beers={beers} myReviews={myReviews} />
               </AuthRoute>
               <AuthRoute isAuth={isAuth} exact path={routes.EDIT_REVIEW}>
-                <ReviewForm
-                  beers={beers}
-                  myReviews={myReviews}
-                  onReviewFormSubmit={handleReviewFormSubmit}
-                />
+                <ReviewForm beers={beers} myReviews={myReviews} />
               </AuthRoute>
               <AuthRoute isAuth={isAuth} exact path={routes.ACCOUNT}>
                 <Account
                   setError={setError}
                   myReviews={myReviews}
-                  onDeleteReview={handleDeleteReview}
+                  setMyReviews={setMyReviews}
                   userId={userId}
                   userName={userName}
                 />
@@ -261,13 +168,13 @@ function App({
                   myReviews={myReviews}
                 />
               </Route>
-            </React.Suspense>
-            <ErrorDisplay error={error} />
-          </ErrorBoundary>
-          <Redirect to="/" from="*" />
-        </Switch>
-        <Footer />
-      </Router>
+              <Redirect to="/" from="*" />
+            </Switch>
+            <Footer />
+          </Router>
+        </React.Suspense>
+        <ErrorDisplay error={error} />
+      </ErrorBoundary>
     </div>
   );
 }

@@ -28,8 +28,8 @@ export default ({ beers }) => {
         {beers.length >= 5 && (
           <div>
             <h2>Top 5</h2>
-            {beers &&
-              beers
+            <ul>
+              {beers
                 .filter((x) => x.reviews && x.reviews.length !== 0)
                 .map((x) => {
                   return {
@@ -41,15 +41,16 @@ export default ({ beers }) => {
                 .slice(0, 5)
                 .map((x, index) => {
                   return (
-                    <p key={index}>
+                    <li key={index}>
                       {index + 1}
                       {". "}
                       <Link to={`/beers/details/${x.beer.beerId}`}>
                         {x.beer.name}
                       </Link>
-                    </p>
+                    </li>
                   );
                 })}
+            </ul>
           </div>
         )}
       </div>

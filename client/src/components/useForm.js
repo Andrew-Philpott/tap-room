@@ -1,7 +1,7 @@
 import React from "react";
 export default (initialFieldValues, validate) => {
   const [values, setValues] = React.useState(initialFieldValues);
-  const [errors, setErrors] = React.useState({});
+  const [formErrors, setFormErrors] = React.useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -15,8 +15,8 @@ export default (initialFieldValues, validate) => {
   return {
     values,
     setValues,
-    errors,
-    setErrors,
+    formErrors,
+    setFormErrors,
     handleInputChange,
   };
 };

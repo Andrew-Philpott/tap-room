@@ -4,6 +4,11 @@ import Plus from "../../assets/svg/plus.svg";
 import Minus from "../../assets/svg/minus.svg";
 import Trash from "../../assets/svg/trash.svg";
 import Pencil from "../../assets/svg/pencil-alt.svg";
+import {
+  incrementPints,
+  decrementPints,
+  deleteBeer,
+} from "../../services/beer-service";
 import * as role from "../../constants/roles";
 import * as route from "../../constants/routes";
 import "./index.css";
@@ -90,10 +95,36 @@ export default ({
   beers,
   isAuth,
   isAdmin,
-  onDeleteBeer,
-  onIncrementBeerPints,
-  onDecrementBeerPints,
+  getToken,
+  setBeers,
+  setError,
 }) => {
+  const handleDeleteBeer = (id) => {
+    if (window.confirm("Are you sure you want to delete this beer?")) {
+      deleteBeer(getToken(), id)
+        .then((beer) => {
+          setBeers([...beers.filter((x) => x.beerId !== beer.beerId)]);
+        })
+        .catch(setError);
+    }
+  };
+
+  const handleIncrementBeerPints = (id) => {
+    incrementPints(getToken(), id)
+      .then((res) => {
+        setBeers([...beers.map((x) => (x.beerId === res.beerId ? res : x))]);
+      })
+      .catch(setError);
+  };
+
+  const handleDecrementBeerPints = (id) => {
+    decrementPints(getToken(), id)
+      .then((res) => {
+        setBeers([...beers.map((x) => (x.beerId === res.beerId ? res : x))]);
+      })
+      .catch(setError);
+  };
+
   return (
     <div id="beer-list" className="main-content">
       <h1>Beers On Tap</h1>
@@ -135,9 +166,9 @@ export default ({
                 key={index}
                 beer={beer}
                 roles={roles}
-                onIncrementBeerPints={onIncrementBeerPints}
-                onDecrementBeerPints={onDecrementBeerPints}
-                onDeleteBeer={onDeleteBeer}
+                onIncrementBeerPints={handleIncrementBeerPints}
+                onDecrementBeerPints={handleDecrementBeerPints}
+                onDeleteBeer={handleDeleteBeer}
               />
             ))}
           </tbody>

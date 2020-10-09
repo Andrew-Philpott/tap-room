@@ -3,8 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import Rating from "../../components/Rating";
 import DarkBeer from "../../assets/img/DarkBeer.webp";
 import Review from "../../components/Review";
-import beerService from "../../services/beer-service";
-import reviewService from "../../services/review-service";
+import { getBeer } from "../../services/beer-service";
 import "./index.css";
 
 export default ({ userId, isAuth, getToken, setError, myReviews }) => {
@@ -12,35 +11,35 @@ export default ({ userId, isAuth, getToken, setError, myReviews }) => {
   const [beer, setBeer] = React.useState(null);
   React.useEffect(() => {
     if (id) {
-      beerService.getBeer(id).then(setBeer).catch(setError);
+      getBeer(id).then(setBeer).catch(setError);
     }
   }, []);
 
-  const handleLike = (item) => {
+  const handleLike = async (item) => {
     const like = item.likes.find((x) => x.userId === userId);
+    const { createLike, deleteLike } = await import(
+      "../../services/review-service"
+    );
+    const newState = { ...beer };
     !like
-      ? reviewService
-          .createLike(getToken(), { reviewId: item.reviewId })
+      ? createLike(getToken(), { reviewId: item.reviewId })
           .then((res) => {
             const review = beer.reviews.find(
               (x) => x.reviewId === item.reviewId
             );
             review.likes.push(res);
-            const newState = { ...beer };
             newState.reviews = beer.reviews.map((x) =>
               x.reviewId === item.reviewId ? review : x
             );
             setBeer(newState);
           })
           .catch((err) => setError(err))
-      : reviewService
-          .deleteLike(getToken(), like.reviewLikeId)
+      : deleteLike(getToken(), like.reviewLikeId)
           .then((res) => {
             const review = { ...item };
             review.likes = review.likes.filter(
               (x) => x.reviewLikeId !== res.reviewLikeId
             );
-            const newState = { ...beer };
             newState.reviews = beer.reviews.map((x) =>
               x.reviewId === item.reviewId ? review : x
             );
@@ -78,7 +77,7 @@ export default ({ userId, isAuth, getToken, setError, myReviews }) => {
               <p>Price: ${beer.price}</p>
               <p>Pints Left: {beer.pints}</p>
             </div>
-            <div style={{ width: "50%" }}>
+            <div>
               <img
                 src={DarkBeer}
                 className="beer-detail-img"

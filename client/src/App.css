@@ -19,10 +19,10 @@
 .App {
   position: relative;
   padding-bottom: 4rem;
-  /* background-attachment: fixed;
+  background-attachment: fixed;
   background-image: url("./assets/img/Beers.webp");
   background-position: center;
-  background-size: cover; */
+  background-size: cover;
   min-height: 100vh;
 }
 .button {
@@ -64,9 +64,6 @@
 }
 .main-content h1 {
   margin-top: 0px;
-}
-.ming-c {
-  color: rgb(21, 97, 109);
 }
 .input {
   border: 1px solid white;
@@ -118,12 +115,6 @@ option {
 @media screen and (min-width: 0px) {
   html,
   body {
-    font-size: 8px;
-  }
-}
-@media screen and (min-width: 400px) {
-  html,
-  body {
     font-size: 12px;
   }
 }
@@ -139,8 +130,7 @@ option {
 a {
   color: white;
 }
-a:hover,
-span:hover {
+a:hover {
   color: #b51fb7;
 }
 form .MuiButtonBase-root:last-of-type {
