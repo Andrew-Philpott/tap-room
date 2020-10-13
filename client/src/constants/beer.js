@@ -1,0 +1,6 @@
+export const GET_BEERS = "GET_BEERS";
+export const NEW_BEER = "NEW_BEER";
+export const DELETE_BEER = "DELETE_BEER";
+export const UPDATE_BEER = "UPDATE_BEER";
+export const INCREASE_BEER_PINTS = "INCREASE_BEER_PINTS";
+export const DECREASE_BEER_PINTS = "DECREASE_BEER_PINTS";
