@@ -73,39 +73,3 @@ export function updateReview(auth, review) {
       );
   };
 }
-export function createLike(auth, id) {
-  return (dispatch) => {
-    dispatch({ type: a.CREATE_LIKE_REQUEST });
-    s.createLike(auth, id)
-      .then((result) =>
-        dispatch({
-          type: a.CREATE_LIKE_SUCCESS,
-          payload: result,
-        })
-      )
-      .catch((error) =>
-        dispatch({
-          type: a.CREATE_LIKE_FAILURE,
-          payload: error,
-        })
-      );
-  };
-}
-export function deleteLike(auth, id) {
-  return (dispatch) => {
-    dispatch({ type: a.DELETE_LIKE_REQUEST });
-    s.deleteLike(auth, id)
-      .then((result) =>
-        dispatch({
-          type: a.DELETE_LIKE_SUCCESS,
-          payload: result,
-        })
-      )
-      .catch((error) =>
-        dispatch({
-          type: a.DELETE_LIKE_FAILURE,
-          payload: error,
-        })
-      );
-  };
-}

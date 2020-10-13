@@ -5,33 +5,41 @@ import Pencil from "../../assets/svg/pencil-alt.svg";
 import { Link } from "react-router-dom";
 import "./index.css";
 
-export default ({ item, onLikeReview, userId, onDeleteReview, isAccount }) => {
+export default ({
+  review,
+  onLikeReview,
+  userId,
+  onDeleteReview,
+  isAccount,
+}) => {
   const [isLiked, setIsLiked] = React.useState(false);
   const handleClick = () => {
-    onLikeReview(item);
+    onLikeReview(review);
   };
 
   React.useEffect(() => {
     const likedResult =
-      item.likes.find((x) => x.userId === userId) !== undefined ? true : false;
+      review.likes.find((x) => x.userId === userId) !== undefined
+        ? true
+        : false;
     setIsLiked(likedResult);
   }, [handleClick]);
 
   const likeEnabled =
-    userId === 0 ? false : item.userId !== userId ? true : false;
+    userId === 0 ? false : review.userId !== userId ? true : false;
 
   return (
     <div className="review">
-      <h2>{isAccount ? item.beer.name : item.name}</h2>
-      <p>{item.dateCreated}</p>
-      <Rating rating={item.rating} max={5} />
-      <h3>{item.headline}</h3>
-      <p>{item.description}</p>
+      <h2>{isAccount ? review.beer.name : review.name}</h2>
+      <p>{review.dateCreated}</p>
+      <Rating rating={review.rating} max={5} />
+      <h3>{review.headline}</h3>
+      <p>{review.description}</p>
       <p>
-        {item.likes.length > 0 && (
+        {review.likes.length > 0 && (
           <React.Fragment>
-            {item.likes.length}
-            {item.likes.length === 1 ? " like" : " likes"}
+            {review.likes.length}
+            {review.likes.length === 1 ? " like" : " likes"}
           </React.Fragment>
         )}
       </p>
@@ -59,10 +67,10 @@ export default ({ item, onLikeReview, userId, onDeleteReview, isAccount }) => {
             <React.Fragment>
               <img
                 src={Trash}
-                onClick={() => onDeleteReview(item.reviewId)}
+                onClick={() => onDeleteReview(review.reviewId)}
                 className="delete"
               />
-              <Link to={`/reviews/edit/${item.reviewId}`}>
+              <Link to={`/reviews/edit/${review.reviewId}`}>
                 <img src={Pencil} className="edit" />
               </Link>
             </React.Fragment>
