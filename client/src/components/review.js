@@ -1,5 +1,5 @@
 import React from "react";
-import Rating from "../Rating";
+import Rating from "../Rating/rating";
 import Trash from "../../assets/svg/trash.svg";
 import Pencil from "../../assets/svg/pencil-alt.svg";
 import { Link } from "react-router-dom";

@@ -6,12 +6,12 @@ import {
   loginRequestB2C,
   tokenRequestB2C,
   forgotRequestB2C,
-} from "../helpers/auth-config-b2c";
+} from "..utils/auth-config-b2c";
 import {
   msalConfigAAD,
   loginRequestAAD,
   tokenRequestAAD,
-} from "../helpers/auth-config-aad";
+} from "../utils/auth-config-aad";
 
 export default function withAuth(WrappedComponent) {
   return class extends React.Component {
