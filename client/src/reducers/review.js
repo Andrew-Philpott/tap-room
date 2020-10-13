@@ -56,7 +56,7 @@ export default (state = initialState, action) => {
         fetching: false,
         reviews: [
           ...state.reviews.map((x) =>
-            x.reviewId === response.reviewId ? response : x
+            x.reviewId === action.payload.reviewId ? action.payload : x
           ),
         ],
       };

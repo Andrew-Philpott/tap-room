@@ -1,51 +1,36 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import Rating from "../../components/Rating/rating";
-import DarkBeer from "../../assets/img/DarkBeer.webp";
-import Review from "../../components/Review";
-import { getBeer } from "../../services/beer-service";
-import "./index.css";
+import Rating from "../../components/rating";
+import DarkBeer from "../../images/DarkBeer.webp";
+import Review from "../../components/review";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getBeerAction,
+  createLikeAction,
+  deleteLikeAction,
+} from "../../actions/beer";
+import "../../css/beer-details.css";
 
-export default ({ userId, isAuth, getToken, setError, myReviews }) => {
+export default ({ userId, isAuth, getToken }) => {
+  const dispatch = useDispatch();
+  const beer = useSelector((state) => state.beers);
+  const reviews = useSelector((state) => state.reviews);
   const { id } = useParams();
-  const [beer, setBeer] = React.useState(null);
   React.useEffect(() => {
     if (id) {
-      getBeer(id).then(setBeer).catch(setError);
+      dispatch(getBeerAction(id));
     }
   }, []);
 
   const handleLike = async (item) => {
     const like = item.likes.find((x) => x.userId === userId);
-    const { createLike, deleteLike } = await import(
-      "../../services/review-service"
+    getToken().then((token) =>
+      dispatch(
+        !like
+          ? createLikeAction(token, { reviewId: item.reviewId })
+          : deleteLikeAction(token, like.reviewLikeId)
+      )
     );
-    const newState = { ...beer };
-    !like
-      ? createLike(getToken(), { reviewId: item.reviewId })
-          .then((res) => {
-            const review = beer.reviews.find(
-              (x) => x.reviewId === item.reviewId
-            );
-            review.likes.push(res);
-            newState.reviews = beer.reviews.map((x) =>
-              x.reviewId === item.reviewId ? review : x
-            );
-            setBeer(newState);
-          })
-          .catch((err) => setError(err))
-      : deleteLike(getToken(), like.reviewLikeId)
-          .then((res) => {
-            const review = { ...item };
-            review.likes = review.likes.filter(
-              (x) => x.reviewLikeId !== res.reviewLikeId
-            );
-            newState.reviews = beer.reviews.map((x) =>
-              x.reviewId === item.reviewId ? review : x
-            );
-            setBeer(newState);
-          })
-          .catch((err) => setError(err));
   };
 
   const average = (array) => array.reduce((a, b) => a + b) / array.length;
@@ -83,7 +68,7 @@ export default ({ userId, isAuth, getToken, setError, myReviews }) => {
                 className="beer-detail-img"
                 alt="Glass of dark beer on a table"
               />
-              {isAuth && !myReviews.includes((x) => x.beerId === id) && (
+              {isAuth && !reviews.includes((x) => x.beerId === id) && (
                 <Link
                   style={{
                     float: "right",

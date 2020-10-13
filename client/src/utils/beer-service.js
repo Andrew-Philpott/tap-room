@@ -1,5 +1,5 @@
-import requestOptions from "..utils/request-options";
-import handleResponse from "..utils/handle-response";
+import requestOptions from "./request-options";
+import handleResponse from "./handle-response";
 
 const baseUrl = "https://taproomapi.azurewebsites.net/api/v1/beers";
 
@@ -44,6 +44,20 @@ export async function updateBeer(auth, id, beer) {
 export async function deleteBeer(auth, id) {
   return await fetch(
     `${baseUrl}/${id}`,
+    requestOptions.deleteOptions(await auth)
+  ).then(handleResponse);
+}
+
+export const createLike = async (auth, like) => {
+  return await fetch(
+    `${baseUrl}/like`,
+    requestOptions.postOptions(await auth, like)
+  ).then(handleResponse);
+};
+
+export async function deleteLike(auth, id) {
+  return await fetch(
+    `${baseUrl}/like/${id}`,
     requestOptions.deleteOptions(await auth)
   ).then(handleResponse);
 }

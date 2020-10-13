@@ -1,9 +1,19 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import BeerBar from "../../assets/img/BeerBar.webp";
-import "./index.css";
+import BeerBar from "../images/BeerBar.webp";
+import { getBeersAction } from "../actions/beer";
+import "../css/home.css";
 
-export default ({ beers }) => {
+export default () => {
+  const dispatch = useDispatch();
+  const beers = useSelector((state) => state.beers.beers);
+  React.useEffect(() => {
+    if (beers.length === 0) {
+      dispatch(getBeersAction());
+    }
+  });
+  console.log(beers);
   const average = (array) => array.reduce((a, b) => a + b) / array.length;
   return (
     <div className="main-content home">

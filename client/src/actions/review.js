@@ -1,7 +1,7 @@
-import * as a from "../contstants/review";
+import * as a from "../constants/review";
 import * as s from "../utils/review-service";
 
-export function getReviews() {
+export function getReviewsAction(auth) {
   return (dispatch) => {
     dispatch({ type: a.GET_REVIEWS_REQUEST });
     s.getMyReviews(auth)
@@ -19,7 +19,7 @@ export function getReviews() {
       );
   };
 }
-export function newReview(auth, review) {
+export function createReviewAction(auth, review) {
   return (dispatch) => {
     dispatch({ type: a.NEW_REVIEW_REQUEST });
     s.createReview(auth, review)
@@ -37,7 +37,7 @@ export function newReview(auth, review) {
       );
   };
 }
-export function deleteReview(auth, id) {
+export function deleteReviewAction(auth, id) {
   return (dispatch) => {
     dispatch({ type: a.DELETE_REVIEW_REQUEST });
     s.deleteReview(auth, id)
@@ -55,7 +55,7 @@ export function deleteReview(auth, id) {
       );
   };
 }
-export function updateReview(auth, review) {
+export function updateReviewAction(auth, review) {
   return (dispatch) => {
     dispatch({ type: a.UPDATE_REVIEW_REQUEST });
     s.updateReview(auth, review)

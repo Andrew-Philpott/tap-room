@@ -8,6 +8,8 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
+  let newState;
+  let review;
   switch (action.type) {
     case a.GET_BEER_REQUEST:
       return {
@@ -61,7 +63,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         fetching: false,
-        beers: [...state.beers.map((x) => (x.beerId === res.beerId ? res : x))],
+        beers: [
+          ...state.beers.map((x) =>
+            x.beerId === action.payload.beerId ? action.payload : x
+          ),
+        ],
       };
     case a.UPDATE_BEER_FAILURE:
       return {
@@ -128,8 +134,8 @@ export default (state = initialState, action) => {
         error: null,
       };
     case a.CREATE_LIKE_SUCCESS:
-      const newState = { ...state.beer };
-      const review = newState.reviews.find(
+      newState = { ...state.beer };
+      review = newState.reviews.find(
         (x) => x.reviewId === action.payload.reviewId
       );
       review.likes.push(action.payload);
@@ -154,15 +160,15 @@ export default (state = initialState, action) => {
         error: null,
       };
     case a.DELETE_LIKE_SUCCESS:
-      const newState = { ...state.beer };
-      const review = newState.reviews.find(
+      newState = { ...state.beer };
+      review = newState.reviews.find(
         (x) => x.reviewId === action.payload.reviewId
       );
       review.likes = review.likes.filter(
         (x) => x.reviewLikeId !== action.payload.reviewLikeId
       );
-      newState.reviews = beer.reviews.map((x) =>
-        x.reviewId === item.reviewId ? review : x
+      newState.reviews = newState.reviews.map((x) =>
+        x.reviewId === action.payload.reviewId ? review : x
       );
       return {
         ...state,

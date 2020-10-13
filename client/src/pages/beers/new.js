@@ -1,6 +1,8 @@
 import React from "react";
-import useForm from "../../components/useForm";
+import useForm from "../../components/use-form";
 import { useParams, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { createBeerAction, updateBeerAction } from "../../actions/beer";
 
 const initalFieldValues = {
   name: "",
@@ -13,8 +15,10 @@ const initalFieldValues = {
   pints: "",
 };
 
-export default ({ beers, setBeers, setError, getToken }) => {
+export default ({ getToken }) => {
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const beers = useSelector((state) => state.beers);
   const history = useHistory();
   const validate = (fieldValues = values) => {
     let temp = { ...formErrors };
@@ -90,20 +94,12 @@ export default ({ beers, setBeers, setError, getToken }) => {
     e.preventDefault();
     if (validate()) {
       getToken((token) => {
-        const { updateBeer, createBeer } = import(
-          "../../services/beer-service"
+        dispatch(
+          id
+            ? updateBeerAction(token, id, values)
+            : createBeerAction(token, values)
         );
-        return id ? updateBeer(token, id, values) : createBeer(token, values);
-      })
-        .then((res) => {
-          setBeers(
-            id
-              ? [...beers.map((x) => (x.beerId === res.beerId ? res : x))]
-              : [...beers, res]
-          );
-          history.push("/beers");
-        })
-        .catch(setError);
+      });
     }
   }
 

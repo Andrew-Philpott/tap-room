@@ -1,23 +1,22 @@
 import React from "react";
-import Review from "../components/Review";
-import { deleteReview } from "../../services/review-service";
-import "./index.css";
+import Review from "../components/review";
+import { deleteReviewAction, getReviewsAction } from "../actions/review";
+import { useDispatch, useSelector } from "react-redux";
 
-export default ({
-  userId,
-  userName,
-  getToken,
-  myReviews,
-  setMyReviews,
-  setError,
-}) => {
+export default ({ userId, userName, getToken }) => {
+  const dispatch = useDispatch();
+  const reviews = useSelector((state) => state.reviews);
   const handleDeleteReview = async (id) => {
-    deleteReview(getToken(), id)
-      .then((res) => {
-        setMyReviews([...myReviews.filter((x) => x.reviewId !== res.reviewId)]);
-      })
-      .catch(setError);
+    getToken().then((token) => dispatch(deleteReviewAction(token, id)));
   };
+
+  React.useEffect(() => {
+    if (reviews.length === 0) {
+      getToken().then((token) => {
+        dispatch(getReviewsAction(token));
+      });
+    }
+  }, []);
 
   return (
     <div className="main-content">
@@ -32,10 +31,10 @@ export default ({
           of $70 in food or beverages
         </h4>
       </div>
-      {myReviews.length > 0 ? (
+      {reviews.length > 0 ? (
         <React.Fragment>
           <h2>My reviews</h2>
-          {myReviews.map((review, index) => {
+          {reviews.map((review, index) => {
             return (
               <Review
                 item={review}

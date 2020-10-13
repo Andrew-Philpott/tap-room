@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import * as routes from "../../constants/routes";
-import "./index.css";
+import * as routes from "../constants/routes";
+import "../css/footer.css";
 
 export default () => {
   return (

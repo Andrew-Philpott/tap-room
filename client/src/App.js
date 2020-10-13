@@ -1,22 +1,23 @@
 import React from "react";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
-import history from "./helpers/history";
-import NavigationBar from "./components/Navigation";
+import history from "./utils/history";
+import NavigationBar from "./components/navigation";
 import * as routes from "../src/constants/routes";
-import withAuth from "../src/components/withAuth";
-import AuthRoute from "./components/AuthRoute";
-import Footer from "./components/Footer";
-import ErrorDisplay from "./components/ErrorDisplay";
-import ErrorBoundary from "./components/ErrorBoundary";
+import withAuth from "../src/components/with-auth";
+import AuthRoute from "./components/auth-route";
+import Footer from "./components/footer";
+import ErrorDisplay from "./components/error-display";
+import ErrorBoundary from "./components/error-boundary";
+import { useDispatch } from "react-redux";
 import "./App.css";
-const Home = React.lazy(() => import("./pages/Home"));
-const BeerDetail = React.lazy(() => import("./pages/BeerDetail"));
-const BeerList = React.lazy(() => import("./pages/BeerList"));
-const BeerForm = React.lazy(() => import("./pages/BeerForm"));
-const ReviewForm = React.lazy(() => import("./pages/ReviewForm"));
-const About = React.lazy(() => import("./pages/About"));
-const SignIn = React.lazy(() => import("./pages/SignIn"));
-const Account = React.lazy(() => import("./pages/Account"));
+const Home = React.lazy(() => import("./pages/index"));
+const BeerDetail = React.lazy(() => import("./pages/beers/details"));
+const BeerList = React.lazy(() => import("./pages/beers/index"));
+const BeerForm = React.lazy(() => import("./pages/beers/new"));
+const ReviewForm = React.lazy(() => import("./pages/reviews/new"));
+const About = React.lazy(() => import("./pages/about"));
+const SignIn = React.lazy(() => import("./pages/admin"));
+const Account = React.lazy(() => import("./pages/account"));
 
 const renderLoader = () => <p>Loading</p>;
 
@@ -30,8 +31,7 @@ function App({
   userName,
   roles,
 }) {
-  const [beers, setBeers] = React.useState([]);
-  const [myReviews, setMyReviews] = React.useState([]);
+  const dispatch = useDispatch();
   const [error, setError] = React.useState((err) => {
     const validationErrors =
       err && err.validationErrors ? err.validationErrors : null;
@@ -51,38 +51,25 @@ function App({
     })();
   }, [error, setError]);
 
-  React.useEffect(() => {
-    if (beers.length === 0) {
-      (async () => {
-        const { getBeers } = await import("./services/beer-service");
-        getBeers()
-          .then((res) => {
-            setBeers(res);
-          })
-          .catch(setError);
-      })();
-    }
-  }, [setBeers]);
-
-  React.useEffect(() => {
-    const path = history.location.pathname;
-    if (
-      isAuth === true &&
-      myReviews.length === 0 &&
-      (path === "/account" ||
-        path.indexOf("/reviews") !== -1 ||
-        path.indexOf("/details") !== -1)
-    ) {
-      (async () => {
-        const { getMyReviews } = await import("./services/review-service");
-        getMyReviews(getToken())
-          .then((res) => {
-            setMyReviews(res);
-          })
-          .catch(setError);
-      })();
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   const path = history.location.pathname;
+  //   if (
+  //     isAuth === true &&
+  //     myReviews.length === 0 &&
+  //     (path === "/account" ||
+  //       path.indexOf("/reviews") !== -1 ||
+  //       path.indexOf("/details") !== -1)
+  //   ) {
+  //     (async () => {
+  //       const { getMyReviews } = await import("./services/review-service");
+  //       getMyReviews(getToken())
+  //         .then((res) => {
+  //           setMyReviews(res);
+  //         })
+  //         .catch(setError);
+  //     })();
+  //   }
+  // }, []);
 
   const handleSignInOrSignOut = (isAdmin) => {
     !isAuth ? (isAdmin ? signIn(true) : signIn(false)) : signOut();
@@ -102,7 +89,7 @@ function App({
                 <SignIn onSignInOrSignOut={handleSignInOrSignOut} />
               </Route>
               <Route exact path={routes.LANDING}>
-                <Home beers={beers} />
+                <Home />
               </Route>
               <Route exact path={routes.ABOUT} component={About} />
               <Route exact path={routes.BEER_LIST}>
@@ -111,18 +98,10 @@ function App({
                   getToken={getToken}
                   isAdmin={isAdmin}
                   isAuth={isAuth}
-                  beers={beers}
-                  setBeers={setBeers}
-                  setError={setError}
                 />
               </Route>
               <Route path={routes.NEW_BEER}>
-                <BeerForm
-                  beers={beers}
-                  setBeers={setBeers}
-                  setError={setError}
-                  getToken={getToken}
-                />
+                <BeerForm getToken={getToken} />
               </Route>
               <AuthRoute
                 isAuth={isAuth}
@@ -130,42 +109,29 @@ function App({
                 adminRequired={true}
                 path={routes.BEER_EDIT}
               >
-                <BeerForm
-                  beers={beers}
-                  setBeers={setBeers}
-                  setError={setError}
-                  getToken={getToken}
-                />
+                <BeerForm getToken={getToken} />
               </AuthRoute>
               <AuthRoute isAuth={isAuth} exact path={routes.NEW_REVIEW}>
-                <ReviewForm beers={beers} myReviews={myReviews} />
+                <ReviewForm />
               </AuthRoute>
               <AuthRoute
                 isAuth={isAuth}
                 exact
                 path={routes.NEW_REVIEW_FOR_BEER}
               >
-                <ReviewForm beers={beers} myReviews={myReviews} />
+                <ReviewForm />
               </AuthRoute>
               <AuthRoute isAuth={isAuth} exact path={routes.EDIT_REVIEW}>
-                <ReviewForm beers={beers} myReviews={myReviews} />
+                <ReviewForm />
               </AuthRoute>
               <AuthRoute isAuth={isAuth} exact path={routes.ACCOUNT}>
-                <Account
-                  setError={setError}
-                  myReviews={myReviews}
-                  setMyReviews={setMyReviews}
-                  userId={userId}
-                  userName={userName}
-                />
+                <Account userId={userId} userName={userName} />
               </AuthRoute>
               <Route exact path={routes.BEER_DETAILS}>
                 <BeerDetail
                   userId={userId}
                   getToken={getToken}
-                  setError={setError}
                   isAuth={isAuth}
-                  myReviews={myReviews}
                 />
               </Route>
               <Redirect to="/" from="*" />

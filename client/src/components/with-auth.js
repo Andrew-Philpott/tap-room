@@ -6,7 +6,7 @@ import {
   loginRequestB2C,
   tokenRequestB2C,
   forgotRequestB2C,
-} from "..utils/auth-config-b2c";
+} from "../utils/auth-config-b2c";
 import {
   msalConfigAAD,
   loginRequestAAD,

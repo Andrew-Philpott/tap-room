@@ -1,11 +1,12 @@
 import React from "react";
-import Rating from "../Rating/rating";
-import Trash from "../../assets/svg/trash.svg";
-import Pencil from "../../assets/svg/pencil-alt.svg";
+import Rating from "./rating";
+import Trash from "../svg/trash.svg";
+import Pencil from "../svg/pencil-alt.svg";
 import { Link } from "react-router-dom";
-import "./index.css";
+import "../css/review.css";
 
 export default ({
+  auth,
   review,
   onLikeReview,
   userId,

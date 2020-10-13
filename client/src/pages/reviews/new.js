@@ -1,8 +1,9 @@
 import React from "react";
 import useForm from "../../components/use-form";
-import { createReview, updateReview } from "../../services/review-service";
+import { useDispatch, useSelector } from "react-redux";
+import { createReviewAction, updateReviewAction } from "../../actions/review";
 import { useParams, useLocation, useHistory } from "react-router-dom";
-import "./index.css";
+import "../../css/review-form.css";
 
 const initalFieldValues = {
   beerId: "",
@@ -11,17 +12,20 @@ const initalFieldValues = {
   headline: "",
 };
 
-export default ({ beers, myReviews, setMyReviews, getToken, setError }) => {
+export default ({ getToken }) => {
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const beers = useSelector((state) => state.beers);
+  const reviews = useSelector((state) => state.reviews);
   const history = useHistory();
   const path = useLocation().pathname;
   const parsedId = parseInt(id);
   const beerSelected = path.indexOf("/reviews/new/") !== -1 ? true : false;
   const isEditReview = path.indexOf("/reviews/edit") !== -1 ? true : false;
-  const reviewedBeers = myReviews.map((x) => x.beerId);
+  const reviewedBeers = reviews.map((x) => x.beerId);
 
   const availableBeersToReview =
-    beers.length !== 0 && myReviews
+    beers.length !== 0 && reviews
       ? beers.filter((beer) => !reviewedBeers.includes(beer.beerId))
       : [];
 
@@ -62,8 +66,8 @@ export default ({ beers, myReviews, setMyReviews, getToken, setError }) => {
       let temp = { ...values };
       if (beerSelected) {
         temp.beerId = parsedId;
-      } else if (isEditReview && myReviews.length !== 0) {
-        const review = myReviews.find((x) => x.reviewId === parsedId);
+      } else if (isEditReview && reviews.length !== 0) {
+        const review = reviews.find((x) => x.reviewId === parsedId);
         temp = review;
       }
       setValues(temp);
@@ -73,23 +77,14 @@ export default ({ beers, myReviews, setMyReviews, getToken, setError }) => {
   function handleSubmit(e) {
     e.preventDefault();
     if (validate()) {
-      parsedId
-        ? updateReview(getToken(), parsedId, values)
-            .then((response) => {
-              setMyReviews([
-                ...myReviews.map((x) =>
-                  x.reviewId === response.reviewId ? response : x
-                ),
-              ]);
-              history.push(`/beers/details/${values.beerId}`);
-            })
-            .catch(setError)
-        : createReview(getToken(), values)
-            .then((response) => {
-              setMyReviews([...myReviews, response]);
-              history.push(`/beers/details/${values.beerId}`);
-            })
-            .catch(setError);
+      getToken((auth) => {
+        dispatch(
+          parsedId
+            ? updateReviewAction(auth, parsedId, values)
+            : createReviewAction(auth, values)
+        );
+      });
+      // history.push(`/beers/details/${values.beerId}`);
     }
   }
   return (
@@ -107,7 +102,7 @@ export default ({ beers, myReviews, setMyReviews, getToken, setError }) => {
                 beers.find(
                   (x) =>
                     x.beerId ===
-                    myReviews.find((x) => x.reviewId === parsedId).beerId
+                    reviews.find((x) => x.reviewId === parsedId).beerId
                 ).name
               }
             </h1>

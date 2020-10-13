@@ -1,25 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Plus from "../../assets/svg/plus.svg";
-import Minus from "../../assets/svg/minus.svg";
-import Trash from "../../assets/svg/trash.svg";
-import Pencil from "../../assets/svg/pencil-alt.svg";
+import Plus from "../../svg/plus.svg";
+import Minus from "../../svg/minus.svg";
+import Trash from "../../svg/trash.svg";
+import Pencil from "../../svg/pencil-alt.svg";
 import {
-  incrementPints,
-  decrementPints,
-  deleteBeer,
-} from "../../services/beer-service";
+  increaseBeerPintsAction,
+  decreaseBeerPintsAction,
+  deleteBeerAction,
+} from "../../actions/beer";
 import * as role from "../../constants/roles";
 import * as route from "../../constants/routes";
-import "./index.css";
+import "../../css/beers.css";
+import { useDispatch, useSelector } from "react-redux";
 
-const BeerItem = ({
-  roles,
-  beer,
-  onDeleteBeer,
-  onIncrementBeerPints,
-  onDecrementBeerPints,
-}) => {
+const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
   return (
     <tr key={beer.beerId}>
       <td>
@@ -59,14 +54,14 @@ const BeerItem = ({
               <Minus
                 className="minus"
                 onClick={() =>
-                  beer.pints > 0 && onDecrementBeerPints(beer.beerId)
+                  beer.pints > 0 && onChangeBeerPints(true, beer.beerId)
                 }
               />
             </td>
             <td>
               <Plus
                 className="plus"
-                onClick={() => onIncrementBeerPints(beer.beerId)}
+                onClick={() => onChangeBeerPints(false, beer.beerId)}
               />
             </td>
             {roles.indexOf(role.ADMIN) !== -1 && (
@@ -90,39 +85,24 @@ const BeerItem = ({
   );
 };
 
-export default ({
-  roles,
-  beers,
-  isAuth,
-  isAdmin,
-  getToken,
-  setBeers,
-  setError,
-}) => {
+export default ({ roles, isAuth, isAdmin, getToken }) => {
+  const dispatch = useDispatch();
+  const beers = useSelector((state) => state.beers);
   const handleDeleteBeer = (id) => {
     if (window.confirm("Are you sure you want to delete this beer?")) {
-      deleteBeer(getToken(), id)
-        .then((beer) => {
-          setBeers([...beers.filter((x) => x.beerId !== beer.beerId)]);
-        })
-        .catch(setError);
+      getToken().then((token) => {
+        dispatch(deleteBeerAction(token, id));
+      });
     }
   };
-
-  const handleIncrementBeerPints = (id) => {
-    incrementPints(getToken(), id)
-      .then((res) => {
-        setBeers([...beers.map((x) => (x.beerId === res.beerId ? res : x))]);
-      })
-      .catch(setError);
-  };
-
-  const handleDecrementBeerPints = (id) => {
-    decrementPints(getToken(), id)
-      .then((res) => {
-        setBeers([...beers.map((x) => (x.beerId === res.beerId ? res : x))]);
-      })
-      .catch(setError);
+  const handleChangeBeerPints = (isMinus, id) => {
+    getToken().then((token) => {
+      dispatch(
+        isMinus
+          ? decreaseBeerPintsAction(token, id)
+          : increaseBeerPintsAction(token, id)
+      );
+    });
   };
 
   return (
@@ -166,8 +146,7 @@ export default ({
                 key={index}
                 beer={beer}
                 roles={roles}
-                onIncrementBeerPints={handleIncrementBeerPints}
-                onDecrementBeerPints={handleDecrementBeerPints}
+                onChangeBeerPints={handleChangeBeerPints}
                 onDeleteBeer={handleDeleteBeer}
               />
             ))}
