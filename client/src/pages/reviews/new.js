@@ -1,5 +1,5 @@
 import React from "react";
-import useForm from "../../components/useForm";
+import useForm from "../../components/use-form";
 import { createReview, updateReview } from "../../services/review-service";
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import "./index.css";

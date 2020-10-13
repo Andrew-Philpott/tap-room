@@ -1,20 +1,108 @@
 import * as a from "../constants/beer";
+import * as s from "../utils/beer-service";
 
-export const getBeers = () => ({
-  type: a.GET_BEERS,
-});
-export const newBeer = () => ({
-  type: a.NEW_BEER,
-});
-export const deleteBeer = () => ({
-  type: a.DELETE_BEER,
-});
-export const updateBeer = () => ({
-  type: a.UPDATE_BEER,
-});
-export const increaseBeerPints = () => ({
-  type: a.INCREASE_BEER_PINT_QUANTITY,
-});
-export const decreaseBeerPints = () => ({
-  type: a.DECREASE_BEER_PINTS,
-});
+export function getBeers() {
+  return (dispatch) => {
+    dispatch({ type: a.GET_BEERS_REQUEST });
+    s.getBeers()
+      .then((result) =>
+        dispatch({
+          type: a.GET_BEERS_SUCCESS,
+          payload: result,
+        })
+      )
+      .catch((error) =>
+        dispatch({
+          type: a.GET_BEERS_FAILURE,
+          payload: error,
+        })
+      );
+  };
+}
+export function newBeer(auth, beer) {
+  return (dispatch) => {
+    dispatch({ type: a.NEW_BEER_REQUEST });
+    s.createBeer(auth, beer)
+      .then((result) =>
+        dispatch({
+          type: a.NEW_BEER_SUCCESS,
+          payload: result,
+        })
+      )
+      .catch((error) =>
+        dispatch({
+          type: a.NEW_BEER_FAILURE,
+          payload: error,
+        })
+      );
+  };
+}
+export function deleteBeer(auth, id) {
+  return (dispatch) => {
+    dispatch({ type: a.DELETE_BEER_REQUEST });
+    s.deleteBeer(auth, id)
+      .then((result) =>
+        dispatch({ type: a.DELETE_BEER_SUCCESS, payload: result })
+      )
+      .catch((error) =>
+        dispatch({
+          type: a.DELETE_BEER_FAILURE,
+          payload: error,
+        })
+      );
+  };
+}
+export function updateBeer(auth, beer) {
+  return (dispatch) => {
+    dispatch({ type: a.UPDATE_BEER_REQUEST });
+    s.updateBeer(auth, beer)
+      .then((result) =>
+        dispatch({
+          type: a.UPDATE_BEER_SUCCESS,
+          payload: result,
+        })
+      )
+      .catch((error) =>
+        dispatch({
+          type: a.UPDATE_BEER_FAILURE,
+          payload: error,
+        })
+      );
+  };
+}
+export function increaseBeerPints(auth, id) {
+  return (dispatch) => {
+    dispatch({ type: a.INCREASE_BEER_PINTS_REQUEST });
+    s.incrementPints(auth, id)
+      .then((result) =>
+        dispatch({
+          type: a.INCREASE_BEER_PINTS_SUCCESS,
+          payload: result,
+        })
+      )
+      .catch((error) =>
+        dispatch({
+          type: a.INCREASE_BEER_PINTS_FAILURE,
+          payload: error,
+        })
+      );
+  };
+}
+export function decreaseBeerPints(auth, id) {
+  return (dispatch) => {
+    dispatch({ type: a.DECREASE_BEER_PINTS_REQUEST });
+    s.decrementPints(auth, id)
+      .then((result) =>
+        dispatch({
+          type: a.DECREASE_BEER_PINTS_SUCCESS,
+          payload: result,
+        })
+      )
+      .catch((error) =>
+        dispatch({
+          type: a.DECREASE_BEER_PINTS_FAILURE,
+          payload: error,
+        })
+      );
+  };
+}

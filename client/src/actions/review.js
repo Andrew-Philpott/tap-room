@@ -1,26 +1,111 @@
-import * as a from "../constants/review";
+import * as a from "../contstants/review";
+import * as s from "../utils/review-service";
 
-export const getReviews = () => ({
-  type: a.GET_REVIEWS,
-  payload: result,
-});
-export const newReview = () => ({
-  type: a.NEW_REVIEW,
-  payload: result,
-});
-export const deleteReview = () => ({
-  type: a.DELETE_REVIEW,
-  payload: result,
-});
-export const updateReview = () => ({
-  type: a.UPDATE_REVIEW,
-  payload: result,
-});
-export const createLike = () => ({
-  type: a.CREATE_LIKE,
-  payload: result,
-});
-export const deleteLike = () => ({
-  type: a.DELETE_LIKE,
-  payload: result,
-});
+export function getReviews() {
+  return (dispatch) => {
+    dispatch({ type: a.GET_REVIEWS_REQUEST });
+    s.getMyReviews(auth)
+      .then((result) =>
+        dispatch({
+          type: a.GET_REVIEWS_SUCCESS,
+          payload: result,
+        })
+      )
+      .catch((error) =>
+        dispatch({
+          type: a.GET_REVIEWS_FAILURE,
+          payload: error,
+        })
+      );
+  };
+}
+export function newReview(auth, review) {
+  return (dispatch) => {
+    dispatch({ type: a.NEW_REVIEW_REQUEST });
+    s.createReview(auth, review)
+      .then((result) =>
+        dispatch({
+          type: a.NEW_REVIEW_SUCCESS,
+          payload: result,
+        })
+      )
+      .catch((error) =>
+        dispatch({
+          type: a.NEW_REVIEW_FAILURE,
+          payload: error,
+        })
+      );
+  };
+}
+export function deleteReview(auth, id) {
+  return (dispatch) => {
+    dispatch({ type: a.DELETE_REVIEW_REQUEST });
+    s.deleteReview(auth, id)
+      .then((result) =>
+        dispatch({
+          type: a.DELETE_REVIEW_SUCCESS,
+          payload: result,
+        })
+      )
+      .catch((error) =>
+        dispatch({
+          type: a.DELETE_REVIEW_FAILURE,
+          payload: error,
+        })
+      );
+  };
+}
+export function updateReview(auth, review) {
+  return (dispatch) => {
+    dispatch({ type: a.UPDATE_REVIEW_REQUEST });
+    s.updateReview(auth, review)
+      .then((result) =>
+        dispatch({
+          type: a.UPDATE_REVIEW_SUCCESS,
+          payload: result,
+        })
+      )
+      .catch((error) =>
+        dispatch({
+          type: a.UPDATE_REVIEW_FAILURE,
+          payload: error,
+        })
+      );
+  };
+}
+export function createLike(auth, id) {
+  return (dispatch) => {
+    dispatch({ type: a.CREATE_LIKE_REQUEST });
+    s.createLike(auth, id)
+      .then((result) =>
+        dispatch({
+          type: a.CREATE_LIKE_SUCCESS,
+          payload: result,
+        })
+      )
+      .catch((error) =>
+        dispatch({
+          type: a.CREATE_LIKE_FAILURE,
+          payload: error,
+        })
+      );
+  };
+}
+export function deleteLike(auth, id) {
+  return (dispatch) => {
+    dispatch({ type: a.DELETE_LIKE_REQUEST });
+    s.deleteLike(auth, id)
+      .then((result) =>
+        dispatch({
+          type: a.DELETE_LIKE_SUCCESS,
+          payload: result,
+        })
+      )
+      .catch((error) =>
+        dispatch({
+          type: a.DELETE_LIKE_FAILURE,
+          payload: error,
+        })
+      );
+  };
+}
