@@ -1,10 +1,21 @@
+# C# build
 **/bin
 **/obj
+**/.DS_Store
+
+# C# api settings
 api/appsettings.json
 api/appsettings.Development.json
+migrations
+
+# npm
 **/node_modules
 **/.vscode
-**/build
-**/.DS_Store
-.env
-migrations
+
+# gatsby
+.cache/
+public
+
+# dotenv
+.env.development
+.env.production
