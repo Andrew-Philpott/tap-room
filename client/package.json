@@ -5,12 +5,15 @@
   "dependencies": {
     "@azure/msal-browser": "^2.3.0",
     "cross-env": "^7.0.2",
+    "gatsby": "^2.24.76",
     "history": "^4.10.1",
     "msal": "^1.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "redux": "^4.0.5"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
