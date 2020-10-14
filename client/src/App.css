@@ -26,27 +26,16 @@
   min-height: 100vh;
 }
 .button {
-  background-color: white !important;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
   min-width: 100px !important;
 }
-.button:hover {
-  background-color: white !important;
-  color: black;
-}
 .delete,
+.edit,
 .hover,
 .minus,
 .plus {
   cursor: pointer;
-}
-.delete:hover {
-  color: red;
-}
-.edit:hover {
-  color: green;
-}
-.green-c {
-  color: green;
 }
 .main-content {
   max-width: 1280px;
@@ -76,23 +65,20 @@
   width: 100%;
   font-size: 20px;
 }
-.MuiInputBase-input {
-  color: white !important;
-}
-.MuiOutlinedInput-notchedOutline {
-  border-color: white !important;
-}
-form > .form-control {
+form .form-control {
   width: 100%;
   min-height: 5.2rem;
   position: relative;
   margin-bottom: 1rem;
 }
-form > .form-control > svg {
+form .form-control > svg {
   position: absolute;
   right: 0px;
   height: 4rem;
   pointer-events: none;
+}
+form button:last-of-type {
+  float: right;
 }
 select {
   -webkit-appearance: none;
@@ -103,13 +89,13 @@ option {
   color: black;
   font-family: inherit;
 }
-.orange-c {
+.orange {
   color: rgb(255, 125, 0);
 }
-.red-c {
+.red {
   color: red;
 }
-.yellow-c {
+.yellow {
   color: yellow;
 }
 @media screen and (min-width: 0px) {
@@ -132,16 +118,6 @@ a {
 }
 a:hover {
   color: #b51fb7;
-}
-form .MuiButtonBase-root:last-of-type {
-  float: right;
-}
-form > .MuiGrid-container {
-  margin-top: 4px;
-}
-form label:first-of-type {
-  display: inline-block;
-  margin-top: 0px;
 }
 form svg path {
   color: white;

@@ -2,17 +2,17 @@ import React from "react";
 import Rating from "./rating";
 import Trash from "../svg/trash.svg";
 import Pencil from "../svg/pencil-alt.svg";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import "../css/review.css";
 
 export default ({
-  auth,
   review,
   onLikeReview,
   userId,
   onDeleteReview,
   isAccount,
 }) => {
+  const history = useHistory();
   const [isLiked, setIsLiked] = React.useState(false);
   const handleClick = () => {
     onLikeReview(review);
@@ -67,13 +67,17 @@ export default ({
           {isAccount && (
             <React.Fragment>
               <img
+                alt=""
                 src={Trash}
                 onClick={() => onDeleteReview(review.reviewId)}
                 className="delete"
               />
-              <Link to={`/reviews/edit/${review.reviewId}`}>
-                <img src={Pencil} className="edit" />
-              </Link>
+              <img
+                alt=""
+                src={Pencil}
+                className="edit"
+                onClick={() => history.push(`/reviews/edit/${review.reviewId}`)}
+              />
             </React.Fragment>
           )}
         </React.Fragment>

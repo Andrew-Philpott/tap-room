@@ -32,6 +32,10 @@ function App({
   roles,
 }) {
   const dispatch = useDispatch();
+  console.log(isAuth);
+  console.log(isAdmin);
+  console.log(userId);
+  console.log(userName);
   const [error, setError] = React.useState((err) => {
     const validationErrors =
       err && err.validationErrors ? err.validationErrors : null;
@@ -125,7 +129,11 @@ function App({
                 <ReviewForm />
               </AuthRoute>
               <AuthRoute isAuth={isAuth} exact path={routes.ACCOUNT}>
-                <Account userId={userId} userName={userName} />
+                <Account
+                  getToken={getToken}
+                  userId={userId}
+                  userName={userName}
+                />
               </AuthRoute>
               <Route exact path={routes.BEER_DETAILS}>
                 <BeerDetail

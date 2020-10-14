@@ -5,17 +5,16 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default ({ userId, userName, getToken }) => {
   const dispatch = useDispatch();
-  const reviews = useSelector((state) => state.reviews);
+  const reviews = useSelector((state) => state.reviews.reviews);
+  console.log(reviews);
   const handleDeleteReview = async (id) => {
     getToken().then((token) => dispatch(deleteReviewAction(token, id)));
   };
 
   React.useEffect(() => {
-    if (reviews.length === 0) {
-      getToken().then((token) => {
-        dispatch(getReviewsAction(token));
-      });
-    }
+    getToken().then((token) => {
+      dispatch(getReviewsAction(token));
+    });
   }, []);
 
   return (
@@ -37,7 +36,7 @@ export default ({ userId, userName, getToken }) => {
           {reviews.map((review, index) => {
             return (
               <Review
-                item={review}
+                review={review}
                 userId={userId}
                 onDeleteReview={handleDeleteReview}
                 isAccount={true}

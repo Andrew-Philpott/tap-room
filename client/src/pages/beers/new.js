@@ -3,6 +3,7 @@ import useForm from "../../components/use-form";
 import { useParams, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createBeerAction, updateBeerAction } from "../../actions/beer";
+import "../../css/beer-form.css";
 
 const initalFieldValues = {
   name: "",
@@ -18,7 +19,7 @@ const initalFieldValues = {
 export default ({ getToken }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const beers = useSelector((state) => state.beers);
+  const beers = useSelector((state) => state.beers.beers);
   const history = useHistory();
   const validate = (fieldValues = values) => {
     let temp = { ...formErrors };
@@ -163,46 +164,40 @@ export default ({ getToken }) => {
           {formErrors.flavor && <div>{formErrors.flavor}</div>}
         </div>
         <div>
-          <div>
-            <div className="form-control">
-              <label htmlFor="price">Price</label>
-              <input
-                type="text"
-                name="price"
-                className="input"
-                value={values.price}
-                onChange={handleInputChange}
-              />
-              {formErrors.price && <div>{formErrors.price}</div>}
-            </div>
+          <div className="form-control">
+            <label htmlFor="price">Price</label>
+            <input
+              type="text"
+              name="price"
+              className="input"
+              value={values.price}
+              onChange={handleInputChange}
+            />
+            {formErrors.price && <div>{formErrors.price}</div>}
           </div>
-          <div>
-            <div className="form-control">
-              <label htmlFor="alcoholContent">Alcohol Content</label>
-              <input
-                type="text"
-                name="alcoholContent"
-                className="input"
-                value={values.alcoholContent}
-                onChange={handleInputChange}
-              />
-              {formErrors.alcoholContent && (
-                <div>{formErrors.alcoholContent}</div>
-              )}
-            </div>
+          <div className="form-control">
+            <label htmlFor="alcoholContent">Alcohol Content</label>
+            <input
+              type="text"
+              name="alcoholContent"
+              className="input"
+              value={values.alcoholContent}
+              onChange={handleInputChange}
+            />
+            {formErrors.alcoholContent && (
+              <div>{formErrors.alcoholContent}</div>
+            )}
           </div>
-          <div>
-            <div className="form-control">
-              <label htmlFor="pints">Pints</label>
-              <input
-                type="text"
-                name="pints"
-                className="input"
-                value={values.pints}
-                onChange={handleInputChange}
-              />
-              {formErrors.pints && <div>{formErrors.pints}</div>}
-            </div>
+          <div className="form-control">
+            <label htmlFor="pints">Pints</label>
+            <input
+              type="text"
+              name="pints"
+              className="input"
+              value={values.pints}
+              onChange={handleInputChange}
+            />
+            {formErrors.pints && <div>{formErrors.pints}</div>}
           </div>
         </div>
         <button className="button" type="submit">

@@ -1,10 +1,15 @@
 import * as a from "../constants/review";
-import * as s from "../utils/review-service";
+import {
+  getMyReviews,
+  createReview,
+  updateReview,
+  deleteReview,
+} from "../utils/review-service";
 
 export function getReviewsAction(auth) {
   return (dispatch) => {
     dispatch({ type: a.GET_REVIEWS_REQUEST });
-    s.getMyReviews(auth)
+    getMyReviews(auth)
       .then((result) =>
         dispatch({
           type: a.GET_REVIEWS_SUCCESS,
@@ -22,7 +27,7 @@ export function getReviewsAction(auth) {
 export function createReviewAction(auth, review) {
   return (dispatch) => {
     dispatch({ type: a.NEW_REVIEW_REQUEST });
-    s.createReview(auth, review)
+    createReview(auth, review)
       .then((result) =>
         dispatch({
           type: a.NEW_REVIEW_SUCCESS,
@@ -40,7 +45,7 @@ export function createReviewAction(auth, review) {
 export function deleteReviewAction(auth, id) {
   return (dispatch) => {
     dispatch({ type: a.DELETE_REVIEW_REQUEST });
-    s.deleteReview(auth, id)
+    deleteReview(auth, id)
       .then((result) =>
         dispatch({
           type: a.DELETE_REVIEW_SUCCESS,
@@ -58,7 +63,7 @@ export function deleteReviewAction(auth, id) {
 export function updateReviewAction(auth, review) {
   return (dispatch) => {
     dispatch({ type: a.UPDATE_REVIEW_REQUEST });
-    s.updateReview(auth, review)
+    updateReview(auth, review)
       .then((result) =>
         dispatch({
           type: a.UPDATE_REVIEW_SUCCESS,

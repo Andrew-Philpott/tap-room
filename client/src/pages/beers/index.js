@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Plus from "../../svg/plus.svg";
 import Minus from "../../svg/minus.svg";
 import Trash from "../../svg/trash.svg";
@@ -8,6 +8,7 @@ import {
   increaseBeerPintsAction,
   decreaseBeerPintsAction,
   deleteBeerAction,
+  getBeersAction,
 } from "../../actions/beer";
 import * as role from "../../constants/roles";
 import * as route from "../../constants/routes";
@@ -15,6 +16,7 @@ import "../../css/beers.css";
 import { useDispatch, useSelector } from "react-redux";
 
 const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
+  const history = useHistory();
   return (
     <tr key={beer.beerId}>
       <td>
@@ -22,9 +24,9 @@ const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
         <React.Fragment>
           <br />
           {beer.pints === 0 ? (
-            <span className="red-c">Out of stock</span>
+            <span className="red">Out of stock</span>
           ) : beer.pints <= 10 ? (
-            <span className="yellow-c">Almost Empty</span>
+            <span className="yellow">Almost Empty</span>
           ) : null}
         </React.Fragment>
       </td>
@@ -35,11 +37,7 @@ const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
       <td>
         <span
           className={`${
-            beer.price > 12
-              ? "orange-c"
-              : beer.price > 8
-              ? "yellow-c"
-              : "green-c"
+            beer.price > 12 ? "orange" : beer.price > 8 ? "yellow" : "green"
           }`}
         >
           {beer.price}
@@ -51,7 +49,11 @@ const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
           roles.indexOf(role.ADMIN) !== -1) && (
           <React.Fragment>
             <td>
-              <Minus
+              <img
+                alt=""
+                height="1rem"
+                width="1rem"
+                src={Minus}
                 className="minus"
                 onClick={() =>
                   beer.pints > 0 && onChangeBeerPints(true, beer.beerId)
@@ -59,7 +61,11 @@ const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
               />
             </td>
             <td>
-              <Plus
+              <img
+                alt=""
+                height="1rem"
+                width="1rem"
+                src={Plus}
                 className="plus"
                 onClick={() => onChangeBeerPints(false, beer.beerId)}
               />
@@ -67,12 +73,21 @@ const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
             {roles.indexOf(role.ADMIN) !== -1 && (
               <React.Fragment>
                 <td>
-                  <Link to={`/beers/edit/${beer.beerId}`}>
-                    <Pencil className="edit" />
-                  </Link>
+                  <img
+                    alt=""
+                    height="1rem"
+                    width="1rem"
+                    onClick={() => history.push(`/beers/edit/${beer.beerId}`)}
+                    src={Pencil}
+                    className="edit"
+                  />
                 </td>
                 <td>
-                  <Trash
+                  <img
+                    alt=""
+                    height="1rem"
+                    width="1rem"
+                    src={Trash}
                     onClick={() => onDeleteBeer(beer.beerId)}
                     className="delete"
                   />
@@ -87,7 +102,14 @@ const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
 
 export default ({ roles, isAuth, isAdmin, getToken }) => {
   const dispatch = useDispatch();
-  const beers = useSelector((state) => state.beers);
+  const beers = useSelector((state) => state.beers.beers);
+  const history = useHistory();
+  React.useEffect(() => {
+    if (beers.length === 0) {
+      dispatch(getBeersAction());
+    }
+  }, []);
+
   const handleDeleteBeer = (id) => {
     if (window.confirm("Are you sure you want to delete this beer?")) {
       getToken().then((token) => {
@@ -110,8 +132,20 @@ export default ({ roles, isAuth, isAdmin, getToken }) => {
       <h1>Beers On Tap</h1>
       {isAuth && (
         <div>
-          <Link to={route.NEW_REVIEW}>Write a review</Link>
-          {isAdmin && <Link to={route.NEW_BEER}>Add a beer</Link>}
+          <button
+            onClick={() => history.push(route.NEW_REVIEW)}
+            className="button"
+          >
+            Write a review
+          </button>
+          {isAdmin && (
+            <button
+              onClick={() => history.push(route.NEW_BEER)}
+              className="button"
+            >
+              Add a beer
+            </button>
+          )}
         </div>
       )}
       {beers.length !== 0 ? (

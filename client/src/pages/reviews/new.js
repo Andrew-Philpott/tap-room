@@ -15,8 +15,8 @@ const initalFieldValues = {
 export default ({ getToken }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const beers = useSelector((state) => state.beers);
-  const reviews = useSelector((state) => state.reviews);
+  const beers = useSelector((state) => state.beers.beers);
+  const reviews = useSelector((state) => state.reviews.reviews);
   const history = useHistory();
   const path = useLocation().pathname;
   const parsedId = parseInt(id);
@@ -77,14 +77,15 @@ export default ({ getToken }) => {
   function handleSubmit(e) {
     e.preventDefault();
     if (validate()) {
-      getToken((auth) => {
-        dispatch(
+      getToken((token) => {
+        return dispatch(
           parsedId
-            ? updateReviewAction(auth, parsedId, values)
-            : createReviewAction(auth, values)
+            ? updateReviewAction(token, parsedId, values)
+            : createReviewAction(token, values)
         );
+      }).then(() => {
+        history.push(`/beers/details/${values.beerId}`);
       });
-      // history.push(`/beers/details/${values.beerId}`);
     }
   }
   return (
@@ -135,7 +136,7 @@ export default ({ getToken }) => {
                         );
                       })}
                   </select>
-                  <svg viewBox="0 0 24 24">
+                  <svg height="50%" width="50%" viewBox="0 0 24 24">
                     <path fill="white" d="M 7 10 l 5 5 l 5 -5 Z" />
                   </svg>
                 </div>
@@ -166,7 +167,7 @@ export default ({ getToken }) => {
                   5 Stars
                 </option>
               </select>
-              <svg viewBox="0 0 24 24">
+              <svg height="2rem" width="2rem" viewBox="0 0 24 24">
                 <path fill="white" d="M 7 10 l 5 5 l 5 -5 Z" />
               </svg>
               {formErrors.rating && <div>{formErrors.rating}</div>}

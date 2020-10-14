@@ -2,10 +2,12 @@ export const msalConfigAAD = {
   auth: {
     clientId: process.env.REACT_APP_AAD_CLIENT_ID,
     authority: process.env.REACT_APP_AAD_AUTHORITY,
+    forceRefresh: false,
     redirectUri: process.env.REACT_APP_AAD_REDIRECT,
   },
   cache: {
     cacheLocation: process.env.REACT_APP_AAD_CACHE_LOCATION,
+
     storeAuthStateInCookie: false,
   },
 };

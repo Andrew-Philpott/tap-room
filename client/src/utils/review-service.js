@@ -30,3 +30,17 @@ export async function deleteReview(auth, id) {
     requestOptions.deleteOptions(await auth)
   ).then(handleResponse);
 }
+
+export const createLike = async (auth, like) => {
+  return await fetch(
+    `${baseUrl}/like`,
+    requestOptions.postOptions(await auth, like)
+  ).then(handleResponse);
+};
+
+export async function deleteLike(auth, id) {
+  return await fetch(
+    `${baseUrl}/like/${id}`,
+    requestOptions.deleteOptions(await auth)
+  ).then(handleResponse);
+}

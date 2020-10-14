@@ -17,10 +17,10 @@ export default ({ rating, max }) => {
   const fullStars = [];
   const emptyStars = [];
   for (let i = 0; i < Math.floor(rating); i++) {
-    fullStars.push(<img src={Star} key={i} />);
+    fullStars.push(<img src={Star} key={i} alt="" />);
   }
   for (let j = 0; j < Math.floor(max - rating); j++) {
-    emptyStars.push(<img src={Star} key={j} />);
+    emptyStars.push(<img src={Star} key={j} alt="" />);
   }
   return (
     <div className="rating">

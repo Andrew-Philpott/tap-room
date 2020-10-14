@@ -5,11 +5,10 @@ import {
   createBeer,
   updateBeer,
   deleteBeer,
-  createLike,
-  deleteLike,
   incrementPints,
   decrementPints,
 } from "../utils/beer-service";
+import { createLike, deleteLike } from "../utils/review-service";
 
 export function getBeerAction(id) {
   return (dispatch) => {
@@ -134,10 +133,10 @@ export function decreaseBeerPintsAction(auth, id) {
       );
   };
 }
-export function createLikeAction(auth, id) {
+export function createLikeAction(auth, like) {
   return (dispatch) => {
     dispatch({ type: a.CREATE_LIKE_REQUEST });
-    createLike(auth, id)
+    createLike(auth, like)
       .then((result) =>
         dispatch({
           type: a.CREATE_LIKE_SUCCESS,

@@ -1,0 +1,8 @@
+#beer-form > form > div:last-of-type {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+#beer-form > form > div:last-of-type .form-control {
+  width: 32%;
+}

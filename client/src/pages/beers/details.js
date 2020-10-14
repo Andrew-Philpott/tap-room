@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Rating from "../../components/rating";
 import DarkBeer from "../../images/DarkBeer.webp";
 import Review from "../../components/review";
@@ -12,9 +12,10 @@ import {
 import "../../css/beer-details.css";
 
 export default ({ userId, isAuth, getToken }) => {
+  const history = useHistory();
   const dispatch = useDispatch();
-  const beer = useSelector((state) => state.beers);
-  const reviews = useSelector((state) => state.reviews);
+  const beer = useSelector((state) => state.beers.beer);
+  const reviews = useSelector((state) => state.reviews.reviews);
   const { id } = useParams();
   React.useEffect(() => {
     if (id) {
@@ -69,16 +70,17 @@ export default ({ userId, isAuth, getToken }) => {
                 alt="Glass of dark beer on a table"
               />
               {isAuth && !reviews.includes((x) => x.beerId === id) && (
-                <Link
+                <button
                   style={{
                     float: "right",
                     marginTop: "8px",
                     marginRight: "6px",
                   }}
-                  to={`/reviews/new/${beer.beerId}`}
+                  className="button"
+                  onClick={() => history.push(`/reviews/new/${beer.beerId}`)}
                 >
                   Write your own review
-                </Link>
+                </button>
               )}
             </div>
           </div>
@@ -89,7 +91,7 @@ export default ({ userId, isAuth, getToken }) => {
                 {beer.reviews.map((review, index) => {
                   return (
                     <Review
-                      item={review}
+                      review={review}
                       onLikeReview={handleLike}
                       userId={userId}
                       isAccount={false}

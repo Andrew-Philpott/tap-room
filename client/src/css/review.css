@@ -31,6 +31,11 @@
   margin-top: 0rem;
   text-align: right;
 }
+.review div:last-of-type > img {
+  height: 1rem;
+  width: 1rem;
+  margin-left: 0.5rem;
+}
 .like {
   cursor: pointer;
   height: 1rem;

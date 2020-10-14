@@ -15,6 +15,8 @@ export default (state = initialState, action) => {
         error: null,
       };
     case a.GET_REVIEWS_SUCCESS:
+      console.log("success");
+      console.log(...action.payload);
       return {
         ...state,
         fetching: false,

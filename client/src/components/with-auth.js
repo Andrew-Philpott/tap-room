@@ -47,6 +47,7 @@ export default function withAuth(WrappedComponent) {
           });
         }
       }
+      console.log(this.state);
     }
 
     render() {

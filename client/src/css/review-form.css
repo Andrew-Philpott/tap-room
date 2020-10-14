@@ -1,7 +1,10 @@
 .character-count {
-  bottom: 2px;
+  bottom: 4px;
   color: lightgray;
   font-style: italic;
   position: absolute;
   right: 4px;
+}
+textarea {
+  resize: none;
 }

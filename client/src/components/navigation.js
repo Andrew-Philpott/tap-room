@@ -35,7 +35,12 @@ export default ({ isAuth, onSignInOrSignOut }) => {
     <Link key={3} to={routes.ABOUT}>
       About
     </Link>,
-    <span key={4} onClick={() => signInSignOut()}>
+    isAuth && (
+      <Link key={4} to={routes.ACCOUNT}>
+        Account
+      </Link>
+    ),
+    <span key={5} onClick={() => signInSignOut()}>
       {!isAuth ? "Sign In" : "Sign Out"}
     </span>,
   ];

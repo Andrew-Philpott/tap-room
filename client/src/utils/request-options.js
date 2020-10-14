@@ -1,13 +1,11 @@
 const origin = "http://localhost:6420";
-const type = { "Content-Type": "application/json" };
-
 function getOptions(auth) {
   return {
     method: "GET",
     headers: {
       Authorization:
         auth && auth.accessToken ? `Bearer ${auth.accessToken}` : "",
-      type,
+      "Content-Type": "application/json",
     },
     origin: origin,
   };
@@ -18,7 +16,7 @@ const putOptions = (auth, model) => {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${auth.accessToken}`,
-      type,
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(model),
     origin: origin,
@@ -31,7 +29,7 @@ function deleteOptions(auth) {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${auth.accessToken}`,
-      type,
+      "Content-Type": "application/json",
     },
     origin: origin,
   };
@@ -42,7 +40,7 @@ const postOptions = (auth, model) => {
     method: "POST",
     headers: {
       Authorization: `Bearer ${auth.accessToken}`,
-      type,
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(model),
     origin: origin,
