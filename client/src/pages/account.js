@@ -2,8 +2,10 @@ import React from "react";
 import Review from "../components/review";
 import { deleteReviewAction, getReviewsAction } from "../actions/review";
 import { useDispatch, useSelector } from "react-redux";
+import useAuth from "../components/use-auth";
 
-export default ({ userId, userName, getToken }) => {
+export default () => {
+  const { auth, getToken } = useAuth();
   const dispatch = useDispatch();
   const reviews = useSelector((state) => state.reviews.reviews);
   console.log(reviews);
@@ -20,7 +22,7 @@ export default ({ userId, userName, getToken }) => {
   return (
     <div className="main-content">
       <p>
-        Welcome, <b>{userName}</b>
+        Welcome, <b>{auth.userName}</b>
       </p>
       <div className="text-align-center">
         <h2>Today's deals</h2>
@@ -37,7 +39,7 @@ export default ({ userId, userName, getToken }) => {
             return (
               <Review
                 review={review}
-                userId={userId}
+                userId={auth.userId}
                 onDeleteReview={handleDeleteReview}
                 isAccount={true}
                 key={index}

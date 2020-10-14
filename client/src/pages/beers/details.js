@@ -10,8 +10,10 @@ import {
   deleteLikeAction,
 } from "../../actions/beer";
 import "../../css/beer-details.css";
+import useAuth from "../../components/use-auth";
 
-export default ({ userId, isAuth, getToken }) => {
+export default () => {
+  const { auth, getToken } = useAuth();
   const history = useHistory();
   const dispatch = useDispatch();
   const beer = useSelector((state) => state.beers.beer);
@@ -24,7 +26,7 @@ export default ({ userId, isAuth, getToken }) => {
   }, []);
 
   const handleLike = async (item) => {
-    const like = item.likes.find((x) => x.userId === userId);
+    const like = item.likes.find((x) => x.userId === auth.userId);
     getToken().then((token) =>
       dispatch(
         !like
@@ -69,7 +71,7 @@ export default ({ userId, isAuth, getToken }) => {
                 className="beer-detail-img"
                 alt="Glass of dark beer on a table"
               />
-              {isAuth && !reviews.includes((x) => x.beerId === id) && (
+              {auth.isAuth && !reviews.includes((x) => x.beerId === id) && (
                 <button
                   style={{
                     float: "right",
@@ -93,7 +95,7 @@ export default ({ userId, isAuth, getToken }) => {
                     <Review
                       review={review}
                       onLikeReview={handleLike}
-                      userId={userId}
+                      userId={auth.userId}
                       isAccount={false}
                       key={index}
                     />
@@ -103,7 +105,7 @@ export default ({ userId, isAuth, getToken }) => {
             ) : (
               <h1>
                 No reviews for this beer yet.{" "}
-                {!isAuth && <>Create an account to provide feedback!</>}
+                {!auth.isAuth && <>Create an account to provide feedback!</>}
               </h1>
             )}
           </div>

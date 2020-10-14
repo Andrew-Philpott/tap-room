@@ -2,10 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import taphouselogo from "../images/taphouselogo.webp";
 import Bars from "../svg/bars.svg";
+import useAuth from "./use-auth";
 import * as routes from "../constants/routes";
 import "../css/navigation.css";
 
-export default ({ isAuth, onSignInOrSignOut }) => {
+export default () => {
+  const { auth, signIn, signOut } = useAuth();
   const [openMenu, setOpenMenu] = React.useState(false);
   const menuRef = React.useRef(null);
 
@@ -22,7 +24,7 @@ export default ({ isAuth, onSignInOrSignOut }) => {
   }, []);
 
   const signInSignOut = () => {
-    onSignInOrSignOut(false);
+    !auth.isAuth ? signIn(false) : signOut();
   };
 
   const navItems = [
@@ -35,13 +37,13 @@ export default ({ isAuth, onSignInOrSignOut }) => {
     <Link key={3} to={routes.ABOUT}>
       About
     </Link>,
-    isAuth && (
+    auth.isAuth && (
       <Link key={4} to={routes.ACCOUNT}>
         Account
       </Link>
     ),
     <span key={5} onClick={() => signInSignOut()}>
-      {!isAuth ? "Sign In" : "Sign Out"}
+      {!auth.isAuth ? "Sign In" : "Sign Out"}
     </span>,
   ];
 

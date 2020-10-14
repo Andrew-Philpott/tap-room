@@ -14,6 +14,7 @@ import * as role from "../../constants/roles";
 import * as route from "../../constants/routes";
 import "../../css/beers.css";
 import { useDispatch, useSelector } from "react-redux";
+import useAuth from "../../components/use-auth";
 
 const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
   const history = useHistory();
@@ -100,8 +101,9 @@ const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
   );
 };
 
-export default ({ roles, isAuth, isAdmin, getToken }) => {
+export default () => {
   const dispatch = useDispatch();
+  const { auth, getToken } = useAuth();
   const beers = useSelector((state) => state.beers.beers);
   const history = useHistory();
   React.useEffect(() => {
@@ -130,7 +132,7 @@ export default ({ roles, isAuth, isAdmin, getToken }) => {
   return (
     <div id="beer-list" className="main-content">
       <h1>Beers On Tap</h1>
-      {isAuth && (
+      {auth.isAuth && (
         <div>
           <button
             onClick={() => history.push(route.NEW_REVIEW)}
@@ -138,7 +140,7 @@ export default ({ roles, isAuth, isAdmin, getToken }) => {
           >
             Write a review
           </button>
-          {isAdmin && (
+          {auth.isAdmin && (
             <button
               onClick={() => history.push(route.NEW_BEER)}
               className="button"
@@ -159,12 +161,12 @@ export default ({ roles, isAuth, isAdmin, getToken }) => {
               <th>ABV</th>
               <th>Price</th>
               <th>Pints</th>
-              {(roles && roles.indexOf(role.EMPLOYEE) !== -1) ||
-                (roles.indexOf(role.ADMIN) !== -1 && (
+              {(auth.roles && auth.roles.indexOf(role.EMPLOYEE) !== -1) ||
+                (auth.roles.indexOf(role.ADMIN) !== -1 && (
                   <React.Fragment>
                     <th>Buy</th>
                     <th>Restock</th>
-                    {roles.indexOf(role.ADMIN) !== -1 && (
+                    {auth.roles.indexOf(role.ADMIN) !== -1 && (
                       <React.Fragment>
                         <th>Edit</th>
                         <th>Remove</th>
@@ -179,7 +181,7 @@ export default ({ roles, isAuth, isAdmin, getToken }) => {
               <BeerItem
                 key={index}
                 beer={beer}
-                roles={roles}
+                roles={auth.roles}
                 onChangeBeerPints={handleChangeBeerPints}
                 onDeleteBeer={handleDeleteBeer}
               />

@@ -3,6 +3,7 @@ import useForm from "../../components/use-form";
 import { useParams, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createBeerAction, updateBeerAction } from "../../actions/beer";
+import useAuth from "../../components/use-auth";
 import "../../css/beer-form.css";
 
 const initalFieldValues = {
@@ -16,8 +17,9 @@ const initalFieldValues = {
   pints: "",
 };
 
-export default ({ getToken }) => {
+export default () => {
   const { id } = useParams();
+  const { getToken } = useAuth();
   const dispatch = useDispatch();
   const beers = useSelector((state) => state.beers.beers);
   const history = useHistory();
