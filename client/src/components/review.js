@@ -73,12 +73,12 @@ export default ({
                 alt=""
                 src={Trash}
                 onClick={() => onDeleteReview(review.reviewId)}
-                className="delete"
+                className="pointer"
               />
               <img
                 alt=""
                 src={Pencil}
-                className="edit"
+                className="pointer"
                 onClick={() => history.push(`/reviews/edit/${review.reviewId}`)}
               />
             </React.Fragment>

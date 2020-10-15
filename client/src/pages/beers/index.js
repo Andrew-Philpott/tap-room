@@ -55,7 +55,7 @@ const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
                 height="20"
                 width="20"
                 src={Minus}
-                className="minus"
+                className="pointer"
                 onClick={() =>
                   beer.pints > 0 && onChangeBeerPints(true, beer.beerId)
                 }
@@ -67,7 +67,7 @@ const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
                 height="20"
                 width="20"
                 src={Plus}
-                className="plus"
+                className="pointer"
                 onClick={() => onChangeBeerPints(false, beer.beerId)}
               />
             </td>
@@ -80,7 +80,7 @@ const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
                     width="20"
                     onClick={() => history.push(`/beers/edit/${beer.beerId}`)}
                     src={Pencil}
-                    className="edit"
+                    className="pointer"
                   />
                 </td>
                 <td>
@@ -90,7 +90,7 @@ const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
                     width="20"
                     src={Trash}
                     onClick={() => onDeleteBeer(beer.beerId)}
-                    className="delete"
+                    className="pointer"
                   />
                 </td>
               </React.Fragment>

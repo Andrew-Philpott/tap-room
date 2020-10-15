@@ -12,7 +12,7 @@ export default () => {
     if (beers.length === 0) {
       dispatch(getBeers());
     }
-  });
+  }, []);
   const average = (array) => array.reduce((a, b) => a + b) / array.length;
   return (
     <div className="main-content home">
