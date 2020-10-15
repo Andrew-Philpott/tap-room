@@ -2,7 +2,7 @@ import React from "react";
 import useForm from "../../components/use-form";
 import { useParams, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { createBeerAction, updateBeerAction } from "../../actions/beer";
+import { createBeer, updateBeer } from "../../actions/beer";
 import useAuth from "../../components/use-auth";
 import "../../css/beer-form.css";
 
@@ -98,9 +98,7 @@ export default () => {
     if (validate()) {
       getToken((token) => {
         dispatch(
-          id
-            ? updateBeerAction(token, id, values)
-            : createBeerAction(token, values)
+          id ? updateBeer(token, id, values) : createBeer(token, values)
         );
       });
     }

@@ -1,10 +1,10 @@
-.character-count {
+#review-form .character-count {
   bottom: 4px;
   color: lightgray;
   font-style: italic;
   position: absolute;
   right: 4px;
 }
-textarea {
+#review-form textarea {
   resize: none;
 }

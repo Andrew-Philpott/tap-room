@@ -1,15 +1,10 @@
 import * as a from "../constants/review";
-import {
-  getMyReviews,
-  createReview,
-  updateReview,
-  deleteReview,
-} from "../utils/review-service";
+import * as r from "../utils/review-service";
 
-export function getReviewsAction(auth) {
+export function getReviews(auth) {
   return (dispatch) => {
     dispatch({ type: a.GET_REVIEWS_REQUEST });
-    getMyReviews(auth)
+    r.getMyReviews(auth)
       .then((result) => {
         dispatch({
           type: a.GET_REVIEWS_SUCCESS,
@@ -24,10 +19,10 @@ export function getReviewsAction(auth) {
       );
   };
 }
-export function createReviewAction(auth, review) {
+export function createReview(auth, review) {
   return (dispatch) => {
     dispatch({ type: a.NEW_REVIEW_REQUEST });
-    createReview(auth, review)
+    r.createReview(auth, review)
       .then((result) =>
         dispatch({
           type: a.NEW_REVIEW_SUCCESS,
@@ -42,10 +37,10 @@ export function createReviewAction(auth, review) {
       );
   };
 }
-export function deleteReviewAction(auth, id) {
+export function deleteReview(auth, id) {
   return (dispatch) => {
     dispatch({ type: a.DELETE_REVIEW_REQUEST });
-    deleteReview(auth, id)
+    r.deleteReview(auth, id)
       .then((result) =>
         dispatch({
           type: a.DELETE_REVIEW_SUCCESS,
@@ -60,10 +55,10 @@ export function deleteReviewAction(auth, id) {
       );
   };
 }
-export function updateReviewAction(auth, review) {
+export function updateReview(auth, review) {
   return (dispatch) => {
     dispatch({ type: a.UPDATE_REVIEW_REQUEST });
-    updateReview(auth, review)
+    r.updateReview(auth, review)
       .then((result) =>
         dispatch({
           type: a.UPDATE_REVIEW_SUCCESS,

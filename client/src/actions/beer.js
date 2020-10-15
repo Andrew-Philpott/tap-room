@@ -1,19 +1,11 @@
 import * as a from "../constants/beer";
-import {
-  getBeer,
-  getBeers,
-  createBeer,
-  updateBeer,
-  deleteBeer,
-  incrementPints,
-  decrementPints,
-} from "../utils/beer-service";
-import { createLike, deleteLike } from "../utils/review-service";
+import * as s from "../utils/beer-service";
+import * as r from "../utils/review-service";
 
-export function getBeerAction(id) {
+export function getBeer(id) {
   return (dispatch) => {
     dispatch({ type: a.GET_BEER_REQUEST });
-    getBeer(id)
+    s.getBeer(id)
       .then((result) =>
         dispatch({
           type: a.GET_BEER_SUCCESS,
@@ -28,10 +20,10 @@ export function getBeerAction(id) {
       );
   };
 }
-export function getBeersAction() {
+export function getBeers() {
   return (dispatch) => {
     dispatch({ type: a.GET_BEERS_REQUEST });
-    getBeers()
+    s.getBeers()
       .then((result) =>
         dispatch({
           type: a.GET_BEERS_SUCCESS,
@@ -46,10 +38,10 @@ export function getBeersAction() {
       );
   };
 }
-export function createBeerAction(auth, beer) {
+export function createBeer(auth, beer) {
   return (dispatch) => {
     dispatch({ type: a.NEW_BEER_REQUEST });
-    createBeer(auth, beer)
+    s.createBeer(auth, beer)
       .then((result) =>
         dispatch({
           type: a.NEW_BEER_SUCCESS,
@@ -64,10 +56,10 @@ export function createBeerAction(auth, beer) {
       );
   };
 }
-export function deleteBeerAction(auth, id) {
+export function deleteBeer(auth, id) {
   return (dispatch) => {
     dispatch({ type: a.DELETE_BEER_REQUEST });
-    deleteBeer(auth, id)
+    s.deleteBeer(auth, id)
       .then((result) =>
         dispatch({ type: a.DELETE_BEER_SUCCESS, payload: result })
       )
@@ -79,10 +71,10 @@ export function deleteBeerAction(auth, id) {
       );
   };
 }
-export function updateBeerAction(auth, beer) {
+export function updateBeer(auth, beer) {
   return (dispatch) => {
     dispatch({ type: a.UPDATE_BEER_REQUEST });
-    updateBeer(auth, beer)
+    s.updateBeer(auth, beer)
       .then((result) =>
         dispatch({
           type: a.UPDATE_BEER_SUCCESS,
@@ -97,10 +89,10 @@ export function updateBeerAction(auth, beer) {
       );
   };
 }
-export function increaseBeerPintsAction(auth, id) {
+export function increaseBeerPints(auth, id) {
   return (dispatch) => {
     dispatch({ type: a.INCREASE_BEER_PINTS_REQUEST });
-    incrementPints(auth, id)
+    s.incrementPints(auth, id)
       .then((result) =>
         dispatch({
           type: a.INCREASE_BEER_PINTS_SUCCESS,
@@ -115,10 +107,10 @@ export function increaseBeerPintsAction(auth, id) {
       );
   };
 }
-export function decreaseBeerPintsAction(auth, id) {
+export function decreaseBeerPints(auth, id) {
   return (dispatch) => {
     dispatch({ type: a.DECREASE_BEER_PINTS_REQUEST });
-    decrementPints(auth, id)
+    s.decrementPints(auth, id)
       .then((result) =>
         dispatch({
           type: a.DECREASE_BEER_PINTS_SUCCESS,
@@ -133,10 +125,10 @@ export function decreaseBeerPintsAction(auth, id) {
       );
   };
 }
-export function createLikeAction(auth, like) {
+export function createLike(auth, like) {
   return (dispatch) => {
     dispatch({ type: a.CREATE_LIKE_REQUEST });
-    createLike(auth, like)
+    r.createLike(auth, like)
       .then((result) =>
         dispatch({
           type: a.CREATE_LIKE_SUCCESS,
@@ -151,10 +143,10 @@ export function createLikeAction(auth, like) {
       );
   };
 }
-export function deleteLikeAction(auth, id) {
+export function deleteLike(auth, id) {
   return (dispatch) => {
     dispatch({ type: a.DELETE_LIKE_REQUEST });
-    deleteLike(auth, id)
+    r.deleteLike(auth, id)
       .then((result) =>
         dispatch({
           type: a.DELETE_LIKE_SUCCESS,

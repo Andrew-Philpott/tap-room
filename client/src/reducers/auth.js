@@ -29,6 +29,17 @@ export default (state = initialState, action) => {
         userId: action.payload.idTokenClaims.oid,
         homeId: action.payload.account.homeAccountId,
       };
+    case "SET_AAD_USER": {
+      return {
+        ...state,
+        userName: action.payload.idTokenClaims.name,
+        roles: action.payload.idTokenClaims.roles,
+        isAuth: true,
+        isAdmin: true,
+        userId: action.payload.idTokenClaims.oid,
+        homeId: action.payload.account.homeAccountId,
+      };
+    }
     default:
       return state;
   }

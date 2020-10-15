@@ -7,7 +7,6 @@ import AuthRoute from "./components/auth-route";
 import Footer from "./components/footer";
 import ErrorDisplay from "./components/error-display";
 import ErrorBoundary from "./components/error-boundary";
-import useAuth from "./components/use-auth";
 import "./App.css";
 const Home = React.lazy(() => import("./pages/index"));
 const BeerDetail = React.lazy(() => import("./pages/beers/details"));
@@ -47,37 +46,26 @@ function App() {
           <Router history={history}>
             <NavigationBar />
             <Switch>
+              <Route exact path={routes.BEER_DETAILS} component={BeerDetail} />
               <Route exact path={routes.ADMIN} component={SignIn} />
               <Route exact path={routes.LANDING} component={Home} />
               <Route exact path={routes.ABOUT} component={About} />
               <Route exact path={routes.BEER_LIST} component={BeerList} />
-              <AuthRoute
-                adminRequired={true}
-                path={routes.NEW_BEER}
-                component={BeerForm}
-              />
-              <AuthRoute
-                adminRequired={true}
-                path={routes.BEER_EDIT}
-                component={BeerForm}
-              />
-              <AuthRoute
-                exact
-                path={routes.NEW_REVIEW}
-                component={ReviewForm}
-              />
-              <AuthRoute
-                exact
-                path={routes.NEW_REVIEW_FOR_BEER}
-                component={ReviewForm}
-              />
-              <AuthRoute
-                exact
-                path={routes.EDIT_REVIEW}
-                component={ReviewForm}
-              />
               <AuthRoute exact path={routes.ACCOUNT} component={Account} />
-              <Route exact path={routes.BEER_DETAILS} component={BeerDetail} />
+              <AuthRoute
+                adminRequired={true}
+                path={[routes.NEW_BEER, routes.BEER_EDIT]}
+                component={BeerForm}
+              />
+              <AuthRoute
+                exact
+                path={[
+                  routes.NEW_REVIEW,
+                  routes.NEW_REVIEW_FOR_BEER,
+                  routes.EDIT_REVIEW,
+                ]}
+                component={ReviewForm}
+              />
               <Redirect to="/" from="*" />
             </Switch>
             <Footer />

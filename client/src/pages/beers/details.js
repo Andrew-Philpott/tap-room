@@ -4,16 +4,13 @@ import Rating from "../../components/rating";
 import DarkBeer from "../../images/DarkBeer.webp";
 import Review from "../../components/review";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getBeerAction,
-  createLikeAction,
-  deleteLikeAction,
-} from "../../actions/beer";
+import { getBeer, createLike, deleteLike } from "../../actions/beer";
 import "../../css/beer-details.css";
 import useAuth from "../../components/use-auth";
 
 export default () => {
-  const { auth, getToken } = useAuth();
+  const auth = useSelector((state) => state.auth);
+  const { getToken } = useAuth();
   const history = useHistory();
   const dispatch = useDispatch();
   const beer = useSelector((state) => state.beers.beer);
@@ -21,7 +18,7 @@ export default () => {
   const { id } = useParams();
   React.useEffect(() => {
     if (id) {
-      dispatch(getBeerAction(id));
+      dispatch(getBeer(id));
     }
   }, []);
 
@@ -30,8 +27,8 @@ export default () => {
     getToken().then((token) =>
       dispatch(
         !like
-          ? createLikeAction(token, { reviewId: item.reviewId })
-          : deleteLikeAction(token, like.reviewLikeId)
+          ? createLike(token, { reviewId: item.reviewId })
+          : deleteLike(token, like.reviewLikeId)
       )
     );
   };

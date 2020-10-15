@@ -5,10 +5,10 @@ import Minus from "../../svg/minus.svg";
 import Trash from "../../svg/trash.svg";
 import Pencil from "../../svg/pencil-alt.svg";
 import {
-  increaseBeerPintsAction,
-  decreaseBeerPintsAction,
-  deleteBeerAction,
-  getBeersAction,
+  increaseBeerPints,
+  decreaseBeerPints,
+  deleteBeer,
+  getBeers,
 } from "../../actions/beer";
 import * as role from "../../constants/roles";
 import * as route from "../../constants/routes";
@@ -102,29 +102,28 @@ const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
 };
 
 export default () => {
+  const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const { auth, getToken } = useAuth();
+  const { getToken } = useAuth();
   const beers = useSelector((state) => state.beers.beers);
   const history = useHistory();
   React.useEffect(() => {
     if (beers.length === 0) {
-      dispatch(getBeersAction());
+      dispatch(getBeers());
     }
   }, []);
 
   const handleDeleteBeer = (id) => {
     if (window.confirm("Are you sure you want to delete this beer?")) {
       getToken().then((token) => {
-        dispatch(deleteBeerAction(token, id));
+        dispatch(deleteBeer(token, id));
       });
     }
   };
   const handleChangeBeerPints = (isMinus, id) => {
     getToken().then((token) => {
       dispatch(
-        isMinus
-          ? decreaseBeerPintsAction(token, id)
-          : increaseBeerPintsAction(token, id)
+        isMinus ? decreaseBeerPints(token, id) : increaseBeerPints(token, id)
       );
     });
   };

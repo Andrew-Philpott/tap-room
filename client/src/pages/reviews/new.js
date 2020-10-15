@@ -1,9 +1,10 @@
 import React from "react";
 import useForm from "../../components/use-form";
 import { useDispatch, useSelector } from "react-redux";
-import { createReviewAction, updateReviewAction } from "../../actions/review";
+import { createReview, updateReview } from "../../actions/review";
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import "../../css/review-form.css";
+import useAuth from "../../components/use-auth";
 
 const initalFieldValues = {
   beerId: "",
@@ -12,7 +13,8 @@ const initalFieldValues = {
   headline: "",
 };
 
-export default ({ getToken }) => {
+export default () => {
+  const { getToken } = useAuth();
   const { id } = useParams();
   const dispatch = useDispatch();
   const beers = useSelector((state) => state.beers.beers);
@@ -80,8 +82,8 @@ export default ({ getToken }) => {
       getToken((token) => {
         return dispatch(
           parsedId
-            ? updateReviewAction(token, parsedId, values)
-            : createReviewAction(token, values)
+            ? updateReview(token, parsedId, values)
+            : createReview(token, values)
         );
       }).then(() => {
         history.push(`/beers/details/${values.beerId}`);
@@ -89,7 +91,7 @@ export default ({ getToken }) => {
     }
   }
   return (
-    <div className="main-content">
+    <div id="review-form" className="main-content">
       {beers.length === 0 ? (
         <h1>There are no beers to review, sorry!</h1>
       ) : isEditReview ||
@@ -120,57 +122,61 @@ export default ({ getToken }) => {
               <React.Fragment>
                 <div className="form-control">
                   <label htmlFor="beerId">Select a beer</label>
-                  <select
-                    className="input"
-                    name="beerId"
-                    value={values.beerId}
-                    onChange={handleInputChange}
-                  >
-                    <option key="" value="" />
-                    {availableBeersToReview &&
-                      availableBeersToReview.map((beer, index) => {
-                        return (
-                          <option key={index} value={beer.beerId}>
-                            {beer.name}
-                          </option>
-                        );
-                      })}
-                  </select>
-                  <svg height="50%" width="50%" viewBox="0 0 24 24">
-                    <path fill="white" d="M 7 10 l 5 5 l 5 -5 Z" />
-                  </svg>
+                  <div>
+                    <select
+                      className="input"
+                      name="beerId"
+                      value={values.beerId}
+                      onChange={handleInputChange}
+                    >
+                      <option key="" value="" />
+                      {availableBeersToReview &&
+                        availableBeersToReview.map((beer, index) => {
+                          return (
+                            <option key={index} value={beer.beerId}>
+                              {beer.name}
+                            </option>
+                          );
+                        })}
+                    </select>
+                    <svg viewBox="0 0 24 24">
+                      <path fill="white" d="M 7 10 l 5 5 l 5 -5 Z" />
+                    </svg>
+                  </div>
                 </div>
               </React.Fragment>
             )}
             <div className="form-control">
               <label htmlFor="rating">Rating</label>
-              <select
-                className="input"
-                name="rating"
-                value={values.rating}
-                onChange={handleInputChange}
-              >
-                <option key="" value="" />
-                <option key={1} value={1}>
-                  1 Star
-                </option>
-                <option key={2} value={2}>
-                  2 Stars
-                </option>
-                <option key={3} value={3}>
-                  3 Stars
-                </option>
-                <option key={4} value={4}>
-                  4 Stars
-                </option>
-                <option key={5} value={5}>
-                  5 Stars
-                </option>
-              </select>
-              <svg height="2rem" width="2rem" viewBox="0 0 24 24">
-                <path fill="white" d="M 7 10 l 5 5 l 5 -5 Z" />
-              </svg>
-              {formErrors.rating && <div>{formErrors.rating}</div>}
+              <div>
+                <select
+                  className="input"
+                  name="rating"
+                  value={values.rating}
+                  onChange={handleInputChange}
+                >
+                  <option key="" value="" />
+                  <option key={1} value={1}>
+                    1 Star
+                  </option>
+                  <option key={2} value={2}>
+                    2 Stars
+                  </option>
+                  <option key={3} value={3}>
+                    3 Stars
+                  </option>
+                  <option key={4} value={4}>
+                    4 Stars
+                  </option>
+                  <option key={5} value={5}>
+                    5 Stars
+                  </option>
+                </select>
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M 7 10 l 5 5 l 5 -5 Z" />
+                </svg>
+                {formErrors.rating && <div>{formErrors.rating}</div>}
+              </div>
             </div>
             <div className="form-control">
               <label htmlFor="headline">Headline (20-80 characters)</label>

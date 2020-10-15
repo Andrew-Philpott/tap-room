@@ -68,13 +68,16 @@
 form .form-control {
   width: 100%;
   min-height: 5.2rem;
-  position: relative;
+
   margin-bottom: 1rem;
 }
-form .form-control > svg {
+form .form-control > div {
+  position: relative;
+}
+form .form-control > div > svg {
   position: absolute;
   right: 0px;
-  height: 4rem;
+  height: 80%;
   pointer-events: none;
 }
 form button:last-of-type {

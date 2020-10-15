@@ -63,7 +63,7 @@ const useAuth = () => {
   }
 
   function handleResponse(response) {
-    dispatch({ type: "SET_USER", payload: response });
+    dispatch({ type: "SET_AAD_USER", payload: response });
     return response;
   }
 
