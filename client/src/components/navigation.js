@@ -4,8 +4,8 @@ import taphouselogo from "../images/taphouselogo.webp";
 import Bars from "../svg/bars.svg";
 import useAuth from "./use-auth";
 import * as routes from "../constants/routes";
-import "../css/navigation.css";
 import { useSelector } from "react-redux";
+import "../css/navigation.css";
 
 export default () => {
   const auth = useSelector((state) => state.auth);

@@ -5,8 +5,8 @@ import DarkBeer from "../../images/DarkBeer.webp";
 import Review from "../../components/review";
 import { useDispatch, useSelector } from "react-redux";
 import { getBeer, createLike, deleteLike } from "../../actions/beer";
-import "../../css/beer-details.css";
 import useAuth from "../../components/use-auth";
+import "../../css/beer-details.css";
 
 export default () => {
   const auth = useSelector((state) => state.auth);
@@ -22,7 +22,7 @@ export default () => {
     }
   }, []);
 
-  const handleLike = async (item) => {
+  const handleLike = (item) => {
     const like = item.likes.find((x) => x.userId === auth.userId);
     getToken().then((token) =>
       dispatch(

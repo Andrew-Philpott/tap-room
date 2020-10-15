@@ -12,10 +12,43 @@ export default (state = initialState, action) => {
   let review;
   switch (action.type) {
     case a.GET_BEER_REQUEST:
+    case a.GET_BEERS_REQUEST:
+    case a.NEW_BEER_REQUEST:
+    case a.UPDATE_BEER_REQUEST:
+    case a.DELETE_BEER_REQUEST:
+    case a.DECREASE_BEER_PINTS_REQUEST:
+    case a.INCREASE_BEER_PINTS_REQUEST:
+    case a.CREATE_LIKE_REQUEST:
+    case a.DELETE_LIKE_REQUEST:
       return {
         ...state,
         fetching: true,
         error: null,
+      };
+    case a.GET_BEER_FAILURE:
+    case a.GET_BEERS_FAILURE:
+    case a.NEW_BEER_FAILURE:
+    case a.UPDATE_BEER_FAILURE:
+    case a.DELETE_BEER_FAILURE:
+    case a.INCREASE_BEER_PINTS_FAILURE:
+    case a.DECREASE_BEER_PINTS_FAILURE:
+    case a.CREATE_LIKE_FAILURE:
+    case a.DELETE_LIKE_FAILURE:
+      const validationErrors = action.payload.validationErrors
+        ? action.payload.validationErrors
+        : null;
+      const status =
+        typeof action.payload === "number" && action.payload === 500
+          ? "Internal server error."
+          : null;
+      return {
+        ...state,
+        fetching: false,
+        error: {
+          validationErrors: validationErrors,
+          status: status,
+          other: !validationErrors && !status && action.payload,
+        },
       };
     case a.GET_BEER_SUCCESS:
       return {
@@ -23,42 +56,18 @@ export default (state = initialState, action) => {
         beer: action.payload,
         fetching: false,
       };
-    case a.GET_BEER_FAILURE:
-      return {
-        ...state,
-        fetching: false,
-        error: action.payload,
-      };
-    case a.GET_BEERS_REQUEST:
-      return { ...state, fetching: true, error: null };
     case a.GET_BEERS_SUCCESS:
       return {
         ...state,
         beers: [...action.payload],
         fetching: false,
       };
-    case a.GET_BEERS_FAILURE:
-      return {
-        ...state,
-        fetching: false,
-        error: action.payload,
-      };
-    case a.NEW_BEER_REQUEST:
-      return { ...state, fetching: true, error: null };
     case a.NEW_BEER_SUCCESS:
       return {
         ...state,
         fetching: false,
         beers: [...state.beers, action.payload],
       };
-    case a.NEW_BEER_FAILURE:
-      return {
-        ...state,
-        fetching: false,
-        error: action.payload,
-      };
-    case a.UPDATE_BEER_REQUEST:
-      return { ...state, fetching: true, error: null };
     case a.UPDATE_BEER_SUCCESS:
       return {
         ...state,
@@ -69,14 +78,6 @@ export default (state = initialState, action) => {
           ),
         ],
       };
-    case a.UPDATE_BEER_FAILURE:
-      return {
-        ...state,
-        fetching: false,
-        error: action.payload,
-      };
-    case a.DELETE_BEER_REQUEST:
-      return { ...state, fetching: true, error: null };
     case a.DELETE_BEER_SUCCESS:
       return {
         ...state,
@@ -85,14 +86,6 @@ export default (state = initialState, action) => {
           ...state.beers.filter((x) => x.beerId !== action.payload.beerId),
         ],
       };
-    case a.DELETE_BEER_FAILURE:
-      return {
-        ...state,
-        fetching: false,
-        error: action.payload,
-      };
-    case a.INCREASE_BEER_PINTS_REQUEST:
-      return { ...state, fetching: true, error: null };
     case a.INCREASE_BEER_PINTS_SUCCESS:
       return {
         ...state,
@@ -103,14 +96,6 @@ export default (state = initialState, action) => {
           ),
         ],
       };
-    case a.INCREASE_BEER_PINTS_FAILURE:
-      return {
-        ...state,
-        fetching: false,
-        error: action.payload,
-      };
-    case a.DECREASE_BEER_PINTS_REQUEST:
-      return { ...state, fetching: true, error: null };
     case a.DECREASE_BEER_PINTS_SUCCESS:
       return {
         ...state,
@@ -120,18 +105,6 @@ export default (state = initialState, action) => {
             x.beerId === action.payload.beerId ? action.payload : x
           ),
         ],
-      };
-    case a.DECREASE_BEER_PINTS_FAILURE:
-      return {
-        ...state,
-        fetching: false,
-        error: action.payload,
-      };
-    case a.CREATE_LIKE_REQUEST:
-      return {
-        ...state,
-        fetching: true,
-        error: null,
       };
     case a.CREATE_LIKE_SUCCESS:
       newState = { ...state.beer };
@@ -146,18 +119,6 @@ export default (state = initialState, action) => {
         ...state,
         fetching: false,
         beer: newState,
-      };
-    case a.CREATE_LIKE_FAILURE:
-      return {
-        ...state,
-        fetching: false,
-        error: action.payload,
-      };
-    case a.DELETE_LIKE_REQUEST:
-      return {
-        ...state,
-        fetching: true,
-        error: null,
       };
     case a.DELETE_LIKE_SUCCESS:
       newState = { ...state.beer };
@@ -174,12 +135,6 @@ export default (state = initialState, action) => {
         ...state,
         fetching: false,
         beer: newState,
-      };
-    case a.DELETE_LIKE_FAILURE:
-      return {
-        ...state,
-        fetching: false,
-        error: action.payload,
       };
     default:
       return state;

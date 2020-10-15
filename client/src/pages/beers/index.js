@@ -12,9 +12,9 @@ import {
 } from "../../actions/beer";
 import * as role from "../../constants/roles";
 import * as route from "../../constants/routes";
-import "../../css/beers.css";
 import { useDispatch, useSelector } from "react-redux";
 import useAuth from "../../components/use-auth";
+import "../../css/beers.css";
 
 const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
   const history = useHistory();
@@ -52,8 +52,8 @@ const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
             <td>
               <img
                 alt=""
-                height="1rem"
-                width="1rem"
+                height="20"
+                width="20"
                 src={Minus}
                 className="minus"
                 onClick={() =>
@@ -64,8 +64,8 @@ const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
             <td>
               <img
                 alt=""
-                height="1rem"
-                width="1rem"
+                height="20"
+                width="20"
                 src={Plus}
                 className="plus"
                 onClick={() => onChangeBeerPints(false, beer.beerId)}
@@ -76,8 +76,8 @@ const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
                 <td>
                   <img
                     alt=""
-                    height="1rem"
-                    width="1rem"
+                    height="20"
+                    width="20"
                     onClick={() => history.push(`/beers/edit/${beer.beerId}`)}
                     src={Pencil}
                     className="edit"
@@ -86,8 +86,8 @@ const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
                 <td>
                   <img
                     alt=""
-                    height="1rem"
-                    width="1rem"
+                    height="20"
+                    width="20"
                     src={Trash}
                     onClick={() => onDeleteBeer(beer.beerId)}
                     className="delete"

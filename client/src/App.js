@@ -1,6 +1,5 @@
 import React from "react";
-import { Router, Route, Switch, Redirect } from "react-router-dom";
-import history from "./utils/history";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import NavigationBar from "./components/navigation";
 import * as routes from "../src/constants/routes";
 import AuthRoute from "./components/auth-route";
@@ -20,30 +19,11 @@ const Account = React.lazy(() => import("./pages/account"));
 const renderLoader = () => <p>Loading</p>;
 
 function App() {
-  const [error, setError] = React.useState((err) => {
-    const validationErrors =
-      err && err.validationErrors ? err.validationErrors : null;
-    const status =
-      typeof err === "number" && err === 500 ? "Internal server error." : null;
-    return { validationErrors: validationErrors, status: status };
-  });
-
-  React.useEffect(() => {
-    (async () => {
-      history.listen(() => {
-        const temp = { ...error };
-        temp.validationErrors = null;
-        temp.status = null;
-        setError(temp);
-      });
-    })();
-  }, [error, setError]);
-
   return (
     <div className="App">
       <ErrorBoundary>
         <React.Suspense fallback={renderLoader()}>
-          <Router history={history}>
+          <BrowserRouter>
             <NavigationBar />
             <Switch>
               <Route exact path={routes.BEER_DETAILS} component={BeerDetail} />
@@ -69,9 +49,9 @@ function App() {
               <Redirect to="/" from="*" />
             </Switch>
             <Footer />
-          </Router>
+          </BrowserRouter>
         </React.Suspense>
-        <ErrorDisplay error={error} />
+        <ErrorDisplay />
       </ErrorBoundary>
     </div>
   );

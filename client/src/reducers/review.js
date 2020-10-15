@@ -9,10 +9,33 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case a.GET_REVIEWS_REQUEST:
+    case a.NEW_REVIEW_REQUEST:
+    case a.UPDATE_REVIEW_REQUEST:
+    case a.DELETE_REVIEW_REQUEST:
       return {
         ...state,
         fetching: true,
         error: null,
+      };
+    case a.GET_REVIEWS_FAILURE:
+    case a.NEW_REVIEW_FAILURE:
+    case a.UPDATE_REVIEW_FAILURE:
+    case a.DELETE_REVIEW_FAILURE:
+      const validationErrors = action.payload.validationErrors
+        ? action.payload.validationErrors
+        : null;
+      const status =
+        typeof action.payload === "number" && action.payload === 500
+          ? "Internal server error."
+          : null;
+      return {
+        ...state,
+        fetching: false,
+        error: {
+          validationErrors: validationErrors,
+          status: status,
+          other: !validationErrors && !status && action.payload,
+        },
       };
     case a.GET_REVIEWS_SUCCESS:
       return {
@@ -20,35 +43,11 @@ export default (state = initialState, action) => {
         fetching: false,
         reviews: [...action.payload],
       };
-    case a.GET_REVIEWS_FAILURE:
-      return {
-        ...state,
-        fetching: false,
-        error: action.payload,
-      };
-    case a.NEW_REVIEW_REQUEST:
-      return {
-        ...state,
-        fetching: true,
-        error: null,
-      };
     case a.NEW_REVIEW_SUCCESS:
       return {
         ...state,
         reviews: [...state.reviews, action.payload],
         fetching: false,
-      };
-    case a.NEW_REVIEW_FAILURE:
-      return {
-        ...state,
-        fetching: false,
-        error: action.payload,
-      };
-    case a.UPDATE_REVIEW_REQUEST:
-      return {
-        ...state,
-        fetching: true,
-        error: null,
       };
     case a.UPDATE_REVIEW_SUCCESS:
       return {
@@ -60,18 +59,6 @@ export default (state = initialState, action) => {
           ),
         ],
       };
-    case a.UPDATE_REVIEW_FAILURE:
-      return {
-        ...state,
-        fetching: false,
-        error: action.payload,
-      };
-    case a.DELETE_REVIEW_REQUEST:
-      return {
-        ...state,
-        fetching: true,
-        error: null,
-      };
     case a.DELETE_REVIEW_SUCCESS:
       return {
         ...state,
@@ -80,12 +67,6 @@ export default (state = initialState, action) => {
             (x) => x.reviewId !== action.payload.reviewId
           ),
         ],
-      };
-    case a.DELETE_REVIEW_FAILURE:
-      return {
-        ...state,
-        fetching: false,
-        error: action.payload,
       };
     default:
       return state;

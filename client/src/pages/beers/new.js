@@ -4,6 +4,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createBeer, updateBeer } from "../../actions/beer";
 import useAuth from "../../components/use-auth";
+import { BEER_LIST } from "../../constants/routes";
 import "../../css/beer-form.css";
 
 const initalFieldValues = {
@@ -96,11 +97,18 @@ export default () => {
   function handleSubmit(e) {
     e.preventDefault();
     if (validate()) {
-      getToken((token) => {
-        dispatch(
-          id ? updateBeer(token, id, values) : createBeer(token, values)
-        );
-      });
+      getToken()
+        .then((token) => {
+          console.log(token);
+          console.log(id);
+          return dispatch(
+            id ? updateBeer(token, id, values) : createBeer(token, values)
+          );
+        })
+        .then(() => {
+          console.log("history push");
+          history.push(BEER_LIST);
+        });
     }
   }
 

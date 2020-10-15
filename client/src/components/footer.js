@@ -1,14 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import * as routes from "../constants/routes";
+import { LANDING, BEER_LIST, ABOUT } from "../constants/routes";
 import "../css/footer.css";
 
 export default () => {
   return (
     <footer>
-      <Link to={routes.LANDING}>Home</Link>
-      <Link to={routes.BEER_LIST}>On Tap</Link>
-      <Link to={routes.ABOUT}>About</Link>
+      <Link to={LANDING}>Home</Link>
+      <Link to={BEER_LIST}>On Tap</Link>
+      <Link to={ABOUT}>About</Link>
     </footer>
   );
 };
