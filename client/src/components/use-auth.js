@@ -12,35 +12,22 @@ import {
   loginRequestAAD,
   tokenRequestAAD,
 } from "../utils/auth-config-aad";
+import { useSelector, useDispatch } from "react-redux";
 
-export default () => {
+const useAuth = () => {
+  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const msalB2C = new UserAgentApplication(msalConfigB2C);
   msalB2C.handleRedirectCallback(authRedirectCallback);
   const msalAAD = new PublicClientApplication(msalConfigAAD);
-  const [auth, setAuth] = React.useState({
-    userName: "",
-    roles: [],
-    isAuth: false,
-    isAdmin: false,
-    userId: 0,
-    homeId: 0,
-  });
 
   React.useEffect(() => {
     if (!auth.isAuth) {
       const account = msalB2C.getAccount();
       if (account !== null) {
-        setAuth({
-          userName: account.name,
-          roles: [],
-          isAuth: true,
-          isAdmin: false,
-          userId: account.idTokenClaims.oid,
-          homeId: account.homeAccountIdentifier,
-        });
+        dispatch({ type: "LOAD_USER_FROM_STORAGE", payload: account });
       }
     }
-    console.log(auth);
   }, []);
 
   function signIn(isAdminSignIn) {
@@ -69,32 +56,18 @@ export default () => {
       } catch (error) {}
     } else {
       if (response.tokenType === "access_token") {
-        setAuth({
-          userName: response.idTokenClaims.name,
-          roles: [],
-          isAuth: true,
-          isAdmin: false,
-          userId: response.idTokenClaims.oid,
-          homeId: response.account.homeAccountId,
-        });
+        dispatch({ type: "SET_USER", payload: response });
         return response;
       }
     }
   }
 
   function handleResponse(response) {
-    setAuth({
-      userName: response.idTokenClaims.name,
-      roles: response.idTokenClaims.roles,
-      isAuth: true,
-      isAdmin: true,
-      userId: response.idTokenClaims.oid,
-      homeId: response.account.homeAccountId,
-    });
+    dispatch({ type: "SET_USER", payload: response });
     return response;
   }
 
-  const getToken = () => {
+  function getToken() {
     if (auth.isAuth === true) {
       if (auth.isAdmin === true) {
         return msalAAD
@@ -111,7 +84,7 @@ export default () => {
         });
       }
     }
-  };
-
-  return { auth, signIn, signOut, getToken };
+  }
+  return { signIn, signOut, getToken };
 };
+export default useAuth;

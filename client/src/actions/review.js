@@ -10,12 +10,12 @@ export function getReviewsAction(auth) {
   return (dispatch) => {
     dispatch({ type: a.GET_REVIEWS_REQUEST });
     getMyReviews(auth)
-      .then((result) =>
+      .then((result) => {
         dispatch({
           type: a.GET_REVIEWS_SUCCESS,
           payload: result,
-        })
-      )
+        });
+      })
       .catch((error) =>
         dispatch({
           type: a.GET_REVIEWS_FAILURE,

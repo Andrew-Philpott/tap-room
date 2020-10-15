@@ -13,7 +13,6 @@ export default () => {
       dispatch(getBeersAction());
     }
   });
-  console.log(beers);
   const average = (array) => array.reduce((a, b) => a + b) / array.length;
   return (
     <div className="main-content home">

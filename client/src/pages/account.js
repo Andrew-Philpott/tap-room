@@ -1,23 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import Review from "../components/review";
 import { deleteReviewAction, getReviewsAction } from "../actions/review";
 import { useDispatch, useSelector } from "react-redux";
 import useAuth from "../components/use-auth";
 
 export default () => {
-  const { auth, getToken } = useAuth();
+  const auth = useSelector((state) => state.auth);
+  const { getToken } = useAuth();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
   const reviews = useSelector((state) => state.reviews.reviews);
-  console.log(reviews);
   const handleDeleteReview = async (id) => {
     getToken().then((token) => dispatch(deleteReviewAction(token, id)));
   };
-
   React.useEffect(() => {
-    getToken().then((token) => {
-      dispatch(getReviewsAction(token));
-    });
-  }, []);
+    if (reviews.length === 0 && loading === true) {
+      (async () => {
+        setLoading(false);
+        const token = await getToken();
+        dispatch(getReviewsAction(token));
+      })();
+    }
+  }, [reviews, loading]);
 
   return (
     <div className="main-content">

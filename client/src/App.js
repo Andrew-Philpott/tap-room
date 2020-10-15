@@ -21,7 +21,6 @@ const Account = React.lazy(() => import("./pages/account"));
 const renderLoader = () => <p>Loading</p>;
 
 function App() {
-  const { auth, getToken } = useAuth();
   const [error, setError] = React.useState((err) => {
     const validationErrors =
       err && err.validationErrors ? err.validationErrors : null;
@@ -53,37 +52,31 @@ function App() {
               <Route exact path={routes.ABOUT} component={About} />
               <Route exact path={routes.BEER_LIST} component={BeerList} />
               <AuthRoute
-                isAuth={auth.isAuth}
-                isAdmin={auth.isAdmin}
                 adminRequired={true}
                 path={routes.NEW_BEER}
-              >
-                <BeerForm />
-              </AuthRoute>
+                component={BeerForm}
+              />
               <AuthRoute
-                isAuth={auth.isAuth}
-                isAdmin={auth.isAdmin}
                 adminRequired={true}
                 path={routes.BEER_EDIT}
-              >
-                <BeerForm />
-              </AuthRoute>
-              <AuthRoute isAuth={auth.isAuth} exact path={routes.NEW_REVIEW}>
-                <ReviewForm />
-              </AuthRoute>
+                component={BeerForm}
+              />
               <AuthRoute
-                isAuth={auth.isAuth}
+                exact
+                path={routes.NEW_REVIEW}
+                component={ReviewForm}
+              />
+              <AuthRoute
                 exact
                 path={routes.NEW_REVIEW_FOR_BEER}
-              >
-                <ReviewForm />
-              </AuthRoute>
-              <AuthRoute isAuth={auth.isAuth} exact path={routes.EDIT_REVIEW}>
-                <ReviewForm />
-              </AuthRoute>
-              <AuthRoute isAuth={auth.isAuth} exact path={routes.ACCOUNT}>
-                <Account />
-              </AuthRoute>
+                component={ReviewForm}
+              />
+              <AuthRoute
+                exact
+                path={routes.EDIT_REVIEW}
+                component={ReviewForm}
+              />
+              <AuthRoute exact path={routes.ACCOUNT} component={Account} />
               <Route exact path={routes.BEER_DETAILS} component={BeerDetail} />
               <Redirect to="/" from="*" />
             </Switch>

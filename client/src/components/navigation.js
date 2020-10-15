@@ -5,9 +5,11 @@ import Bars from "../svg/bars.svg";
 import useAuth from "./use-auth";
 import * as routes from "../constants/routes";
 import "../css/navigation.css";
+import { useSelector } from "react-redux";
 
 export default () => {
-  const { auth, signIn, signOut } = useAuth();
+  const auth = useSelector((state) => state.auth);
+  const { signIn, signOut } = useAuth();
   const [openMenu, setOpenMenu] = React.useState(false);
   const menuRef = React.useRef(null);
 
