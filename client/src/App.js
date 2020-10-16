@@ -7,6 +7,7 @@ import withAuth from "../src/components/withAuth";
 import AuthRoute from "./components/AuthRoute";
 import Footer from "./components/Footer";
 import ErrorDisplay from "./components/ErrorDisplay";
+import { getBeers } from "./services/beer-service";
 import ErrorBoundary from "./components/ErrorBoundary";
 import "./App.css";
 const Home = React.lazy(() => import("./pages/Home"));
@@ -54,7 +55,6 @@ function App({
   React.useEffect(() => {
     if (beers.length === 0) {
       (async () => {
-        const { getBeers } = await import("./services/beer-service");
         getBeers()
           .then((res) => {
             setBeers(res);
@@ -62,7 +62,7 @@ function App({
           .catch(setError);
       })();
     }
-  }, [setBeers]);
+  }, []);
 
   React.useEffect(() => {
     const path = history.location.pathname;

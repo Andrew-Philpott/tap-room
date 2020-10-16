@@ -1,6 +1,7 @@
 import React from "react";
 import Star from "../../assets/svg/star.svg";
 import StarHalf from "../../assets/svg/star-half-alt.svg";
+import StarRegular from "../../assets/svg/star-regular.svg";
 import "./index.css";
 
 export default ({ rating, max }) => {
@@ -9,7 +10,7 @@ export default ({ rating, max }) => {
     remaining === 0 ? null : remaining > 0.75 ? (
       <img src={Star} alt="" />
     ) : remaining < 0.25 ? (
-      <img src={Star} alt="" />
+      <img src={StarRegular} alt="" />
     ) : (
       <img src={StarHalf} alt="" />
     );
