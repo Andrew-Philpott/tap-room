@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import BeerBar from "../images/BeerBar.webp";
 import { getBeers } from "../actions/beer";
-import "../css/home.css";
 
 export default () => {
   const dispatch = useDispatch();

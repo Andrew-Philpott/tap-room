@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createReview, updateReview } from "../../actions/review";
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import useAuth from "../../components/use-auth";
-import "../../css/review-form.css";
+
 const initalFieldValues = {
   beerId: "",
   rating: "",

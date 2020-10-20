@@ -3,7 +3,6 @@ import Rating from "./rating";
 import Trash from "../svg/trash.svg";
 import Pencil from "../svg/pencil-alt.svg";
 import { useHistory } from "react-router-dom";
-import "../css/review.css";
 
 export default ({
   review,

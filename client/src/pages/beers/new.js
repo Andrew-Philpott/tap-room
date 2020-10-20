@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { createBeer, updateBeer } from "../../actions/beer";
 import useAuth from "../../components/use-auth";
 import { BEER_LIST } from "../../constants/routes";
-import "../../css/beer-form.css";
 
 const initalFieldValues = {
   name: "",

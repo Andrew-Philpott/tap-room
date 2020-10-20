@@ -14,7 +14,6 @@ import * as role from "../../constants/roles";
 import * as route from "../../constants/routes";
 import { useDispatch, useSelector } from "react-redux";
 import useAuth from "../../components/use-auth";
-import "../../css/beers.css";
 
 const BeerItem = ({ roles, beer, onDeleteBeer, onChangeBeerPints }) => {
   const history = useHistory();

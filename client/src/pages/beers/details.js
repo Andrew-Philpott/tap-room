@@ -6,7 +6,6 @@ import Review from "../../components/review";
 import { useDispatch, useSelector } from "react-redux";
 import { getBeer, createLike, deleteLike } from "../../actions/beer";
 import useAuth from "../../components/use-auth";
-import "../../css/beer-details.css";
 
 export default () => {
   const auth = useSelector((state) => state.auth);

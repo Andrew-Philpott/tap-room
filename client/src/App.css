@@ -1,139 +1,379 @@
 @font-face {
-  font-family: "Roboto";
-  src: url("./utils/Roboto-Italic.ttf");
+  font-family: Roboto;
+  src: url(./utils/Roboto-Italic.ttf);
 }
 
 #root {
-  color: white;
+  color: #fff;
   display: block;
   min-height: 100vh;
   overflow: hidden;
 }
-* {
-  box-sizing: border-box;
-}
-*:before,
-*:after {
-  box-sizing: border-box;
-}
+
 .App {
   position: relative;
   padding-bottom: 4rem;
   background-attachment: fixed;
-  background-image: url("./images/Beers.webp");
+  background-image: url(./images/Beers.webp);
   background-position: center;
   background-size: cover;
   min-height: 100vh;
 }
+
 .button {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
   min-width: 100px;
 }
-.pointer {
-  cursor: pointer;
-}
+
 .main-content {
   max-width: 1200px;
   background-color: rgba(0, 21, 36, 0.95);
-  border: 10px solid white;
+  border: 10px solid #fff;
   border-radius: 4px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 3rem;
   min-height: 100vh;
-  margin-top: 3rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  padding-top: 2rem;
-  padding-bottom: 100px;
+  margin: 3rem auto;
+  padding: 2rem 2rem 100px;
 }
+
 .main-content h1 {
-  margin-top: 0px;
+  margin-top: 0;
 }
+
 .input {
-  border: 1px solid white;
+  border: 1px solid #fff;
   border-radius: 4px;
   background: none;
-  padding: 22.5px 14px;
-  color: white;
+  color: #fff;
   font-family: inherit;
   min-height: 4rem;
   width: 100%;
   font-size: 20px;
+  padding: 22.5px 14px;
 }
+
 form .form-control {
   width: 100%;
   min-height: 5.2rem;
-
   margin-bottom: 1rem;
 }
+
 form .form-control > div {
   position: relative;
 }
+
 form .form-control > div > svg {
   position: absolute;
-  right: 0px;
+  right: 0;
   height: 80%;
   pointer-events: none;
 }
-form button:last-of-type {
-  float: right;
+
+.rating {
+  display: inline-block;
+  height: 100%;
 }
+
+.rating > img {
+  height: 1.2rem;
+  width: 1.2rem;
+  color: #fff;
+}
+
+#review-form .character-count {
+  bottom: 4px;
+  color: lightgray;
+  font-style: italic;
+  position: absolute;
+  right: 4px;
+}
+
+#review-form textarea {
+  resize: none;
+}
+
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
 }
+
 option {
-  color: black;
+  color: #000;
   font-family: inherit;
 }
+
 .orange {
-  color: rgb(255, 125, 0);
+  color: #ff7d00;
 }
+
 .red {
   color: red;
 }
+
 .yellow {
-  color: yellow;
+  color: #ff0;
 }
+
+html {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+.about img:first-of-type {
+  height: auto;
+  max-height: 400px;
+  width: 100%;
+}
+
+.about img:last-of-type {
+  float: left;
+  width: 50%;
+  max-width: 320px;
+  height: auto;
+  margin-right: 8px;
+}
+
+.beer-detail-img {
+  height: auto;
+  max-height: 600px;
+  max-width: 600px;
+  position: relative;
+  width: 100%;
+}
+
+#beer-detail > div:first-of-type {
+  display: flex;
+}
+
+#beer-detail > div:first-of-type > div {
+  width: 50%;
+}
+
+.rating-container {
+  height: 1.3rem;
+  width: 100%;
+}
+
+.rating-container span {
+  float: left;
+  font-size: 1.3rem;
+}
+
+#beer-form > form > div:last-of-type {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+#beer-form > form > div:last-of-type .form-control {
+  width: 32%;
+}
+
+#beer-list > h1 {
+  display: inline-block;
+}
+
+#beer-list th {
+  text-align: left;
+}
+
+#beer-list table {
+  display: block;
+  max-width: fit-content;
+  overflow-x: auto;
+  white-space: nowrap;
+  word-wrap: break-word;
+  margin: 0 auto;
+}
+
+#beer-list td,
+#beer-list th {
+  padding-bottom: 1rem;
+  padding-right: 2rem;
+}
+
+footer {
+  align-items: center;
+  background-color: #ff7d00;
+  bottom: 0;
+  display: flex;
+  height: 4rem;
+  justify-content: space-evenly;
+  position: absolute;
+  width: 100%;
+}
+
+footer > a {
+  text-decoration: none;
+  padding: 1rem;
+}
+
+.home img {
+  height: auto;
+  max-height: 600px;
+  width: 100%;
+}
+
+.home > div:first-of-type {
+  display: flex;
+  justify-content: space-around;
+}
+
+.home ul {
+  padding-left: 0;
+}
+
+.home li {
+  list-style: none;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.home li a {
+  font-size: 1.5rem;
+  text-decoration: none;
+  height: 100%;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+.nav-bar {
+  display: flex;
+  align-content: center;
+  background-color: #ff7d00;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.section-desktop a,
+.section-desktop span {
+  font-size: 1.25rem;
+  text-decoration: none;
+  padding: 1rem;
+}
+
+.section-desktop .MuiButton-root {
+  min-width: 100px;
+  text-transform: capitalize;
+}
+
+.section-mobile {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.section-mobile ul {
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 0 rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  position: absolute;
+  right: 1rem;
+  top: 0;
+  border-radius: 4px;
+  background-color: #fff;
+  text-decoration: none;
+  width: 6rem;
+  max-height: calc(100%-96px);
+  padding: 0;
+}
+
+.section-mobile ul > li {
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+
+.section-mobile ul > li > a,
+.section-mobile ul > li > span {
+  text-decoration: none;
+  text-align: left;
+  font-weight: 400;
+  min-height: 24px;
+  color: #000;
+  width: 100%;
+  padding: 6px 1rem;
+}
+
+.taphouse-logo {
+  height: 4rem;
+  width: auto;
+}
+
+*,
+:before,
+:after {
+  box-sizing: border-box;
+}
+
+.pointer,
+.nav-bar span,
+.section-mobile > img {
+  cursor: pointer;
+}
+
+form button:last-of-type,
+#beer-list > div:first-of-type {
+  float: right;
+}
+
+a,
+form svg path {
+  color: #fff;
+}
+
+a:hover,
+.nav-bar span:hover,
+.nav-bar li > a:hover {
+  color: #b51fb7;
+}
+
+html::-webkit-scrollbar,
+.section-desktop {
+  display: none;
+}
+
 @media screen and (min-width: 0px) {
   html,
   body {
     font-size: 12px;
   }
 }
+
+@media screen and (min-width: 600px) {
+  .section-desktop {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: calc(100%- (4rem+2rem));
+    height: auto;
+  }
+
+  .section-mobile {
+    display: none;
+  }
+}
+
 @media screen and (min-width: 800px) {
   html,
   body {
     font-size: 20px;
   }
+
   .panel {
     display: block;
   }
+
   .main-content {
     padding-left: 4rem;
     padding-right: 4rem;
   }
-}
-a {
-  color: white;
-}
-a:hover {
-  color: #b51fb7;
-}
-form svg path {
-  color: white;
-}
-html::-webkit-scrollbar {
-  display: none;
-}
-html {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-html,
-body {
-  margin: 0;
 }

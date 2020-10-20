@@ -5,7 +5,6 @@ import Bars from "../svg/bars.svg";
 import useAuth from "./use-auth";
 import * as routes from "../constants/routes";
 import { useSelector } from "react-redux";
-import "../css/navigation.css";
 
 export default () => {
   const auth = useSelector((state) => state.auth);
