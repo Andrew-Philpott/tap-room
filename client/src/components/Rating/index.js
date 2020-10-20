@@ -2,7 +2,6 @@ import React from "react";
 import Star from "../../assets/svg/star.svg";
 import StarHalf from "../../assets/svg/star-half-alt.svg";
 import StarRegular from "../../assets/svg/star-regular.svg";
-import "./index.css";
 
 export default ({ rating, max }) => {
   const remaining = rating % 1;

@@ -3,7 +3,6 @@ import Rating from "../Rating";
 import Trash from "../../assets/svg/trash.svg";
 import Pencil from "../../assets/svg/pencil-alt.svg";
 import { Link } from "react-router-dom";
-import "./index.css";
 
 export default ({ item, onLikeReview, userId, onDeleteReview, isAccount }) => {
   const [isLiked, setIsLiked] = React.useState(false);

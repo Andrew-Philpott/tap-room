@@ -4,7 +4,6 @@ import Rating from "../../components/Rating";
 import DarkBeer from "../../assets/img/DarkBeer.webp";
 import Review from "../../components/Review";
 import { getBeer } from "../../services/beer-service";
-import "./index.css";
 
 export default ({ userId, isAuth, getToken, setError, myReviews }) => {
   const { id } = useParams();

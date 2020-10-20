@@ -11,7 +11,6 @@ import {
 } from "../../services/beer-service";
 import * as role from "../../constants/roles";
 import * as route from "../../constants/routes";
-import "./index.css";
 
 const BeerItem = ({
   roles,
