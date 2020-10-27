@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import BeerBar from "../assets/BeerBar.webp";
+import { topFiveBeers} from "../other/utils";
 
 export default ({ beers }) => {
-  const average = (array) => array.reduce((a, b) => a + b) / array.length;
   return (
     <div className="main-content home" data-test="component-home">
       <img src={BeerBar} alt="Glass of a light beer on the bar" />
@@ -28,16 +28,7 @@ export default ({ beers }) => {
           <div>
             <h2>Top 5</h2>
             <ul>
-              {beers
-                .filter((x) => x.reviews && x.reviews.length !== 0)
-                .map((x) => {
-                  return {
-                    beer: x,
-                    averageRating: average(x.reviews.map((r) => r.rating)),
-                  };
-                })
-                .sort((a, b) => (a.averageRating < b.averageRating ? 1 : -1))
-                .slice(0, 5)
+              {topFiveBeers(beers)
                 .map((x, index) => {
                   return (
                     <li key={index}>
