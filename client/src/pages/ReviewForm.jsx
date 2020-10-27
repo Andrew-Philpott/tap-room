@@ -1,6 +1,5 @@
 import React from "react";
 import useForm from "../other/use-form";
-import { createReview, updateReview } from "../other/review-service";
 import { useParams, useLocation, useHistory } from "react-router-dom";
 
 const initalFieldValues = {
@@ -69,9 +68,10 @@ export default ({ beers, myReviews, setMyReviews, getToken, setError }) => {
     }
   }, []);
 
-  function handleSubmit(e) {
+ async function handleSubmit(e) {
     e.preventDefault();
     if (validate()) {
+      const { createReview, updateReview } = await import("../other/review-service");
       parsedId
         ? updateReview(getToken(), parsedId, values)
             .then((response) => {

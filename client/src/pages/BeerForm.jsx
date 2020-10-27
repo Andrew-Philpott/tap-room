@@ -86,15 +86,13 @@ export default ({ beers, setBeers, setError, getToken }) => {
     }
   }, []);
 
-  function handleSubmit(e) {
+async function handleSubmit(e) {
     e.preventDefault();
-    if (validate()) {
-      getToken((token) => {
-        const { updateBeer, createBeer } = import(
-          "../other/beer-service"
-        );
-        return id ? updateBeer(token, id, values) : createBeer(token, values);
-      })
+  if (validate()) {
+    const { updateBeer, createBeer } = await import(
+      "../other/beer-service"
+    );
+         id ? updateBeer(getToken(), id, values) : createBeer(getToken(), values)
         .then((res) => {
           setBeers(
             id

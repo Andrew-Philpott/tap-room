@@ -1,6 +1,5 @@
 import React from "react";
 import Review from "../components/Review";
-import { deleteReview } from "../other/review-service";
 
 export default ({
   userId,
@@ -11,6 +10,7 @@ export default ({
   setError,
 }) => {
   const handleDeleteReview = async (id) => {
+    const { deleteReview } = await import("../other/review-service");
     deleteReview(getToken(), id)
       .then((res) => {
         setMyReviews([...myReviews.filter((x) => x.reviewId !== res.reviewId)]);
