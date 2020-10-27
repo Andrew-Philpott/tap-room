@@ -1,6 +1,5 @@
 import React from "react";
-import { Router, Route, Switch, Redirect } from "react-router-dom";
-import history from "./helpers/history";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import NavigationBar from "./components/Navigation";
 import * as routes from "../src/constants/routes";
 import withAuth from "../src/components/withAuth";
@@ -42,17 +41,6 @@ function App({
   });
 
   React.useEffect(() => {
-    (async () => {
-      history.listen(() => {
-        const temp = { ...error };
-        temp.validationErrors = null;
-        temp.status = null;
-        setError(temp);
-      });
-    })();
-  }, [error, setError]);
-
-  React.useEffect(() => {
     if (beers.length === 0) {
       (async () => {
         getBeers()
@@ -65,14 +53,7 @@ function App({
   }, []);
 
   React.useEffect(() => {
-    const path = history.location.pathname;
-    if (
-      isAuth === true &&
-      myReviews.length === 0 &&
-      (path === "/account" ||
-        path.indexOf("/reviews") !== -1 ||
-        path.indexOf("/details") !== -1)
-    ) {
+    if (isAuth === true && myReviews.length === 0) {
       (async () => {
         const { getMyReviews } = await import("./services/review-service");
         getMyReviews(getToken())
@@ -92,7 +73,7 @@ function App({
     <div className="App">
       <ErrorBoundary>
         <React.Suspense fallback={renderLoader()}>
-          <Router history={history}>
+          <BrowserRouter>
             <NavigationBar
               isAuth={isAuth}
               onSignInOrSignOut={handleSignInOrSignOut}
@@ -116,19 +97,10 @@ function App({
                   setError={setError}
                 />
               </Route>
-              <Route path={routes.NEW_BEER}>
-                <BeerForm
-                  beers={beers}
-                  setBeers={setBeers}
-                  setError={setError}
-                  getToken={getToken}
-                />
-              </Route>
               <AuthRoute
                 isAuth={isAuth}
                 isAdmin={isAdmin}
-                adminRequired={true}
-                path={routes.BEER_EDIT}
+                path={[routes.BEER_EDIT, routes.NEW_BEER]}
               >
                 <BeerForm
                   beers={beers}
@@ -136,18 +108,16 @@ function App({
                   setError={setError}
                   getToken={getToken}
                 />
-              </AuthRoute>
-              <AuthRoute isAuth={isAuth} exact path={routes.NEW_REVIEW}>
-                <ReviewForm beers={beers} myReviews={myReviews} />
               </AuthRoute>
               <AuthRoute
                 isAuth={isAuth}
                 exact
-                path={routes.NEW_REVIEW_FOR_BEER}
+                path={[
+                  routes.NEW_REVIEW,
+                  routes.NEW_REVIEW_FOR_BEER,
+                  routes.EDIT_REVIEW,
+                ]}
               >
-                <ReviewForm beers={beers} myReviews={myReviews} />
-              </AuthRoute>
-              <AuthRoute isAuth={isAuth} exact path={routes.EDIT_REVIEW}>
                 <ReviewForm beers={beers} myReviews={myReviews} />
               </AuthRoute>
               <AuthRoute isAuth={isAuth} exact path={routes.ACCOUNT}>
@@ -171,7 +141,7 @@ function App({
               <Redirect to="/" from="*" />
             </Switch>
             <Footer />
-          </Router>
+          </BrowserRouter>
         </React.Suspense>
         <ErrorDisplay error={error} />
       </ErrorBoundary>
