@@ -1,7 +1,7 @@
 import React from "react";
-import Rating from "../Rating";
-import Trash from "../../assets/svg/trash.svg";
-import Pencil from "../../assets/svg/pencil-alt.svg";
+import Rating from "./Rating";
+import Trash from "../assets/trash.svg";
+import Pencil from "../assets/pencil-alt.svg";
 import { Link } from "react-router-dom";
 
 export default ({ item, onLikeReview, userId, onDeleteReview, isAccount }) => {

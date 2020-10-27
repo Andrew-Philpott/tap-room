@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import BeerBar from "../../assets/img/BeerBar.webp";
+import BeerBar from "../assets/BeerBar.webp";
 
 export default ({ beers }) => {
   const average = (array) => array.reduce((a, b) => a + b) / array.length;

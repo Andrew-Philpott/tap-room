@@ -1,5 +1,5 @@
 import React from "react";
-import useForm from "../../components/useForm";
+import useForm from "../other/use-form";
 import { useParams, useHistory } from "react-router-dom";
 
 const initalFieldValues = {
@@ -91,7 +91,7 @@ export default ({ beers, setBeers, setError, getToken }) => {
     if (validate()) {
       getToken((token) => {
         const { updateBeer, createBeer } = import(
-          "../../services/beer-service"
+          "../other/beer-service"
         );
         return id ? updateBeer(token, id, values) : createBeer(token, values);
       })

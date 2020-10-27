@@ -1,6 +1,6 @@
 import React from "react";
-import Review from "../../components/Review";
-import { deleteReview } from "../../services/review-service";
+import Review from "../components/Review";
+import { deleteReview } from "../other/review-service";
 
 export default ({
   userId,

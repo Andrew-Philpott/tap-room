@@ -1,9 +1,9 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import Rating from "../../components/Rating";
-import DarkBeer from "../../assets/img/DarkBeer.webp";
-import Review from "../../components/Review";
-import { getBeer } from "../../services/beer-service";
+import Rating from "../components/Rating";
+import DarkBeer from "../assets/DarkBeer.webp";
+import Review from "../components/Review";
+import { getBeer } from "../other/beer-service";
 
 export default ({ userId, isAuth, getToken, setError, myReviews }) => {
   const { id } = useParams();
@@ -17,7 +17,7 @@ export default ({ userId, isAuth, getToken, setError, myReviews }) => {
   const handleLike = async (item) => {
     const like = item.likes.find((x) => x.userId === userId);
     const { createLike, deleteLike } = await import(
-      "../../services/review-service"
+      "../other/review-service"
     );
     const newState = { ...beer };
     !like

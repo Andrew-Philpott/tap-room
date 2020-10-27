@@ -1,16 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Plus from "../../assets/svg/plus.svg";
-import Minus from "../../assets/svg/minus.svg";
-import Trash from "../../assets/svg/trash.svg";
-import Pencil from "../../assets/svg/pencil-alt.svg";
+import Plus from "../assets/plus.svg";
+import Minus from "../assets/minus.svg";
+import Trash from "../assets/trash.svg";
+import Pencil from "../assets/pencil-alt.svg";
 import {
   incrementPints,
   decrementPints,
   deleteBeer,
-} from "../../services/beer-service";
-import * as role from "../../constants/roles";
-import * as route from "../../constants/routes";
+} from "../other/beer-service";
+import * as role from "../other/roles";
+import * as route from "../other/routes";
 
 const BeerItem = ({
   roles,

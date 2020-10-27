@@ -1,12 +1,12 @@
 import React from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import NavigationBar from "./components/Navigation";
-import * as routes from "../src/constants/routes";
-import withAuth from "../src/components/withAuth";
+import * as routes from "./other/routes";
+import withAuth from "./components/WithAuth";
 import AuthRoute from "./components/AuthRoute";
 import Footer from "./components/Footer";
 import ErrorDisplay from "./components/ErrorDisplay";
-import { getBeers } from "./services/beer-service";
+import { getBeers } from "./other/beer-service";
 import ErrorBoundary from "./components/ErrorBoundary";
 import "./App.css";
 const Home = React.lazy(() => import("./pages/Home"));
@@ -55,7 +55,7 @@ function App({
   React.useEffect(() => {
     if (isAuth === true && myReviews.length === 0) {
       (async () => {
-        const { getMyReviews } = await import("./services/review-service");
+        const { getMyReviews } = await import("./other/review-service");
         getMyReviews(getToken())
           .then((res) => {
             setMyReviews(res);

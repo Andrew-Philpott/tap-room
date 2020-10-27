@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import taphouselogo from "../../assets/img/taphouselogo.webp";
-import Bars from "../../assets/svg/bars.svg";
-import * as routes from "../../constants/routes";
+import taphouselogo from "../assets/taphouselogo.webp";
+import Bars from "../assets/bars.svg";
+import * as routes from "../other/routes";
 
 export default ({ isAuth, onSignInOrSignOut }) => {
   const [openMenu, setOpenMenu] = React.useState(false);

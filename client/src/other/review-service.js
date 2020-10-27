@@ -1,5 +1,5 @@
-import requestOptions from "../helpers/request-options";
-import handleResponse from "../helpers/handle-response";
+import requestOptions from "../other/request-options";
+import handleResponse from "../other/handle-response";
 
 const baseUrl = "https://taproomapi.azurewebsites.net/api/v1/reviews";
 
