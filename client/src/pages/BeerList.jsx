@@ -26,9 +26,9 @@ const BeerItem = ({
         <React.Fragment>
           <br />
           {beer.pints === 0 ? (
-            <span className="red-c">Out of stock</span>
+            <span className="red">Out of stock</span>
           ) : beer.pints <= 10 ? (
-            <span className="yellow-c">Almost Empty</span>
+            <span className="yellow">Almost Empty</span>
           ) : null}
         </React.Fragment>
       </td>
@@ -40,10 +40,10 @@ const BeerItem = ({
         <span
           className={`${
             beer.price > 12
-              ? "orange-c"
+              ? "orange"
               : beer.price > 8
-              ? "yellow-c"
-              : "green-c"
+              ? "yellow"
+              : "green"
           }`}
         >
           {beer.price}
@@ -125,7 +125,7 @@ export default ({
   };
 
   return (
-    <div id="beer-list" className="main-content">
+    <div id="beer-list" className="main-content" data-test="component-beer-list">
       <h1>Beers On Tap</h1>
       {isAuth && (
         <div>

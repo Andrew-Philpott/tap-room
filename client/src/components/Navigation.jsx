@@ -40,8 +40,7 @@ export default ({ isAuth, onSignInOrSignOut }) => {
   ];
 
   return (
-    <React.Fragment>
-      <div className="nav-bar">
+      <div className="nav-bar" data-test="component-navigation">
         <Link to={routes.LANDING}>
           <img width="70" height="70" src={taphouselogo} alt="Tap House Logo" />
         </Link>
@@ -68,6 +67,5 @@ export default ({ isAuth, onSignInOrSignOut }) => {
           )}
         </div>
       </div>
-    </React.Fragment>
   );
 };

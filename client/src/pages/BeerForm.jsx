@@ -86,27 +86,31 @@ export default ({ beers, setBeers, setError, getToken }) => {
     }
   }, []);
 
-async function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-  if (validate()) {
-    const { updateBeer, createBeer } = await import(
-      "../other/beer-service"
-    );
-         id ? updateBeer(getToken(), id, values) : createBeer(getToken(), values)
-        .then((res) => {
-          setBeers(
-            id
-              ? [...beers.map((x) => (x.beerId === res.beerId ? res : x))]
-              : [...beers, res]
-          );
-          history.push("/beers");
-        })
-        .catch(setError);
+    if (validate()) {
+      const { updateBeer, createBeer } = await import("../other/beer-service");
+      id
+        ? updateBeer(getToken(), id, values)
+        : createBeer(getToken(), values)
+            .then((res) => {
+              setBeers(
+                id
+                  ? [...beers.map((x) => (x.beerId === res.beerId ? res : x))]
+                  : [...beers, res]
+              );
+              history.push("/beers");
+            })
+            .catch(setError);
     }
   }
 
   return (
-    <div id="beer-form" className="main-content">
+    <div
+      id="beer-form"
+      className="main-content"
+      data-test="component-beer-form"
+    >
       <h1>{!id && <>Add a new beer</>}</h1>
       <form autoComplete="off" method="post" noValidate onSubmit={handleSubmit}>
         <div className="form-control">

@@ -2,7 +2,7 @@ import React from "react";
 
 export default () => {
   return (
-    <div data-test="component-about" className="main-content about">
+    <div className="main-content about" data-test="component-about">
       <img
         src={
           "https://images.unsplash.com/photo-1564038057908-cae089c15d45?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"

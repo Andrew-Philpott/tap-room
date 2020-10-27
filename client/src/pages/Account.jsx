@@ -19,7 +19,7 @@ export default ({
   };
 
   return (
-    <div className="main-content">
+    <div className="main-content" data-test="component-account">
       <p>
         Welcome, <b>{userName}</b>
       </p>

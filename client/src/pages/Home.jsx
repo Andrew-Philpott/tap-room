@@ -5,7 +5,7 @@ import BeerBar from "../assets/BeerBar.webp";
 export default ({ beers }) => {
   const average = (array) => array.reduce((a, b) => a + b) / array.length;
   return (
-    <div className="main-content home">
+    <div className="main-content home" data-test="component-home">
       <img src={BeerBar} alt="Glass of a light beer on the bar" />
       <div>
         {beers.length !== 0 && (

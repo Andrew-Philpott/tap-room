@@ -20,7 +20,7 @@ export default ({ item, onLikeReview, userId, onDeleteReview, isAccount }) => {
     userId === 0 ? false : item.userId !== userId ? true : false;
 
   return (
-    <div className="review">
+    <div className="review" data-test="component-review">
       <h2>{isAccount ? item.beer.name : item.name}</h2>
       <p>{item.dateCreated}</p>
       <Rating rating={item.rating} max={5} />

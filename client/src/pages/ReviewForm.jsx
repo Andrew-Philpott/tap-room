@@ -92,7 +92,7 @@ export default ({ beers, myReviews, setMyReviews, getToken, setError }) => {
     }
   }
   return (
-    <div className="main-content">
+    <div className="main-content" data-test="component-review-form">
       {beers.length === 0 ? (
         <h1>There are no beers to review, sorry!</h1>
       ) : isEditReview ||

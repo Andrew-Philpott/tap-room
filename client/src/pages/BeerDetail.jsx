@@ -16,9 +16,7 @@ export default ({ userId, isAuth, getToken, setError, myReviews }) => {
 
   const handleLike = async (item) => {
     const like = item.likes.find((x) => x.userId === userId);
-    const { createLike, deleteLike } = await import(
-      "../other/review-service"
-    );
+    const { createLike, deleteLike } = await import("../other/review-service");
     const newState = { ...beer };
     !like
       ? createLike(getToken(), { reviewId: item.reviewId })
@@ -55,7 +53,11 @@ export default ({ userId, isAuth, getToken, setError, myReviews }) => {
     average(beer.reviews.map((r) => r.rating));
 
   return (
-    <div id="beer-detail" className="main-content">
+    <div
+      id="beer-detail"
+      className="main-content"
+      data-test="component-beer-detail"
+    >
       {beer ? (
         <React.Fragment>
           <div>

@@ -23,7 +23,7 @@ export default ({ rating, max }) => {
     emptyStars.push(<img src={Star} key={j} />);
   }
   return (
-    <div className="rating">
+    <div className="rating" data-test="component-rating">
       {fullStars.map((x) => {
         return x;
       })}
