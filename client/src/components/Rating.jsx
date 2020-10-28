@@ -20,7 +20,7 @@ export default ({ rating, max }) => {
     fullStars.push(<img src={Star} key={i} alt="" />);
   }
   for (let j = 0; j < Math.floor(max - rating); j++) {
-    emptyStars.push(<img src={Star} key={j} alt="" />);
+    emptyStars.push(<img src={StarRegular} key={j} alt="" />);
   }
   return (
     <div className="rating" data-test="component-rating">

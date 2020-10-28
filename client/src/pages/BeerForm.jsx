@@ -10,8 +10,8 @@ const initalFieldValues = {
   aroma: "",
   flavor: "",
   price: "",
-  alcoholContent: "",
   pints: "",
+  alcoholContent: "",
 };
 
 export default ({ beers, setBeers, setError }) => {
@@ -21,51 +21,26 @@ export default ({ beers, setBeers, setError }) => {
   const validate = (fieldValues = values) => {
     let temp = { ...formErrors };
     let fieldNumber;
-    if ("name" in fieldValues)
-      temp.name = fieldValues.name ? "" : "Field cannot be blank";
-    if ("brand" in fieldValues)
-      temp.brand = fieldValues.brand ? "" : "Field cannot be blank";
-    if ("color" in fieldValues)
-      temp.color = fieldValues.color ? "" : "Field cannot be blank";
-    if ("aroma" in fieldValues)
-      temp.aroma = fieldValues.aroma ? "" : "Field cannot be blank";
-    if ("flavor" in fieldValues)
-      temp.flavor = fieldValues.flavor ? "" : "Field cannot be blank";
-    if ("price" in fieldValues) {
-      fieldNumber = parseInt(fieldValues.price);
-      if (isNaN(fieldNumber)) {
-        temp.price = "Field must be a number";
-      } else {
-        if (fieldNumber < 1 || fieldNumber > 10000) {
-          temp.price = "Field must be between 1 and 10000";
+    const keys = Object.keys(fieldValues);
+    for (let index = 0; index < fieldValues.length; index++) {
+      const val = fieldValues[index];
+      const key = keys[index];
+      if (key in fieldValues) {
+        if (index < 5) {
+          temp[key] = val ? "" : "Field cannot be blank";
         } else {
-          temp.price = "";
+          fieldNumber = parseInt(fieldValues[index]);
+          if (isNaN(fieldNumber)) {
+            temp[key] = "Field must be a number";
+          } else {
+            if (index === fieldValues.length - 1) {
+              temp[key] =  fieldNumber < 0 || fieldNumber > 80 ? "Field must be between 0 and 80" : "";
+            } else {
+              temp[key] = fieldNumber < 1 || fieldNumber > 10000 ? "Field must be between 1 and 10000" : "";
+            }
+          }
         }
-      }
-    }
-    if ("alcoholContent" in fieldValues) {
-      fieldNumber = parseInt(fieldValues.alcoholContent);
-      if (isNaN(fieldNumber)) {
-        temp.alcoholContent = "Field must be a number";
-      } else {
-        if (fieldNumber < 0 || fieldNumber > 80) {
-          temp.alcoholContent = "Field must be between 0 and 80";
-        } else {
-          temp.alcoholContent = "";
-        }
-      }
-    }
-    if ("pints" in fieldValues) {
-      fieldNumber = parseInt(fieldValues.pints);
-      if (isNaN(fieldNumber)) {
-        temp.pints = "Field must be a number";
-      } else {
-        if (fieldNumber < 1 || fieldNumber > 10000) {
-          temp.pints = "Field must be between 1 and 10000";
-        } else {
-          temp.pints = "";
-        }
-      }
+      }   
     }
     setFormErrors({ ...temp });
 

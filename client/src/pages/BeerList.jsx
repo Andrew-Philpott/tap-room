@@ -1,14 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Plus from "../assets/plus.svg";
 import Minus from "../assets/minus.svg";
 import Trash from "../assets/trash.svg";
 import Pencil from "../assets/pencil-alt.svg";
-import {
-  incrementPints,
-  decrementPints,
-  deleteBeer,
-} from "../other/beer-service";
 import * as role from "../other/roles";
 import * as route from "../other/routes";
 import { useAuth } from "../components/AuthContext";
@@ -17,9 +12,9 @@ const BeerItem = ({
   roles,
   beer,
   onDeleteBeer,
-  onIncrementBeerPints,
-  onDecrementBeerPints,
+  onChangeBeerPints
 }) => {
+  const history = useHistory();
   return (
     <tr key={beer.beerId} data-test="component-beer-item">
       <td>
@@ -54,32 +49,49 @@ const BeerItem = ({
       {roles &&
         (roles.indexOf(role.EMPLOYEE) !== -1 ||
           roles.indexOf(role.ADMIN) !== -1) && (
-          <React.Fragment>
+            <React.Fragment>
             <td>
-              <Minus
-                className="minus"
+              <img
+                alt=""
+                height="20"
+                width="20"
+                src={Minus}
+                className="pointer"
                 onClick={() =>
-                  beer.pints > 0 && onDecrementBeerPints(beer.beerId)
+                  beer.pints > 0 && onChangeBeerPints(true, beer.beerId)
                 }
               />
             </td>
             <td>
-              <Plus
-                className="plus"
-                onClick={() => onIncrementBeerPints(beer.beerId)}
+              <img
+                alt=""
+                height="20"
+                width="20"
+                src={Plus}
+                className="pointer"
+                onClick={() => onChangeBeerPints(false, beer.beerId)}
               />
             </td>
             {roles.indexOf(role.ADMIN) !== -1 && (
               <React.Fragment>
                 <td>
-                  <Link to={`/beers/edit/${beer.beerId}`}>
-                    <Pencil className="edit" />
-                  </Link>
+                  <img
+                    alt=""
+                    height="20"
+                    width="20"
+                    onClick={() => history.push(`/beers/edit/${beer.beerId}`)}
+                    src={Pencil}
+                    className="pointer"
+                  />
                 </td>
                 <td>
-                  <Trash
+                  <img
+                    alt=""
+                    height="20"
+                    width="20"
+                    src={Trash}
                     onClick={() => onDeleteBeer(beer.beerId)}
-                    className="delete"
+                    className="pointer"
                   />
                 </td>
               </React.Fragment>
@@ -96,8 +108,9 @@ export default ({
   setError,
 }) => {
   const { isAuth, isAdmin, roles, getToken } = useAuth();
-  const handleDeleteBeer = (id) => {
+  const handleDeleteBeer = async (id) => {
     if (window.confirm("Are you sure you want to delete this beer?")) {
+      const { deleteBeer } = await import("../other/beer-service");
       deleteBeer(getToken(), id)
         .then((beer) => {
           setBeers([...beers.filter((x) => x.beerId !== beer.beerId)]);
@@ -106,18 +119,16 @@ export default ({
     }
   };
 
-  const handleIncrementBeerPints = (id) => {
-    incrementPints(getToken(), id)
-      .then((res) => {
-        setBeers([...beers.map((x) => (x.beerId === res.beerId ? res : x))]);
+  const handleChangeBeerPints = async (isMinus, id) => {
+    const { decrementPints, incrementPints } = await import("../other/beer-service");
+    getToken()
+      .then((token) => {
+        return isMinus ? decrementPints(token, id) : incrementPints(token);
       })
-      .catch(setError);
-  };
-
-  const handleDecrementBeerPints = (id) => {
-    decrementPints(getToken(), id)
-      .then((res) => {
-        setBeers([...beers.map((x) => (x.beerId === res.beerId ? res : x))]);
+      .then((result) => {
+        setBeers([
+          ...beers.map((x) => (x.beerId === result.beerId ? result : x)),
+        ]);
       })
       .catch(setError);
   };
@@ -163,8 +174,7 @@ export default ({
                 key={index}
                 beer={beer}
                 roles={roles}
-                onIncrementBeerPints={handleIncrementBeerPints}
-                onDecrementBeerPints={handleDecrementBeerPints}
+                onChangeBeerPints={handleChangeBeerPints}
                 onDeleteBeer={handleDeleteBeer}
               />
             ))}
