@@ -106,7 +106,7 @@ export default ({ setError, myReviews }) => {
                 {beer.reviews.map((review, index) => {
                   return (
                     <Review
-                      item={review}
+                      review={review}
                       onLikeReview={handleLike}
                       userId={userId}
                       isAccount={false}

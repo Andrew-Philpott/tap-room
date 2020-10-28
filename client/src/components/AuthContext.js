@@ -62,7 +62,7 @@ export function AuthProvider(props) {
   const signInSignOut = (isAdminView) => {
     if (isAdminView) {
       if (!auth.isAuth && !auth.isAdmin) {
-        msalAAD.loginPopup(loginRequestAAD);
+        msalAAD.loginPopup(loginRequestAAD).then(handleResponse);
       } else {
         msalAAD.logout({
           account: msalAAD.getAccountByUsername(auth.userName),

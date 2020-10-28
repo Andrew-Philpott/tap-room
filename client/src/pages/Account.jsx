@@ -36,7 +36,7 @@ export default ({
           {myReviews.map((review, index) => {
             return (
               <Review
-                item={review}
+                review={review}
                 userId={userId}
                 onDeleteReview={handleDeleteReview}
                 isAccount={true}
