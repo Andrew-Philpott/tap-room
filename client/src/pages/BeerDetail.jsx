@@ -33,7 +33,7 @@ export default ({ setError, myReviews }) => {
             );
             setBeer(newState);
           })
-          .catch((err) => setError(err))
+          .catch(setError)
       : deleteLike(getToken(), like.reviewLikeId)
           .then((res) => {
             const review = { ...item };
@@ -45,7 +45,7 @@ export default ({ setError, myReviews }) => {
             );
             setBeer(newState);
           })
-          .catch((err) => setError(err));
+          .catch(setError);
   };
   const averageRating =
     beer &&
