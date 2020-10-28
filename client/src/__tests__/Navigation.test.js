@@ -2,19 +2,10 @@ import React from "react";
 import { shallow } from "enzyme";
 import Navigation from "../components/Navigation";
 import AuthContext from "../components/AuthContext";
-
-const initialAuth = {
-  userName: "",
-  roles: [],
-  isAuth: false,
-  isAdmin: false,
-  userId: 0,
-  homeId: 0,
-};
+import { initialAuth, mockUseAuth } from "../testutils";
 
 const setup = () => {
-  const mockUseAuth = jest.fn().mockReturnValue([initialAuth, jest.fn()]);
-  AuthContext.useAuth = mockUseAuth;
+  AuthContext.useAuth = mockUseAuth(initialAuth);
   return shallow(<Navigation />);
 };
 
