@@ -7,7 +7,7 @@ import Footer from "./components/Footer";
 import ErrorDisplay from "./components/ErrorDisplay";
 import { getBeers } from "./other/beer-service";
 import ErrorBoundary from "./components/ErrorBoundary";
-import { useAuth } from "./components/AuthContext";
+import AuthContext from "./components/AuthContext";
 import "./App.css";
 const Home = React.lazy(() => import("./pages/Home"));
 const BeerDetail = React.lazy(() => import("./pages/BeerDetail"));
@@ -21,7 +21,7 @@ const Account = React.lazy(() => import("./pages/Account"));
 const renderLoader = () => <p>Loading</p>;
 
 function App() {
-  const { isAuth, getToken } = useAuth();
+  const { isAuth, getToken } = AuthContext.useAuth();
   const [beers, setBeers] = React.useState([]);
   const [myReviews, setMyReviews] = React.useState([]);
   const [error, setError] = React.useState((err) => {

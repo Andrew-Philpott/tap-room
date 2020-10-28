@@ -6,7 +6,8 @@ import Trash from "../assets/trash.svg";
 import Pencil from "../assets/pencil-alt.svg";
 import * as role from "../other/roles";
 import * as route from "../other/routes";
-import { useAuth } from "../components/AuthContext";
+import AuthContext from "../components/AuthContext";
+import PropTypes from "prop-types";
 
 const BeerItem = ({
   roles,
@@ -102,12 +103,12 @@ const BeerItem = ({
   );
 };
 
-export default ({
+const BeerList = ({
   beers,
   setBeers,
   setError,
 }) => {
-  const { isAuth, isAdmin, roles, getToken } = useAuth();
+  const { isAuth, isAdmin, roles, getToken } = AuthContext.useAuth();
   const handleDeleteBeer = async (id) => {
     if (window.confirm("Are you sure you want to delete this beer?")) {
       const { deleteBeer } = await import("../other/beer-service");
@@ -186,3 +187,11 @@ export default ({
     </div>
   );
 };
+
+BeerList.propTypes = {
+  beers: PropTypes.array.isRequired,
+  setBeers: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
+}
+
+export default BeerList;

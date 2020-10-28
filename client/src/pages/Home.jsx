@@ -2,8 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import BeerBar from "../assets/BeerBar.webp";
 import { topFiveBeers } from "../other/utils";
+import PropTypes from "prop-types";
 
-export default ({ beers }) => {
+const Home = ({ beers }) => {
   return (
     <div className="main-content home" data-test="component-home">
       <img src={BeerBar} alt="Glass of a light beer on the bar" />
@@ -46,3 +47,9 @@ export default ({ beers }) => {
     </div>
   );
 };
+
+Home.propTypes = {
+  beers: PropTypes.array.isRequired
+}
+
+export default Home;

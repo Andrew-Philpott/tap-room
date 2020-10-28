@@ -4,11 +4,12 @@ import Rating from "../components/Rating";
 import DarkBeer from "../assets/DarkBeer.webp";
 import Review from "../components/Review";
 import { getBeer } from "../other/beer-service";
-import { useAuth } from "../components/AuthContext";
+import AuthContext from "../components/AuthContext";
 import { average } from "../other/utils";
+import PropTypes from "prop-types";
 
-export default ({ setError, myReviews }) => {
-  const { userId, isAuth, getToken } = useAuth();
+const BeerDetail = ({ setError, myReviews }) => {
+  const { userId, isAuth, getToken } = AuthContext.useAuth();
   const { id } = useParams();
   const [beer, setBeer] = React.useState(null);
   React.useEffect(() => {
@@ -129,3 +130,10 @@ export default ({ setError, myReviews }) => {
     </div>
   );
 };
+
+BeerDetail.propTypes = {
+  setError: PropTypes.func.isRequired,
+  myReviews: PropTypes.array.isRequired,
+}
+
+export default BeerDetail;

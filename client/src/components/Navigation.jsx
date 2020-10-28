@@ -3,10 +3,10 @@ import { Link, useHistory } from "react-router-dom";
 import taphouselogo from "../assets/taphouselogo.webp";
 import Bars from "../assets/bars.svg";
 import * as routes from "../other/routes";
-import { useAuth } from "./AuthContext";
+import AuthContext from "./AuthContext";
 
 export default () => {
-  const { isAuth, signInSignOut } = useAuth();
+  const { isAuth, signInSignOut } = AuthContext.useAuth();
   const history = useHistory();
   const [openMenu, setOpenMenu] = React.useState(false);
   const menuRef = React.useRef(null);

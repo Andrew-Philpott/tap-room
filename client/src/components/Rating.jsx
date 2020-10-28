@@ -2,8 +2,9 @@ import React from "react";
 import Star from "../assets/star.svg";
 import StarHalf from "../assets/star-half-alt.svg";
 import StarRegular from "../assets/star-regular.svg";
+import PropTypes from "prop-types";
 
-export default ({ rating, max }) => {
+const Rating = ({ rating, max }) => {
   const remaining = rating % 1;
   const star =
     remaining === 0 ? null : remaining > 0.75 ? (
@@ -34,3 +35,7 @@ export default ({ rating, max }) => {
     </div>
   );
 };
+
+
+
+export default Rating;

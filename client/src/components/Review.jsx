@@ -3,13 +3,14 @@ import Rating from "./Rating";
 import Trash from "../assets/trash.svg";
 import Pencil from "../assets/pencil-alt.svg";
 import { useHistory } from "react-router-dom";
-import { useAuth } from "./AuthContext";
+import AuthContext from "./AuthContext";
 import ThumbsUp from "./ThumbsUp";
+import PropTypes from "prop-types";
 
-export default ({ review, onLikeReview, onDeleteReview, isAccount }) => {
+const Review = ({ review, onLikeReview, onDeleteReview, isAccount }) => {
   const [isLiked, setIsLiked] = React.useState(false);
   const history = useHistory();
-  const { userId } = useAuth();
+  const { userId } = AuthContext.useAuth();
 
   React.useEffect(() => {
     const likedResult =
@@ -65,3 +66,12 @@ export default ({ review, onLikeReview, onDeleteReview, isAccount }) => {
     </div>
   );
 };
+
+Review.propTypes = {
+  review: PropTypes.object.isRequired,
+  onLikeReview: PropTypes.func.isRequired,
+  onDeleteReview: PropTypes.func.isRequired,
+  isAccount: PropTypes.bool.isRequired
+}
+
+export default Review;

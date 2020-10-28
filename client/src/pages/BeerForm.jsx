@@ -1,7 +1,8 @@
 import React from "react";
 import useForm from "../other/use-form";
 import { useParams, useHistory } from "react-router-dom";
-import { useAuth } from "../components/AuthContext";
+import AuthContext from "../components/AuthContext";
+import PropTypes from "prop-types";
 
 const initalFieldValues = {
   name: "",
@@ -14,8 +15,8 @@ const initalFieldValues = {
   alcoholContent: "",
 };
 
-export default ({ beers, setBeers, setError }) => {
-  const { getToken } = useAuth();
+const BeerForm = ({ beers, setBeers, setError }) => {
+  const { getToken } = AuthContext.useAuth();
   const { id } = useParams();
   const history = useHistory();
   const validate = (fieldValues = values) => {
@@ -195,3 +196,11 @@ export default ({ beers, setBeers, setError }) => {
     </div>
   );
 };
+
+BeerForm.propTypes = {
+  beers: PropTypes.array.isRequired,
+  setBeers: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
+}
+
+export default BeerForm;

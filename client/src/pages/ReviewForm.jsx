@@ -1,7 +1,8 @@
 import React from "react";
 import useForm from "../other/use-form";
 import { useParams, useLocation, useHistory } from "react-router-dom";
-import { useAuth } from "../components/AuthContext";
+import AuthContext from "../components/AuthContext";
+import PropTypes from "prop-types";
 
 const initalFieldValues = {
   beerId: "",
@@ -10,8 +11,8 @@ const initalFieldValues = {
   headline: "",
 };
 
-export default ({ beers, myReviews, setMyReviews, setError }) => {
-  const { getToken } = useAuth();
+const ReviewForm = ({ beers, myReviews, setMyReviews, setError }) => {
+  const { getToken } = AuthContext.useAuth();
   const { id } = useParams();
   const history = useHistory();
   const path = useLocation().pathname;
@@ -222,3 +223,12 @@ export default ({ beers, myReviews, setMyReviews, setError }) => {
     </div>
   );
 };
+
+ReviewForm.propTypes = {
+  beers: PropTypes.array.isRequired,
+  myReviews: PropTypes.array.isRequired,
+  setMyReviews: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
+}
+
+export default ReviewForm;

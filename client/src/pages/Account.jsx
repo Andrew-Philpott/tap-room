@@ -1,13 +1,14 @@
 import React from "react";
 import Review from "../components/Review";
-import { useAuth } from "../components/AuthContext";
+import AuthContext from "../components/AuthContext";
+import PropTypes from "prop-types";
 
-export default ({
+const Account = ({
   myReviews,
   setMyReviews,
   setError,
 }) => {
-  const { userId, userName, getToken } = useAuth();
+  const { userId, userName, getToken } = AuthContext.useAuth();
   const handleDeleteReview = async (id) => {
     const { deleteReview } = await import("../other/review-service");
     deleteReview(getToken(), id)
@@ -51,3 +52,11 @@ export default ({
     </div>
   );
 };
+
+Account.propTypes = {
+  myReviews: PropTypes.array.isRequired,
+  setMyReviews: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
+}
+
+export default Account;

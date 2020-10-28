@@ -1,6 +1,7 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-export default ({review, onLikeReview, isLiked }) => {
+const ThumbsUp = ({review, onLikeReview, isLiked}) => {
   return (
     <React.Fragment>
       <svg
@@ -20,3 +21,11 @@ export default ({review, onLikeReview, isLiked }) => {
     </React.Fragment>
   );
 };
+
+ThumbsUp.propTypes = {
+  review: PropTypes.object.isRequired,
+  onLikeReview: PropTypes.func.isRequired,
+  isLiked: PropTypes.bool.isRequired,
+}
+
+export default ThumbsUp;

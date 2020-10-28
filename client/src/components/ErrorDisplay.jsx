@@ -1,6 +1,7 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-export default ({ error }) => {
+const ErrorDisplay = ({ error }) => {
   return (
     <React.Fragment>
       {error && (error.status || error.validationErrors) && (
@@ -18,3 +19,9 @@ export default ({ error }) => {
     </React.Fragment>
   );
 };
+
+ErrorDisplay.propTypes = {
+  error: PropTypes.object.isRequired
+}
+
+export default ErrorDisplay;
