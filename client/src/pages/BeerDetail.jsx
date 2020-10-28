@@ -4,8 +4,11 @@ import Rating from "../components/Rating";
 import DarkBeer from "../assets/DarkBeer.webp";
 import Review from "../components/Review";
 import { getBeer } from "../other/beer-service";
+import { useAuth } from "../components/AuthContext";
+import { average } from "../other/utils";
 
-export default ({ userId, isAuth, getToken, setError, myReviews }) => {
+export default ({ setError, myReviews }) => {
+  const { userId, isAuth, getToken } = useAuth();
   const { id } = useParams();
   const [beer, setBeer] = React.useState(null);
   React.useEffect(() => {
@@ -44,8 +47,6 @@ export default ({ userId, isAuth, getToken, setError, myReviews }) => {
           })
           .catch((err) => setError(err));
   };
-
-  const average = (array) => array.reduce((a, b) => a + b) / array.length;
   const averageRating =
     beer &&
     beer.reviews &&

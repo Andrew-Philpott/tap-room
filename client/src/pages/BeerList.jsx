@@ -11,6 +11,7 @@ import {
 } from "../other/beer-service";
 import * as role from "../other/roles";
 import * as route from "../other/routes";
+import { useAuth } from "../components/AuthContext";
 
 const BeerItem = ({
   roles,
@@ -90,14 +91,11 @@ const BeerItem = ({
 };
 
 export default ({
-  roles,
   beers,
-  isAuth,
-  isAdmin,
-  getToken,
   setBeers,
   setError,
 }) => {
+  const { isAuth, isAdmin, roles, getToken } = useAuth();
   const handleDeleteBeer = (id) => {
     if (window.confirm("Are you sure you want to delete this beer?")) {
       deleteBeer(getToken(), id)

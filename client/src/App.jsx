@@ -57,76 +57,51 @@ function App({
     }
   }, []);
 
-  const handleSignInOrSignOut = (isAdmin) => {
-    !isAuth ? (isAdmin ? signIn(true) : signIn(false)) : signOut();
-  };
-
   return (
     <div className="App" data-test="component-app">
       <ErrorBoundary>
         <React.Suspense fallback={renderLoader()}>
           <BrowserRouter>
-            <NavigationBar
-              isAuth={isAuth}
-              onSignInOrSignOut={handleSignInOrSignOut}
-            />
+            <NavigationBar/>
             <Switch>
-              <Route exact path={routes.ADMIN}>
-                <SignIn onSignInOrSignOut={handleSignInOrSignOut} />
-              </Route>
+              <Route exact path={routes.ADMIN} component={SignIn}/>
               <Route exact path={routes.LANDING}>
                 <Home beers={beers} />
               </Route>
               <Route exact path={routes.ABOUT} component={About} />
               <Route exact path={routes.BEER_LIST}>
                 <BeerList
-                  roles={roles}
-                  getToken={getToken}
-                  isAdmin={isAdmin}
-                  isAuth={isAuth}
                   beers={beers}
                   setBeers={setBeers}
                   setError={setError}
                 />
               </Route>
               <AuthRoute
-                isAuth={isAuth}
-                isAdmin={isAdmin}
                 path={[routes.BEER_EDIT, routes.NEW_BEER]}
               >
                 <BeerForm
                   beers={beers}
                   setBeers={setBeers}
                   setError={setError}
-                  getToken={getToken}
                 />
               </AuthRoute>
               <AuthRoute
-                isAuth={isAuth}
                 exact
                 path={[
                   routes.NEW_REVIEW,
                   routes.NEW_REVIEW_FOR_BEER,
                   routes.EDIT_REVIEW,
                 ]}
-              >
-                <ReviewForm beers={beers} myReviews={myReviews} />
-              </AuthRoute>
-              <AuthRoute isAuth={isAuth} exact path={routes.ACCOUNT}>
-                <Account
+                component={<ReviewForm beers={beers} myReviews={myReviews} />}
+              />
+              <AuthRoute exact path={routes.ACCOUNT} component={<Account
                   setError={setError}
                   myReviews={myReviews}
                   setMyReviews={setMyReviews}
-                  userId={userId}
-                  userName={userName}
-                />
-              </AuthRoute>
+                />}/>
               <Route exact path={routes.BEER_DETAILS}>
                 <BeerDetail
-                  userId={userId}
-                  getToken={getToken}
                   setError={setError}
-                  isAuth={isAuth}
                   myReviews={myReviews}
                 />
               </Route>
@@ -141,4 +116,4 @@ function App({
   );
 }
 
-export default withAuth(App);
+export default App;

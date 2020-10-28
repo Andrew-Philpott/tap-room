@@ -3,9 +3,11 @@ import Rating from "./Rating";
 import Trash from "../assets/trash.svg";
 import Pencil from "../assets/pencil-alt.svg";
 import { Link } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
-export default ({ item, onLikeReview, userId, onDeleteReview, isAccount }) => {
+export default ({ item, onLikeReview, onDeleteReview, isAccount }) => {
   const [isLiked, setIsLiked] = React.useState(false);
+  const { userId } = useAuth();
   const handleClick = () => {
     onLikeReview(item);
   };
@@ -60,9 +62,10 @@ export default ({ item, onLikeReview, userId, onDeleteReview, isAccount }) => {
                 src={Trash}
                 onClick={() => onDeleteReview(item.reviewId)}
                 className="delete"
+                alt=""
               />
               <Link to={`/reviews/edit/${item.reviewId}`}>
-                <img src={Pencil} className="edit" />
+                <img src={Pencil} className="edit" alt="" />
               </Link>
             </React.Fragment>
           )}

@@ -1,6 +1,7 @@
 import React from "react";
 import useForm from "../other/use-form";
 import { useParams, useHistory } from "react-router-dom";
+import { useAuth } from "../components/AuthContext";
 
 const initalFieldValues = {
   name: "",
@@ -13,7 +14,8 @@ const initalFieldValues = {
   pints: "",
 };
 
-export default ({ beers, setBeers, setError, getToken }) => {
+export default ({ beers, setBeers, setError }) => {
+  const { getToken } = useAuth();
   const { id } = useParams();
   const history = useHistory();
   const validate = (fieldValues = values) => {

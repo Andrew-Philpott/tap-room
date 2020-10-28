@@ -1,6 +1,7 @@
 import React from "react";
 import useForm from "../other/use-form";
 import { useParams, useLocation, useHistory } from "react-router-dom";
+import { useAuth } from "../components/AuthContext";
 
 const initalFieldValues = {
   beerId: "",
@@ -9,7 +10,8 @@ const initalFieldValues = {
   headline: "",
 };
 
-export default ({ beers, myReviews, setMyReviews, getToken, setError }) => {
+export default ({ beers, myReviews, setMyReviews, setError }) => {
+  const { getToken } = useAuth();
   const { id } = useParams();
   const history = useHistory();
   const path = useLocation().pathname;

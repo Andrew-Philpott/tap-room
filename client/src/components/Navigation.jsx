@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import taphouselogo from "../assets/taphouselogo.webp";
 import Bars from "../assets/bars.svg";
 import * as routes from "../other/routes";
+import { useAuth } from "./AuthContext";
 
-export default ({ isAuth, onSignInOrSignOut }) => {
+export default () => {
+  const {isAuth,signInSignOut} = useAuth();
   const [openMenu, setOpenMenu] = React.useState(false);
   const menuRef = React.useRef(null);
 
@@ -20,10 +22,6 @@ export default ({ isAuth, onSignInOrSignOut }) => {
     return () => document.removeEventListener("mousedown", closeMenu);
   }, []);
 
-  const signInSignOut = () => {
-    onSignInOrSignOut(false);
-  };
-
   const navItems = [
     <Link key={1} to={routes.LANDING}>
       Home
@@ -34,7 +32,7 @@ export default ({ isAuth, onSignInOrSignOut }) => {
     <Link key={3} to={routes.ABOUT}>
       About
     </Link>,
-    <span key={4} onClick={() => signInSignOut()}>
+    <span key={4} onClick={() => signInSignOut(false)}>
       {!isAuth ? "Sign In" : "Sign Out"}
     </span>,
   ];

@@ -1,14 +1,13 @@
 import React from "react";
 import Review from "../components/Review";
+import { useAuth } from "../components/AuthContext";
 
 export default ({
-  userId,
-  userName,
-  getToken,
   myReviews,
   setMyReviews,
   setError,
 }) => {
+  const { userId, userName, getToken } = useAuth();
   const handleDeleteReview = async (id) => {
     const { deleteReview } = await import("../other/review-service");
     deleteReview(getToken(), id)
