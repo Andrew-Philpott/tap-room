@@ -41,19 +41,11 @@ function App({
   });
 
   React.useEffect(() => {
-    if (beers.length === 0) {
-      (async () => {
-        getBeers()
-          .then((res) => {
-            setBeers(res);
-          })
-          .catch(setError);
-      })();
-    }
+    getBeers().then((r)=>setBeers(r)).catch(setError);
   }, []);
 
   React.useEffect(() => {
-    if (isAuth === true && myReviews.length === 0) {
+    if (isAuth === true) {
       (async () => {
         const { getMyReviews } = await import("./other/review-service");
         getMyReviews(getToken())
@@ -70,7 +62,7 @@ function App({
   };
 
   return (
-    <div className="App">
+    <div className="App" data-test="component-app">
       <ErrorBoundary>
         <React.Suspense fallback={renderLoader()}>
           <BrowserRouter>

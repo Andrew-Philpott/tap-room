@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import BeerBar from "../assets/BeerBar.webp";
-import { topFiveBeers} from "../other/utils";
+import { topFiveBeers } from "../other/utils";
 
 export default ({ beers }) => {
   return (
@@ -28,18 +28,17 @@ export default ({ beers }) => {
           <div>
             <h2>Top 5</h2>
             <ul>
-              {topFiveBeers(beers)
-                .map((x, index) => {
-                  return (
-                    <li key={index}>
-                      {index + 1}
-                      {". "}
-                      <Link to={`/beers/details/${x.beer.beerId}`}>
-                        {x.beer.name}
-                      </Link>
-                    </li>
-                  );
-                })}
+              {topFiveBeers(beers).map((x, index) => {
+                return (
+                  <li key={index}>
+                    {index + 1}
+                    {". "}
+                    <Link to={`/beers/details/${x.beer.beerId}`}>
+                      {x.beer.name}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         )}

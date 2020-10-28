@@ -20,7 +20,7 @@ const BeerItem = ({
   onDecrementBeerPints,
 }) => {
   return (
-    <tr key={beer.beerId}>
+    <tr key={beer.beerId} data-test="component-beer-item">
       <td>
         <Link to={`/beers/details/${beer.beerId}`}>{beer.name}</Link>
         <React.Fragment>
@@ -144,8 +144,8 @@ export default ({
               <th>ABV</th>
               <th>Price</th>
               <th>Pints</th>
-              {(roles && roles.indexOf(role.EMPLOYEE) !== -1) ||
-                (roles.indexOf(role.ADMIN) !== -1 && (
+              {roles && (roles.indexOf(role.EMPLOYEE) !== -1 ||
+                roles.indexOf(role.ADMIN) !== -1) && (
                   <React.Fragment>
                     <th>Buy</th>
                     <th>Restock</th>
@@ -156,7 +156,7 @@ export default ({
                       </React.Fragment>
                     )}
                   </React.Fragment>
-                ))}
+                )}
             </tr>
           </thead>
           <tbody>
