@@ -2,10 +2,10 @@ import React from "react";
 import { shallow } from "enzyme";
 import Navigation from "../components/Navigation";
 import AuthContext from "../components/AuthContext";
-import { initialAuth, mockUseAuth } from "../testutils";
+import { noAuth, mockUseAuth } from "../testutils";
 
 const setup = () => {
-  AuthContext.useAuth = mockUseAuth(initialAuth);
+  AuthContext.useAuth = mockUseAuth;
   return shallow(<Navigation />);
 };
 

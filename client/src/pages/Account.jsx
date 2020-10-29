@@ -8,7 +8,17 @@ const Account = ({
   setMyReviews,
   setError,
 }) => {
-  const { userId, userName, getToken } = AuthContext.useAuth();
+  const { userId, isAuth, userName, getToken } = AuthContext.useAuth();
+
+  React.useEffect(() => {
+    if (isAuth === true) {
+      (async () => {
+        const { getMyReviews } = await import("../other/review-service");
+        getMyReviews(getToken()).then(setMyReviews).catch(setError);
+      })();
+    }
+  }, [isAuth]);
+
   const handleDeleteReview = async (id) => {
     const { deleteReview } = await import("../other/review-service");
     deleteReview(getToken(), id)

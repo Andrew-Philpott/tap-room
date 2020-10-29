@@ -2,13 +2,13 @@ import React from "react";
 import { shallow } from "enzyme";
 import Review from "../components/Review";
 import AuthContext from "../components/AuthContext";
-import { initialAuth, mockUseAuth, reviewWithoutLikes } from "../testutils";
+import { noAuth, mockUseAuth, reviewWithoutLikes } from "../testutils";
 
 const mockLikeReview = jest.fn();
 const mockDeleteReview = jest.fn();
 
 const setup = ({ review, isAccount }) => {
-  AuthContext.useAuth = mockUseAuth(initialAuth);
+  AuthContext.useAuth = mockUseAuth;
   return shallow(
     <Review
       review={review}

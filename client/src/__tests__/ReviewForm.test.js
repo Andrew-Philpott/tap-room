@@ -4,14 +4,14 @@ import ReviewForm from "../pages/ReviewForm";
 import AuthContext from "../components/AuthContext";
 import { MemoryRouter } from "react-router";
 import {
-  initialAuth,
+  noAuth,
   mockUseAuth,
   mockSetError,
   mockSetMyReviews,
 } from "../testutils";
 
 const setup = ({ beers, myReviews }) => {
-  AuthContext.useAuth = mockUseAuth(initialAuth);
+  AuthContext.useAuth = mockUseAuth;
   return mount(
     <MemoryRouter initialEntries={["/reviews/new"]}>
       <ReviewForm

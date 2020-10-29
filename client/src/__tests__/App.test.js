@@ -1,37 +1,30 @@
 import React from "react";
 import { mount } from "enzyme";
 import App from "../App";
+import AuthContext from "../components/AuthContext";
+import { mockUseAuth } from "../testutils";
+import beerService from "../other/beer-service";
 
-const mockSignIn = jest.fn();
-const mockSignOut = jest.fn();
-const mockGetToken = jest.fn();
-const mockGetBeers = (global.fetch = jest.fn(() => Promise.resolve([])));
+const mockGetBeers = jest.fn(() => Promise.resolve([]));
 
 const setup = () => {
-  return mount(
-    <App
-      signIn={mockSignIn}
-      signOut={mockSignOut}
-      getToken={mockGetToken}
-      userName={""}
-      roles={[]}
-      isAuth={false}
-      isAdmin={false}
-    />
-  );
+  AuthContext.useAuth = mockUseAuth;
+  mockGetBeers.mockClear();
+  beerService.getBeers = mockGetBeers;
+  return mount(<App />);
 };
-// test("renders without error", () => {
-//   const wrapper = setup();
-//   const component = wrapper.find(`[data-test="component-app"]`);
-//   expect(component.length).toBe(1);
-// });
+test("renders without error", () => {
+  const wrapper = setup();
+  const component = wrapper.find(`[data-test="component-app"]`);
+  expect(component.length).toBe(1);
+});
 describe("getBeers calls", () => {
+  const wrapper = setup();
+
   test("getBeers gets called on app mount", () => {
-    setup();
     expect(mockGetBeers).toHaveBeenCalled();
   });
   test("beers does not update on app update", () => {
-    const wrapper = setup();
     mockGetBeers.mockClear();
     wrapper.setProps();
     expect(mockGetBeers).not.toHaveBeenCalled();

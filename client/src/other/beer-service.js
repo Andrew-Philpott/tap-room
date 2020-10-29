@@ -47,3 +47,12 @@ export async function deleteBeer(auth, id) {
     requestOptions.deleteOptions(await auth)
   ).then(handleResponse);
 }
+export default {
+  getBeer,
+  getBeers,
+  decrementPints,
+  incrementPints,
+  createBeer,
+  updateBeer,
+  deleteBeer,
+};

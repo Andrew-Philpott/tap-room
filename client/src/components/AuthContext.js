@@ -118,10 +118,11 @@ export function AuthProvider(props) {
       value={{
         isAuth: auth.isAuth,
         isAdmin: auth.isAdmin,
+        userId: auth.userId,
         userName: auth.userName,
         roles: auth.roles,
-        signInSignOut,
-        getToken,
+        signInSignOut: signInSignOut,
+        getToken: getToken,
       }}
       {...props}
     />

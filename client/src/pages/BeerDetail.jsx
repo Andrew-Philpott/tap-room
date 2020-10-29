@@ -3,20 +3,28 @@ import { Link, useParams } from "react-router-dom";
 import Rating from "../components/Rating";
 import DarkBeer from "../assets/DarkBeer.webp";
 import Review from "../components/Review";
-import { getBeer } from "../other/beer-service";
+import beerService from "../other/beer-service";
 import AuthContext from "../components/AuthContext";
 import { average } from "../other/utils";
 import PropTypes from "prop-types";
 
-const BeerDetail = ({ setError, myReviews }) => {
+const BeerDetail = ({ setError, myReviews, setMyReviews }) => {
   const { userId, isAuth, getToken } = AuthContext.useAuth();
   const { id } = useParams();
   const [beer, setBeer] = React.useState(null);
   React.useEffect(() => {
     if (id) {
-      getBeer(id).then(setBeer).catch(setError);
+      beerService.getBeer(id).then(setBeer).catch(setError);
     }
   }, []);
+  React.useEffect(() => {
+    if (isAuth === true) {
+      (async () => {
+        const { getMyReviews } = await import("../other/review-service");
+        getMyReviews(getToken()).then(setMyReviews).catch(setError);
+      })();
+    }
+  }, [isAuth]);
 
   const handleLike = async (item) => {
     const like = item.likes.find((x) => x.userId === userId);
@@ -117,9 +125,9 @@ const BeerDetail = ({ setError, myReviews }) => {
                 })}
               </div>
             ) : (
-              <h1>
+              <h1 data-test="beer-detail-message">
                 No reviews for this beer yet.{" "}
-                {!isAuth && <>Create an account to provide feedback!</>}
+                {!isAuth && <span>Create an account to provide feedback!</span>}
               </h1>
             )}
           </div>
@@ -133,7 +141,6 @@ const BeerDetail = ({ setError, myReviews }) => {
 
 BeerDetail.propTypes = {
   setError: PropTypes.func.isRequired,
-  myReviews: PropTypes.array.isRequired,
 }
 
 export default BeerDetail;

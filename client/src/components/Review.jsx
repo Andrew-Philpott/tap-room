@@ -70,7 +70,7 @@ const Review = ({ review, onLikeReview, onDeleteReview, isAccount }) => {
 Review.propTypes = {
   review: PropTypes.object.isRequired,
   onLikeReview: PropTypes.func.isRequired,
-  onDeleteReview: PropTypes.func.isRequired,
+  onDeleteReview: PropTypes.func,
   isAccount: PropTypes.bool.isRequired
 }
 

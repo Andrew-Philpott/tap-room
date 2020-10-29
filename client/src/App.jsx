@@ -5,9 +5,8 @@ import * as routes from "./other/routes";
 import AuthRoute from "./components/AuthRoute";
 import Footer from "./components/Footer";
 import ErrorDisplay from "./components/ErrorDisplay";
-import { getBeers } from "./other/beer-service";
+import beerService from "./other/beer-service";
 import ErrorBoundary from "./components/ErrorBoundary";
-import AuthContext from "./components/AuthContext";
 import "./App.css";
 const Home = React.lazy(() => import("./pages/Home"));
 const BeerDetail = React.lazy(() => import("./pages/BeerDetail"));
@@ -21,7 +20,6 @@ const Account = React.lazy(() => import("./pages/Account"));
 const renderLoader = () => <p>Loading</p>;
 
 function App() {
-  const { isAuth, getToken } = AuthContext.useAuth();
   const [beers, setBeers] = React.useState([]);
   const [myReviews, setMyReviews] = React.useState([]);
   const [error, setError] = React.useState((err) => {
@@ -33,17 +31,8 @@ function App() {
   });
 
   React.useEffect(() => {
-    getBeers().then(setBeers).catch(setError);
+    beerService.getBeers().then(setBeers).catch(setError);
   }, []);
-
-  React.useEffect(() => {
-    if (isAuth === true) {
-      (async () => {
-        const { getMyReviews } = await import("./other/review-service");
-        getMyReviews(getToken()).then(setMyReviews).catch(setError);
-      })();
-    }
-  }, [isAuth]);
 
   return (
     <div className="App" data-test="component-app">
@@ -65,7 +54,7 @@ function App() {
                 />
               </Route>
               <Route exact path={routes.BEER_DETAILS}>
-                <BeerDetail setError={setError} myReviews={myReviews} />
+                <BeerDetail setError={setError} myReviews={myReviews} setMyReviews={setMyReviews} />
               </Route>
               <AuthRoute
                 adminRequired={true}

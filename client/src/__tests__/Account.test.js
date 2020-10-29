@@ -1,16 +1,11 @@
 import React from "react";
 import { mount } from "enzyme";
 import Account from "../pages/Account";
-import {
-  initialAuth,
-  mockUseAuth,
-  mockSetMyReviews,
-  mockSetError,
-} from "../testutils";
+import { mockUseAuth, mockSetMyReviews, mockSetError } from "../testutils";
 import AuthContext from "../components/AuthContext";
 
 const setup = ({ myReviews }) => {
-  AuthContext.useAuth = mockUseAuth(initialAuth);
+  AuthContext.useAuth = mockUseAuth;
   return mount(
     <Account
       myReviews={myReviews}
